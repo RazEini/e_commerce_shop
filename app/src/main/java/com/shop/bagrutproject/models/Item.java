@@ -1,4 +1,4 @@
-package com.shop.bagrutproject.model;
+package com.shop.bagrutproject.models;
 
 import java.util.List;
 

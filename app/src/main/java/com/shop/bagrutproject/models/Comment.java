@@ -1,4 +1,4 @@
-package com.shop.bagrutproject.model;
+package com.shop.bagrutproject.models;
 
 public class Comment {
     String id;
