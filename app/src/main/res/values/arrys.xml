@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="cityArry">
-        <item>ראשון לציון</item>
-        <item>רחובות</item>
-        <item>בת ים</item>
-        <item>אשקלון</item>
-        <item>נס ציונה</item>
-        <item>תל אביב</item>
-        <item>רמת גן</item>
-        <item>פתח תקווה</item>
-        <item>גבעתיים</item>
-        <item>אילת</item>
-        <item>הרצליה</item>
-        <item>טבריה</item>
-        <item>בני ברק</item>
-        <item>חולון</item>
-        <item>חיפה</item>
-        <item>קריית שמונה</item>
-        <item>מטולה</item>
-        <item>ירושלים</item>
+    <string-array name="ItemTypeArray">
+        <item>מקרר</item>
+        <item>מאוורר</item>
+        <item>מזגן</item>
+        <item>טלוויזיה</item>
+        <item>קומקום</item>
+        <item>תנור חימום</item>
+        <item>מייבש כביסה</item>
+        <item>קוטל יתושים</item>
+        <item>מכונת כביסה</item>
+        <item>מגהץ</item>
+        <item>מדיח כלים</item>
+    </string-array>
+
+    <string-array name="ItemTypeArray">
+        <item>אדום</item>
+        <item>שחור</item>
+        <item>כחול</item>
+        <item>אפור</item>
+        <item>תכלת</item>
     </string-array>
 </resources>

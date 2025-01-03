@@ -134,7 +134,7 @@ public class DatabaseService {
     /// @see DatabaseCallback
     /// @see User
     public void createNewUser(@NotNull final User user, @Nullable final DatabaseCallback<Void> callback) {
-        writeData("users/" + user.getId(), user, callback);
+        writeData("users/" + user.getUid(), user, callback);
     }
 
     /// create a new cart in the database
@@ -174,12 +174,12 @@ public class DatabaseService {
         getData("carts/" + cartId, Cart.class, callback);
     }
 
-    /// generate a new id for a new food in the database
-    /// @return a new id for the food
+    /// generate a new id for a new item in the database
+    /// @return a new id for the item
     /// @see #generateNewId(String)
-    /// @see Food
-    public String generateFoodId() {
-        return generateNewId("foods");
+    /// @see Item
+    public String generateItemId() {
+        return generateNewId("items");
     }
 
     /// generate a new id for a new cart in the database

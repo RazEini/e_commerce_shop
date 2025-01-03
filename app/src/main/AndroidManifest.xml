@@ -13,8 +13,16 @@
         android:theme="@style/Theme.BagrutProject"
         tools:targetApi="31">
         <activity
-            android:name=".AddItemActivity"
-            android:exported="false" />
+            android:name=".screens.AddItem"
+            android:exported="true" >
+
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
+
         <activity
             android:name=".screens.Login"
             android:exported="false" />
@@ -23,12 +31,8 @@
             android:exported="false" />
         <activity
             android:name=".screens.MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            android:exported="false">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 
