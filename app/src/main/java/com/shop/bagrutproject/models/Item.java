@@ -4,17 +4,17 @@ import java.util.List;
 
 public class Item {
 
-    String id;
-    String type;
-    String company;
-    String modelItem;
-    String color;
-    double price;
-    String aboutItem;
-    List<String> pics;
-    int numberRate;
-    double rate;
-    double sumRate;
+    protected String id;
+    protected String type;
+    protected String company;
+    protected String modelItem;
+    protected String color;
+    protected double price;
+    protected String aboutItem;
+    protected List<String> pics;
+    protected int numberRate;
+    protected double rate;
+    protected double sumRate;
 
     public Item() {
     }

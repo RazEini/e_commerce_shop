@@ -5,12 +5,12 @@ import org.jetbrains.annotations.NotNull;
 public class User {
 
     /// unique id of the user
-    private String uid;
-    private String email;
-    private String password;
-    private String fName;
-    private String lName;
-    private String phone;
+    protected String uid;
+    protected String email;
+    protected String password;
+    protected String fName;
+    protected String lName;
+    protected String phone;
 
     public User() {
     }

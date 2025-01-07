@@ -14,11 +14,11 @@
         <item>מדיח כלים</item>
     </string-array>
 
-    <string-array name="ItemTypeArray">
+    <string-array name="ItemColorArray">
         <item>אדום</item>
         <item>שחור</item>
+        <item>צהוב</item>
         <item>כחול</item>
-        <item>אפור</item>
         <item>תכלת</item>
     </string-array>
 </resources>

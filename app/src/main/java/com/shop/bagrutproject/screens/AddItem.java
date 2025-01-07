@@ -27,19 +27,42 @@ public class AddItem extends AppCompatActivity {
         setContentView(R.layout.activity_add_item);
 
         Spinner ItemTypeSpinner = findViewById(R.id.spType);
+        Spinner ItemColorSpinner = findViewById(R.id.spColor);
 
         // Create an ArrayAdapter using a string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this, R.array.ItemTypeArray, android.R.layout.simple_spinner_item);
 
+        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(
+                this, R.array.ItemColorArray, android.R.layout.simple_spinner_item);
+
         // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         // Apply the adapter to the spinner
         ItemTypeSpinner.setAdapter(adapter);
 
+        ItemColorSpinner.setAdapter(adapter1);
+
         // Set an item selected listener to detect item selection
         ItemTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
+                // Get the selected item
+                String selectedItem = (String) parentView.getItemAtPosition(position);
+                // Show a Toast with the selected item
+                Toast.makeText(AddItem.this, "Selected: " + selectedItem, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // Handle case when no item is selected (optional)
+            }
+        });
+
+        ItemColorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
                 // Get the selected item

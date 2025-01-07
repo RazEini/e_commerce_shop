@@ -3,8 +3,8 @@ package com.shop.bagrutproject.models;
 import java.util.List;
 
 public class Cart {
-    String id;
-    List<Item> items;
+    protected String id;
+    protected List<Item> items;
 
     public Cart(String id, List<Item> items) {
         this.id = id;

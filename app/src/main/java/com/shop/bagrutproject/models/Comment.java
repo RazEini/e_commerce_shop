@@ -1,12 +1,12 @@
 package com.shop.bagrutproject.models;
 
 public class Comment {
-    String id;
-    User user;
-    Item item;
-    String date;
-    String commentText;
-    double rate;
+    protected String id;
+    protected User user;
+    protected Item item;
+    protected String date;
+    protected String commentText;
+    protected double rate;
 
     public Comment(String id, User user, Item item, String date, String commentText, double rate) {
         this.id = id;
