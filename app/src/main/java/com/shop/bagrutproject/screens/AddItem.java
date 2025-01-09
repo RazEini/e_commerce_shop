@@ -1,6 +1,8 @@
 package com.shop.bagrutproject.screens;
 
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import androidx.activity.EdgeToEdge;
@@ -16,9 +18,17 @@ import android.widget.Spinner;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.shop.bagrutproject.R;
 
 public class AddItem extends AppCompatActivity {
+    EditText etItemName1, etPrice1, etDescription;
+    int price;
+    String itemName, stPrice;
+    Button btnGallery1,btnTakePic1, btnAddItem1;
+    FirebaseDatabase database ;
+    DatabaseReference myRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,55 +36,60 @@ public class AddItem extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_item);
 
+        initViews();
+        database = FirebaseDatabase.getInstance();
+        myRef=database.getReference("Items").push();
+
         Spinner ItemTypeSpinner = findViewById(R.id.spType);
         Spinner ItemColorSpinner = findViewById(R.id.spColor);
 
-        // Create an ArrayAdapter using a string array and a default spinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
                 this, R.array.ItemTypeArray, android.R.layout.simple_spinner_item);
 
         ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(
                 this, R.array.ItemColorArray, android.R.layout.simple_spinner_item);
 
-        // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        // Apply the adapter to the spinner
         ItemTypeSpinner.setAdapter(adapter);
 
         ItemColorSpinner.setAdapter(adapter1);
 
-        // Set an item selected listener to detect item selection
         ItemTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
-                // Get the selected item
                 String selectedItem = (String) parentView.getItemAtPosition(position);
-                // Show a Toast with the selected item
                 Toast.makeText(AddItem.this, "Selected: " + selectedItem, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                // Handle case when no item is selected (optional)
             }
         });
 
         ItemColorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
-                // Get the selected item
                 String selectedItem = (String) parentView.getItemAtPosition(position);
-                // Show a Toast with the selected item
                 Toast.makeText(AddItem.this, "Selected: " + selectedItem, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-                // Handle case when no item is selected (optional)
             }
         });
+    }
+
+    private void initViews() {
+        btnAddItem1=findViewById(R.id.btnAddItem);
+        btnGallery1=findViewById(R.id.btnGallery);
+        btnTakePic1=findViewById(R.id.btnTakePic);
+
+        etItemName1=findViewById(R.id.etItemName);
+        etPrice1=findViewById(R.id.etItemPrice);
+        etDescription=findViewById(R.id.etItemInfo);
+
     }
 }

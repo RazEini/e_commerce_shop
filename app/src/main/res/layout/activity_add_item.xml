@@ -5,121 +5,173 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".screens.AddItem">
+    tools:context=".screens.AddItem"
+    android:background="#FBE0C3">
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="20dp">
 
-        <TextView
-            android:id="@+id/tvAddItem"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_margintop="20dp"
-            android:layout_marginBottom="40dp"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:text="הוספת מוצר"
-            android:textSize="30sp"
-            android:textStyle="bold" />
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:paddingBottom="20dp"
+            tools:ignore="MissingConstraints">
 
-        <EditText
-            android:id="@+id/etItemName"
-            android:layout_width="350sp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:hint="שם מוצר"
-            android:inputType="text"
-            android:padding="12dp"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/tvAddItem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginBottom="40dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:text="הוספת מוצר"
+                android:textSize="30sp"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tvItemType"
-            android:layout_width="331dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:fontFamily="sans-serif"
-            android:text="סוג מוצר"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
+            <EditText
+                android:id="@+id/etItemName"
+                android:layout_width="241dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:hint="שם מוצר"
+                android:inputType="text"
+                android:padding="12dp"
+                android:textStyle="bold"
+                android:layout_gravity="right"
+                android:layout_marginRight="2dp"/>
 
-        <Spinner
-            android:id="@+id/spType"
-            android:layout_width="350sp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
-            android:padding="12dp"
-            android:textDirection="ltr">
-        </Spinner>
+            <TextView
+                android:id="@+id/tvItemType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="sans-serif"
+                android:text="סוג מוצר"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/tvItemColor"
-            android:layout_width="331dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:fontFamily="sans-serif"
-            android:text="צבע מוצר"
-            android:textSize="20sp"
-            android:textStyle="bold"/>
+            <Spinner
+                android:id="@+id/spType"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:padding="12dp"
+                android:textDirection="ltr" />
 
-        <Spinner
-            android:id="@+id/spColor"
-            android:layout_width="350sp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
-            android:padding="12dp"
-            android:textDirection="ltr">
-        </Spinner>
+            <TextView
+                android:id="@+id/tvItemColor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="sans-serif"
+                android:text="צבע מוצר"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/etItemCompany"
-            android:layout_width="350sp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
-            android:hint="חברה"
-            android:inputType="text"
-            android:padding="12dp"
-            android:textStyle="bold" />
+            <Spinner
+                android:id="@+id/spColor"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:padding="12dp"
+                android:textDirection="ltr" />
 
-        <EditText
-            android:id="@+id/etItemInfo"
-            android:layout_width="350sp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
-            android:hint="מידע על המוצר"
-            android:inputType="text"
-            android:padding="12dp"
-            android:textStyle="bold" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="40dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingStart="20dp">
 
-        <EditText
-            android:id="@+id/etItemPrice"
-            android:layout_width="350sp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="30dp"
-            android:hint="מחיר"
-            android:inputType="text"
-            android:padding="12dp"
-            android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="40dp"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btnAddItem"
-            android:layout_width="300dp"
-            android:layout_height="match_parent"
-            android:layout_marginTop="20dp"
-            android:padding="12dp"
-            android:text="הוסף מוצר לחנות"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+                    <Button
+                        android:id="@+id/btnGallery"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:text="גלריה"
+                        android:textStyle="bold"/>
 
-    </LinearLayout>
+                    <Button
+                        android:id="@+id/btnTakePic"
+                        android:layout_width="150dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:text="צלם תמונה"
+                        android:textStyle="bold"/>
 
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        tools:srcCompat="@tools:sample/avatars">
+                    </ImageView>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <EditText
+                        android:id="@+id/etItemCompany"
+                        android:layout_width="162dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="30dp"
+                        android:hint="חברה"
+                        android:inputType="text"
+                        android:padding="12dp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/etItemInfo"
+                        android:layout_width="168dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="30dp"
+                        android:hint="מידע על המוצר"
+                        android:inputType="text"
+                        android:padding="12dp"
+                        android:textStyle="bold" />
+
+                    <EditText
+                        android:id="@+id/etItemPrice"
+                        android:layout_width="176dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="30dp"
+                        android:hint="מחיר"
+                        android:inputType="text"
+                        android:padding="12dp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/btnAddItem"
+                android:layout_width="250dp"
+                android:layout_height="60dp"
+                android:layout_marginBottom="20dp"
+                android:gravity="center"
+                android:padding="12dp"
+                android:text="הוסף מוצר לחנות"
+                android:textColor="@android:color/white"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
