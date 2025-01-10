@@ -5,7 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".screens.Login">
+    tools:context=".screens.Login"
+    android:background="#f0f0f0">
 
     <TextView
         android:id="@+id/tvLogin"
@@ -63,7 +64,8 @@
             android:text="הרשם"
             android:textColor="@android:color/white"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:backgroundTint="@color/black" />
 
     </LinearLayout>
 

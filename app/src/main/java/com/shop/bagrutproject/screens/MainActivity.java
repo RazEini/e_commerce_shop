@@ -15,7 +15,7 @@ import com.shop.bagrutproject.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnReg , btnLog;
+    Button btnReg , btnLog , btnOd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private void initViews() {
         btnReg = findViewById(R.id.btnRegister);
         btnLog = findViewById(R.id.btnLogin);
+        btnOd = findViewById(R.id.btnOdot);
         btnReg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -47,6 +48,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, Login.class);
+                startActivity(intent);
+            }
+        });
+
+        btnOd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, Odot.class);
                 startActivity(intent);
             }
         });
