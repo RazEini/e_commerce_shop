@@ -1,8 +1,13 @@
 package com.shop.bagrutproject.screens;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import androidx.activity.EdgeToEdge;
@@ -15,6 +20,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,73 +29,91 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.shop.bagrutproject.R;
 
 public class AddItem extends AppCompatActivity {
-    EditText etItemName1, etPrice1, etDescription;
-    int price;
-    String itemName, stPrice;
-    Button btnGallery1,btnTakePic1, btnAddItem1;
-    FirebaseDatabase database ;
-    DatabaseReference myRef;
+
+    private EditText etItemName, etItemCompany, etItemInfo, etItemPrice;
+    private Spinner spType, spColor;
+    private Button btnGallery, btnTakePic, btnAddItem;
+    private ImageView imageView;
+    private Uri imageUri;
+
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private static final int CAMERA_REQUEST = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_add_item);
 
-        initViews();
-        database = FirebaseDatabase.getInstance();
-        myRef=database.getReference("Items").push();
+        etItemName = findViewById(R.id.etItemName);
+        etItemCompany = findViewById(R.id.etItemCompany);
+        etItemInfo = findViewById(R.id.etItemInfo);
+        etItemPrice = findViewById(R.id.etItemPrice);
+        spType = findViewById(R.id.spType);
+        spColor = findViewById(R.id.spColor);
+        btnGallery = findViewById(R.id.btnGallery);
+        btnTakePic = findViewById(R.id.btnTakePic);
+        btnAddItem = findViewById(R.id.btnAddItem);
+        imageView = findViewById(R.id.imageView);
 
-        Spinner ItemTypeSpinner = findViewById(R.id.spType);
-        Spinner ItemColorSpinner = findViewById(R.id.spColor);
-
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                this, R.array.ItemTypeArray, android.R.layout.simple_spinner_item);
-
-        ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(
-                this, R.array.ItemColorArray, android.R.layout.simple_spinner_item);
-
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        adapter1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        ItemTypeSpinner.setAdapter(adapter);
-
-        ItemColorSpinner.setAdapter(adapter1);
-
-        ItemTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        btnGallery.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
-                String selectedItem = (String) parentView.getItemAtPosition(position);
-                Toast.makeText(AddItem.this, "Selected: " + selectedItem, Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
+            public void onClick(View v) {
+                openGallery();
             }
         });
 
-        ItemColorSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        btnTakePic.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parentView, View view, int position, long id) {
-                String selectedItem = (String) parentView.getItemAtPosition(position);
-                Toast.makeText(AddItem.this, "Selected: " + selectedItem, Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                openCamera();
             }
+        });
 
+        btnAddItem.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
+            public void onClick(View v) {
+                String itemName = etItemName.getText().toString();
+                String itemCompany = etItemCompany.getText().toString();
+                String itemInfo = etItemInfo.getText().toString();
+                String itemPrice = etItemPrice.getText().toString();
+                String itemType = spType.getSelectedItem().toString();
+                String itemColor = spColor.getSelectedItem().toString();
+
+                if (itemName.isEmpty() || itemCompany.isEmpty() || itemInfo.isEmpty() ||
+                        itemPrice.isEmpty() || itemType.isEmpty() || itemColor.isEmpty()) {
+                    Toast.makeText(AddItem.this, "אנא מלא את כל השדות", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(AddItem.this, "המוצר נוסף בהצלחה!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
-    private void initViews() {
-        btnAddItem1=findViewById(R.id.btnAddItem);
-        btnGallery1=findViewById(R.id.btnGallery);
-        btnTakePic1=findViewById(R.id.btnTakePic);
+    private void openGallery() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/*");
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
 
-        etItemName1=findViewById(R.id.etItemName);
-        etPrice1=findViewById(R.id.etItemPrice);
-        etDescription=findViewById(R.id.etItemInfo);
+    private void openCamera() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, CAMERA_REQUEST);
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == PICK_IMAGE_REQUEST && data != null && data.getData() != null) {
+                imageUri = data.getData();
+                imageView.setImageURI(imageUri);
+            } else if (requestCode == CAMERA_REQUEST && data != null) {
+                Bitmap photo = (Bitmap) data.getExtras().get("data");
+                imageView.setImageBitmap(photo);
+            }
+        }
     }
 }
+
+

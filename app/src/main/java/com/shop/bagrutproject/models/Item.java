@@ -5,12 +5,13 @@ import java.util.List;
 public class Item {
 
     protected String id;
+
+    protected String name;
     protected String type;
-    protected String company;
-    protected String modelItem;
     protected String color;
-    protected double price;
+    protected String company;
     protected String aboutItem;
+    protected double price;
     protected List<String> pics;
     protected int numberRate;
     protected double rate;
@@ -19,14 +20,14 @@ public class Item {
     public Item() {
     }
 
-    public Item(String id, String type, String company, String modelItem, String color, double price, String aboutItem, List<String> pics, int numberRate, double rate, double sumRate) {
+    public Item(String id, String name, String type, String company, String color, double price, String aboutItem, List<String> pics, int numberRate, double rate, double sumRate) {
         this.id = id;
+        this.name = name;
         this.type = type;
-        this.company = company;
-        this.modelItem = modelItem;
         this.color = color;
-        this.price = price;
+        this.company = company;
         this.aboutItem = aboutItem;
+        this.price = price;
         this.pics = pics;
         this.numberRate = numberRate;
         this.rate = rate;
@@ -40,6 +41,10 @@ public class Item {
     public void setId(String id) {
         this.id = id;
     }
+
+    public String getName() { return name; }
+
+    public void setName(String name) { this.name = name; }
 
     public String getType() {
         return type;
@@ -55,14 +60,6 @@ public class Item {
 
     public void setCompany(String company) {
         this.company = company;
-    }
-
-    public String getModelItem() {
-        return modelItem;
-    }
-
-    public void setModelItem(String modelItem) {
-        this.modelItem = modelItem;
     }
 
     public String getColor() {
@@ -125,12 +122,12 @@ public class Item {
     public String toString() {
         return "Item{" +
                 "id='" + id + '\'' +
+                ", name='" + name + '\'' +
                 ", type='" + type + '\'' +
-                ", company='" + company + '\'' +
-                ", modelItem='" + modelItem + '\'' +
                 ", color='" + color + '\'' +
-                ", price=" + price +
+                ", company='" + company + '\'' +
                 ", aboutItem='" + aboutItem + '\'' +
+                ", price=" + price +
                 ", pics=" + pics +
                 ", numberRate=" + numberRate +
                 ", rate=" + rate +
