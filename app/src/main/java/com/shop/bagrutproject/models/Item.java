@@ -12,7 +12,7 @@ public class Item {
     protected String company;
     protected String aboutItem;
     protected double price;
-    protected List<String> pics;
+    protected String pic;
     protected int numberRate;
     protected double rate;
     protected double sumRate;
@@ -20,7 +20,7 @@ public class Item {
     public Item() {
     }
 
-    public Item(String id, String name, String type, String company, String color, double price, String aboutItem, List<String> pics, int numberRate, double rate, double sumRate) {
+    public Item(String id, String name, String type, String color, String company, String aboutItem, double price, String pic, int numberRate, double rate, double sumRate) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -28,7 +28,7 @@ public class Item {
         this.company = company;
         this.aboutItem = aboutItem;
         this.price = price;
-        this.pics = pics;
+        this.pic = pic;
         this.numberRate = numberRate;
         this.rate = rate;
         this.sumRate = sumRate;
@@ -86,12 +86,12 @@ public class Item {
         this.aboutItem = aboutItem;
     }
 
-    public List<String> getPics() {
-        return pics;
+    public String getPic() {
+        return pic;
     }
 
-    public void setPics(List<String> pics) {
-        this.pics = pics;
+    public void setPic(String pic) {
+        this.pic = pic;
     }
 
     public int getNumberRate() {
@@ -128,7 +128,7 @@ public class Item {
                 ", company='" + company + '\'' +
                 ", aboutItem='" + aboutItem + '\'' +
                 ", price=" + price +
-                ", pics=" + pics +
+
                 ", numberRate=" + numberRate +
                 ", rate=" + rate +
                 ", sumRate=" + sumRate +

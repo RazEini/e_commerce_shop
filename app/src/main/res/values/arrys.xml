@@ -21,4 +21,14 @@
         <item>כחול</item>
         <item>תכלת</item>
     </string-array>
+
+    <string-array name="CompanyArray">
+        <item>ELECTRA</item>
+        <item>AEG</item>
+        <item>Sharp</item>
+        <item>OIG</item>
+        <item>King</item>
+        <item>CRYSTAL</item>
+        <item>SPECTRA</item>
+    </string-array>
 </resources>

@@ -110,4 +110,6 @@ public class AuthenticationService {
         return mAuth.getCurrentUser() != null;
     }
 
+
+
 }
