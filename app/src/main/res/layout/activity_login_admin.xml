@@ -5,8 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".screens.Login"
-    android:background="#f0f0f0">
+    tools:context=".screens.LoginAdmin">
 
     <TextView
         android:id="@+id/tvLogin"
@@ -15,7 +14,7 @@
         android:layout_marginBottom="34dp"
         android:fontFamily="sans-serif"
         android:gravity="center"
-        android:text="התחברות"
+        android:text="התחברות מנהל"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
@@ -35,18 +34,18 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <EditText
-            android:id="@+id/etEmail"
+            android:id="@+id/edtAdminUsername"
             android:layout_width="350sp"
             android:layout_height="wrap_content"
             android:layout_marginTop="70dp"
             android:layout_marginBottom="30dp"
-            android:hint="אימייל"
+            android:hint="שם מנהל"
             android:inputType="textEmailAddress"
             android:padding="12dp"
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/etPassword"
+            android:id="@+id/edtAdminPassword"
             android:layout_width="350sp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="50dp"
@@ -56,12 +55,12 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/btnSubmit"
+            android:id="@+id/btnAdminLogin"
             android:layout_width="300dp"
             android:layout_height="match_parent"
             android:layout_marginTop="50dp"
             android:padding="12dp"
-            android:text="התחבר"
+            android:text="התחברות"
             android:textColor="@android:color/white"
             android:textSize="20sp"
             android:textStyle="bold"

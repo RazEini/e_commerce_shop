@@ -13,16 +13,16 @@
         android:theme="@style/Theme.BagrutProject"
         tools:targetApi="31">
         <activity
-            android:name=".screens.AddCart"
+            android:name=".screens.LoginAdmin"
             android:exported="false" />
         <activity
-            android:name=".screens.MainActivity"
+            android:name=".screens.AddItem"
             android:exported="false" />
         <activity
             android:name=".screens.Odot"
             android:exported="false" />
         <activity
-            android:name=".screens.AddItem"
+            android:name=".screens.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -38,7 +38,7 @@
             android:exported="false" />
         <activity
             android:name=".screens.AdminPage"
-            android:exported="false"></activity>
+            android:exported="false" />
     </application>
 
 </manifest>
