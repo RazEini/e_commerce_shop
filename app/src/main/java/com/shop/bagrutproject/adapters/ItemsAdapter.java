@@ -34,7 +34,14 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
 
         holder.itemNameTextView.setText(item.getName());
         holder.itemPriceTextView.setText("₪" + item.getPrice());
-        holder.itemImageView.setImageBitmap(ImageUtil.convertFrom64base(item.getPic()));
+
+        // בודקים אם יש תמונה ב-Firebase (בסיס64) ואם לא, מציגים תמונת ברירת מחדל
+        if (item.getPic() != null && !item.getPic().isEmpty()) {
+            holder.itemImageView.setImageBitmap(ImageUtil.convertFrom64base(item.getPic()));
+        } else {
+            // נטען תמונת ברירת מחדל אם אין תמונה
+            holder.itemImageView.setImageResource(R.drawable.ic_launcher_foreground); // ניתן להחליף ב-placeholder שלך
+        }
     }
 
     @Override
@@ -55,4 +62,3 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
         }
     }
 }
-

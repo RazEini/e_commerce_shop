@@ -73,7 +73,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                             final String userUid = user.getUid();
 
 
-                            Intent go = new Intent(getApplicationContext(), MainActivity.class);
+                            Intent go = new Intent(getApplicationContext(), RecyclerViewActivity.class);
                             startActivity(go);
                         } else {
 

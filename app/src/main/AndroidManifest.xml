@@ -12,7 +12,7 @@
         android:theme="@style/Theme.BagrutProject"
         tools:targetApi="31">
 
-        <activity android:name=".screens.MainActivity"
+        <activity android:name=".screens.RecyclerViewActivity"
             android:exported="false" />
         <activity android:name=".screens.LoginAdmin"
             android:exported="false" />
@@ -20,7 +20,7 @@
             android:exported="false" />
         <activity android:name=".screens.Odot"
             android:exported="false" />
-        <activity android:name=".screens.RecyclerViewActivity"
+        <activity android:name=".screens.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
