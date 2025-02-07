@@ -1,5 +1,6 @@
 package com.shop.bagrutproject.adapters;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.shop.bagrutproject.R;
 import com.shop.bagrutproject.models.Item;
+import com.shop.bagrutproject.screens.ItemDetailActivity;
 import com.shop.bagrutproject.utils.ImageUtil;
 import java.util.List;
 
@@ -42,6 +44,14 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> 
             // נטען תמונת ברירת מחדל אם אין תמונה
             holder.itemImageView.setImageResource(R.drawable.ic_launcher_foreground); // ניתן להחליף ב-placeholder שלך
         }
+
+        // הוספת לחיצה על המוצר
+        holder.itemView.setOnClickListener(v -> {
+            // הוספת אינטרנט לעמוד פרטי המוצר
+            Intent intent = new Intent(holder.itemView.getContext(), ItemDetailActivity.class);
+            intent.putExtra("itemId", item.getId()); // שליחה של ID המוצר לעמוד פרטי המוצר
+            holder.itemView.getContext().startActivity(intent);
+        });
     }
 
     @Override

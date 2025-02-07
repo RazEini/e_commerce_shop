@@ -57,6 +57,8 @@ public class AdminPage extends AppCompatActivity {
             btnShop.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Intent go = new Intent(getApplicationContext(), RecyclerViewActivity.class);
+                    startActivity(go);
                 }
             });
         }

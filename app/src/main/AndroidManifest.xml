@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -11,27 +12,41 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BagrutProject"
         tools:targetApi="31">
-
-        <activity android:name=".screens.RecyclerViewActivity"
+        <activity
+            android:name=".screens.ItemDetailActivity"
             android:exported="false" />
-        <activity android:name=".screens.LoginAdmin"
+        <activity
+            android:name=".screens.ItemDetailsActivity"
             android:exported="false" />
-        <activity android:name=".screens.AddItem"
+        <activity
+            android:name=".screens.RecyclerViewActivity"
             android:exported="false" />
-        <activity android:name=".screens.Odot"
+        <activity
+            android:name=".screens.LoginAdmin"
             android:exported="false" />
-        <activity android:name=".screens.MainActivity"
+        <activity
+            android:name=".screens.AddItem"
+            android:exported="false" />
+        <activity
+            android:name=".screens.Odot"
+            android:exported="false" />
+        <activity
+            android:name=".screens.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".screens.Login"
+        <activity
+            android:name=".screens.Login"
             android:exported="false" />
-        <activity android:name=".screens.Register"
+        <activity
+            android:name=".screens.Register"
             android:exported="false" />
-        <activity android:name=".screens.AdminPage"
+        <activity
+            android:name=".screens.AdminPage"
             android:exported="false" />
     </application>
 

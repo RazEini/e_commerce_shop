@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
-    android:background="?android:attr/selectableItemBackground">
+    android:background="?android:attr/selectableItemBackground"
+    android:padding="16dp">
 
     <ImageView
         android:id="@+id/PreviewimageView"
@@ -13,37 +13,38 @@
         android:layout_height="100dp"
         android:layout_marginEnd="16dp"
         android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/PreviewtextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginRight="8sp"
+        android:layout_marginBottom="8dp"
         android:text="שם המוצר"
+        android:textColor="@android:color/black"
         android:textSize="18sp"
         android:textStyle="bold"
-        android:textColor="@android:color/black"
-        android:layout_marginBottom="8dp"
-        android:layout_marginRight="8sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/PreviewimageView"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/PreviewPriceTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="מחיר"
-        android:textSize="16sp"
-        android:textColor="@android:color/holo_red_dark"
-        android:textStyle="bold"
         android:layout_marginTop="8dp"
         android:layout_marginRight="8sp"
         android:gravity="right"
+        android:text="מחיר"
+        android:textColor="@android:color/holo_red_dark"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/PreviewimageView"
-        app:layout_constraintTop_toBottomOf="@id/PreviewtextView"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/PreviewtextView" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
