@@ -1,74 +1,81 @@
 package com.shop.bagrutproject.adapters;
 
+import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.shop.bagrutproject.R;
 import com.shop.bagrutproject.models.Item;
 import com.shop.bagrutproject.screens.ItemDetailActivity;
+import com.shop.bagrutproject.screens.RecyclerViewActivity;
 import com.shop.bagrutproject.utils.ImageUtil;
+
 import java.util.List;
 
-public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ViewHolder> {
+public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
 
-    private final List<Item> itemList;
+    private List<Item> itemsList;
+    private Context context;
 
-    public ItemsAdapter(List<Item> itemList) {
-        this.itemList = itemList;
-    }
-
-    @NonNull
-    @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.itemselected, parent, false);
-        return new ViewHolder(view);
+    public ItemsAdapter(List<Item> itemsList, Context context) {
+        this.itemsList = itemsList;
+        this.context = context;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Item item = itemList.get(position);
-        if (item == null) return;
+    public ItemViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.itemselected, parent, false);
+        return new ItemViewHolder(view);
+    }
 
-        holder.itemNameTextView.setText(item.getName());
-        holder.itemPriceTextView.setText("₪" + item.getPrice());
-
-        // בודקים אם יש תמונה ב-Firebase (בסיס64) ואם לא, מציגים תמונת ברירת מחדל
-        if (item.getPic() != null && !item.getPic().isEmpty()) {
-            holder.itemImageView.setImageBitmap(ImageUtil.convertFrom64base(item.getPic()));
-        } else {
-            // נטען תמונת ברירת מחדל אם אין תמונה
-            holder.itemImageView.setImageResource(R.drawable.ic_launcher_foreground); // ניתן להחליף ב-placeholder שלך
-        }
-
-        // הוספת לחיצה על המוצר
-        holder.itemView.setOnClickListener(v -> {
-            // הוספת אינטרנט לעמוד פרטי המוצר
-            Intent intent = new Intent(holder.itemView.getContext(), ItemDetailActivity.class);
-            intent.putExtra("itemId", item.getId()); // שליחה של ID המוצר לעמוד פרטי המוצר
-            holder.itemView.getContext().startActivity(intent);
-        });
+    @Override
+    public void onBindViewHolder(ItemViewHolder holder, int position) {
+        Item item = itemsList.get(position);
+        holder.bindItem(item);
     }
 
     @Override
     public int getItemCount() {
-        return itemList.size();
+        return itemsList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        public final TextView itemNameTextView;
-        public final TextView itemPriceTextView;
-        public final ImageView itemImageView;
+    public class ItemViewHolder extends RecyclerView.ViewHolder {
 
-        public ViewHolder(View itemView) {
+        private ImageView previewImageView;
+        private TextView previewTextView;
+        private TextView previewPriceTextView;
+        private Button addToCartButton;
+
+        public ItemViewHolder(View itemView) {
             super(itemView);
-            itemNameTextView = itemView.findViewById(R.id.PreviewtextView);
-            itemPriceTextView = itemView.findViewById(R.id.PreviewPriceTextView);
-            itemImageView = itemView.findViewById(R.id.PreviewimageView);
+            previewImageView = itemView.findViewById(R.id.PreviewimageView);
+            previewTextView = itemView.findViewById(R.id.PreviewtextView);
+            previewPriceTextView = itemView.findViewById(R.id.PreviewPriceTextView);
+            addToCartButton = itemView.findViewById(R.id.addToCartButton);
+
+            // הוספת לחיצה על כל מוצר כדי להוביל לדף המידע של המוצר
+            itemView.setOnClickListener(v -> {
+                Item item = itemsList.get(getAdapterPosition());  // מקבל את המוצר שנלחץ
+                Intent intent = new Intent(context, ItemDetailActivity.class);
+                intent.putExtra("itemId", item.getId()); // שולח את ה-ID של המוצר
+                context.startActivity(intent);
+            });
+        }
+
+        public void bindItem(Item item) {
+            previewImageView.setImageBitmap(ImageUtil.convertFrom64base(item.getPic()));
+            previewTextView.setText(item.getName());
+            previewPriceTextView.setText("₪" + item.getPrice());
+
+            addToCartButton.setOnClickListener(v -> {
+                ((RecyclerViewActivity) context).addItemToCart(item); // הוספת המוצר לעגלה
+            });
         }
     }
 }

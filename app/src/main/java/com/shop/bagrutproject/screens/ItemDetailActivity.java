@@ -2,9 +2,12 @@ package com.shop.bagrutproject.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,6 +23,7 @@ public class ItemDetailActivity extends AppCompatActivity {
     private ImageView itemImage;
     private DatabaseReference databaseReference;
     private String itemId;
+    private Button btnGoBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,10 +41,17 @@ public class ItemDetailActivity extends AppCompatActivity {
         itemType = findViewById(R.id.itemType);
         itemImage = findViewById(R.id.itemImage);
 
-        // יצירת אובייקט Firebase Database
+        btnGoBack = findViewById(R.id.btnGoToShop);
+
+        btnGoBack.setOnClickListener(v -> {
+            Intent intent = new Intent(ItemDetailActivity.this, RecyclerViewActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+        // משיכת המידע של המוצר מ-Firebase
         databaseReference = FirebaseDatabase.getInstance().getReference("items").child(itemId);
 
-        // טוען את פרטי המוצר מ-Firebase
         fetchItemDetails();
     }
 
@@ -48,9 +59,7 @@ public class ItemDetailActivity extends AppCompatActivity {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                // קבלת פרטי המוצר מתוך ה-DataSnapshot
                 Item item = dataSnapshot.getValue(Item.class);
-
                 if (item != null) {
                     itemName.setText(item.getName());
                     itemPrice.setText("₪" + item.getPrice());
@@ -59,11 +68,10 @@ public class ItemDetailActivity extends AppCompatActivity {
                     itemColor.setText(item.getColor());
                     itemType.setText(item.getType());
 
-                    // אם יש תמונה ב-Firebase, תציג אותה, אחרת תציג תמונה ברירת מחדל
                     if (item.getPic() != null && !item.getPic().isEmpty()) {
                         itemImage.setImageBitmap(ImageUtil.convertFrom64base(item.getPic()));
                     } else {
-                        itemImage.setImageResource(R.drawable.ic_launcher_foreground); // תמונת ברירת מחדל
+                        itemImage.setImageResource(R.drawable.ic_launcher_foreground);
                     }
                 }
             }
@@ -75,3 +83,4 @@ public class ItemDetailActivity extends AppCompatActivity {
         });
     }
 }
+

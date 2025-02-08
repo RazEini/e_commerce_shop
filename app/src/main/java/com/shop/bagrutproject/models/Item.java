@@ -1,8 +1,9 @@
 package com.shop.bagrutproject.models;
 
+import java.io.Serializable;  // הוספתי את ה-Serializable
 import java.util.List;
 
-public class Item {
+public class Item implements Serializable {  // הוספתי את ה-Serializable פה
 
     protected String id;
 
@@ -128,7 +129,6 @@ public class Item {
                 ", company='" + company + '\'' +
                 ", aboutItem='" + aboutItem + '\'' +
                 ", price=" + price +
-
                 ", numberRate=" + numberRate +
                 ", rate=" + rate +
                 ", sumRate=" + sumRate +

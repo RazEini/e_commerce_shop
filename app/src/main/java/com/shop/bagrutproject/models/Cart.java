@@ -1,10 +1,11 @@
 package com.shop.bagrutproject.models;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Cart {
-    protected String id;
-    protected List<Item> items;
+public class Cart implements Serializable {
+    private String id;
+    private List<Item> items;
 
     public Cart(String id, List<Item> items) {
         this.id = id;
@@ -25,13 +26,5 @@ public class Cart {
 
     public void setItems(List<Item> items) {
         this.items = items;
-    }
-
-    @Override
-    public String toString() {
-        return "Cart{" +
-                "id='" + id + '\'' +
-                ", items=" + items +
-                '}';
     }
 }

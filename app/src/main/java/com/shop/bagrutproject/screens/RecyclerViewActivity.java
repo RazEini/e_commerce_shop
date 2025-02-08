@@ -1,30 +1,38 @@
 package com.shop.bagrutproject.screens;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.ValueEventListener;
-import com.shop.bagrutproject.R;
-import com.shop.bagrutproject.adapters.ItemsAdapter;
-import com.shop.bagrutproject.models.Item;
+import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.shop.bagrutproject.R;
+import com.shop.bagrutproject.adapters.ItemsAdapter;
+import com.shop.bagrutproject.models.Cart;
+import com.shop.bagrutproject.models.Item;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class RecyclerViewActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private ItemsAdapter itemsAdapter;
-    private List<Item> itemList;
+    private List<Item> cartItems = new ArrayList<>();
     private DatabaseReference databaseReference;
+    private Cart cart;
+    private Button cartButton;
+    private TextView totalPriceText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,38 +40,62 @@ public class RecyclerViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recycler_view);
 
         recyclerView = findViewById(R.id.recyclerViewItems);
+        cartButton = findViewById(R.id.cartButton);
+        totalPriceText = findViewById(R.id.cartItemsText);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // יצירת אובייקט Firebase Database
-        databaseReference = FirebaseDatabase.getInstance().getReference("items");
+        // מאתחל את העגלה
+        cart = new Cart(UUID.randomUUID().toString(), new ArrayList<Item>());
 
-        itemList = new ArrayList<>();
-        itemsAdapter = new ItemsAdapter(itemList);
+        // מאתחל את itemsAdapter ומעביר את שני הפרמטרים
+        itemsAdapter = new ItemsAdapter(cartItems, this);
         recyclerView.setAdapter(itemsAdapter);
 
-        // טוען את הנתונים מ-Firebase
-        fetchDataFromFirebase();
+        databaseReference = FirebaseDatabase.getInstance().getReference("items");
+
+        // נוודא שלחיצה על כפתור "עגלת קניות" תציג את העגלה
+        cartButton.setOnClickListener(v -> {
+            Intent intent = new Intent(RecyclerViewActivity.this, CartActivity.class);
+            intent.putExtra("cart", cart); // שליחה של העגלה כ-Extra
+            startActivity(intent);
+        });
+
+        // טוען את המוצרים מ-Firebase
+        fetchItemsFromFirebase();
     }
 
-    private void fetchDataFromFirebase() {
+    private void fetchItemsFromFirebase() {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                itemList.clear(); // נמחק את הרשימה הישנה
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                cartItems.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Item item = snapshot.getValue(Item.class); // המרת הנתונים לאובייקט Item
-                    if (item != null) {
-                        itemList.add(item); // הוספת אייטם לרשימה
-                    }
+                    Item item = snapshot.getValue(Item.class);
+                    cartItems.add(item);
                 }
-                itemsAdapter.notifyDataSetChanged(); // עדכון ה-RecyclerView עם הנתונים החדשים
+                itemsAdapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // טיפול בשגיאה
-                Log.e("Firebase", "Error fetching data", databaseError.toException());
+            public void onCancelled(DatabaseError databaseError) {
+                // טיפול בשגיאות
             }
         });
+    }
+
+    // הוספת מוצר לעגלה
+    public void addItemToCart(Item item) {
+        cart.getItems().add(item);
+        updateTotalPrice();  // עדכון המחיר הכולל
+        Toast.makeText(RecyclerViewActivity.this, "המוצר נוסף לעגלה", Toast.LENGTH_SHORT).show();
+    }
+
+    // עדכון המחיר הכולל בעגלה
+    private void updateTotalPrice() {
+        double totalPrice = 0;
+        for (Item item : cart.getItems()) {
+            totalPrice += item.getPrice();
+        }
+        totalPriceText.setText("סך הכל: ₪" + totalPrice);
     }
 }
