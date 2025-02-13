@@ -51,6 +51,8 @@ public class AdminPage extends AppCompatActivity {
             btnUsers.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Intent go = new Intent(getApplicationContext(), UsersActivity.class);
+                    startActivity(go);
                 }
             });
 
