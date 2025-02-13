@@ -12,9 +12,9 @@ import com.shop.bagrutproject.R;
 
 public class UserDetailActivity extends AppCompatActivity {
 
-    TextView tvFName, tvLName, tvEmail, tvPhone, tvPassword;
+    TextView tvFName, tvLName, tvEmail, tvPhone;
     ImageButton btnBack;
-    String uid, fName, lName, email, phone, password;
+    String uid, fName, lName, email, phone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +25,7 @@ public class UserDetailActivity extends AppCompatActivity {
         tvLName = findViewById(R.id.tvLName);
         tvEmail = findViewById(R.id.tvEmail);
         tvPhone = findViewById(R.id.tvPhone);
-        tvPassword = findViewById(R.id.tvPassword);
+
         btnBack = findViewById(R.id.btnBack);
 
         // Get the data passed from the adapter
@@ -36,14 +36,12 @@ public class UserDetailActivity extends AppCompatActivity {
             lName = extras.getString("USER_LNAME");
             email = extras.getString("USER_EMAIL");
             phone = extras.getString("USER_PHONE");
-            password = extras.getString("USER_PASSWORD");
 
             // Set the data to the TextViews
             tvFName.setText("First Name: " + fName);
             tvLName.setText("Last Name: " + lName);
             tvEmail.setText("Email: " + email);
             tvPhone.setText("Phone: " + phone);
-            tvPassword.setText("Password: " + password);
         }
 
         // Set the back button functionality

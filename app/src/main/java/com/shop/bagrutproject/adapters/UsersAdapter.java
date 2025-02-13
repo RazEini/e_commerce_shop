@@ -46,7 +46,6 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersViewHol
             intent.putExtra("USER_LNAME", user.getLName());
             intent.putExtra("USER_EMAIL", user.getEmail());
             intent.putExtra("USER_PHONE", user.getPhone());
-            intent.putExtra("USER_PASSWORD", user.getPassword()); // Add password here
             context.startActivity(intent);
         });
     }
