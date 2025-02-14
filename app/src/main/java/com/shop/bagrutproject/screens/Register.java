@@ -27,7 +27,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.shop.bagrutproject.R;
+import com.shop.bagrutproject.models.Cart;
+import com.shop.bagrutproject.models.Item;
 import com.shop.bagrutproject.models.User;
+import com.shop.bagrutproject.services.DatabaseService;
+
+import java.util.ArrayList;
+import java.util.UUID;
 
 
 public class Register extends AppCompatActivity implements View.OnClickListener{
@@ -42,7 +48,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
     public static final String MyPREFERENCES = "MyPrefs" ;
     SharedPreferences sharedpreferences;
 
-
+    DatabaseService databaseService;
 
 
     @Override
@@ -55,6 +61,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        databaseService=DatabaseService.getInstance();
 
 
         sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
@@ -132,6 +139,20 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                                 editor.putString("email", email);
                                 editor.putString("password", pass);
 
+                                // מאתחל את העגלה
+                             Cart   cart = new Cart(UUID.randomUUID().toString(), new ArrayList<Item>());
+
+                                databaseService.createNewCart(cart,newUser.getUid(), new DatabaseService.DatabaseCallback<Void>() {
+                                    @Override
+                                    public void onCompleted(Void object) {
+
+                                    }
+
+                                    @Override
+                                    public void onFailed(Exception e) {
+
+                                    }
+                                });
                                 editor.commit();
                                 Intent goLog=new Intent(getApplicationContext(), Login.class);
                                 startActivity(goLog);

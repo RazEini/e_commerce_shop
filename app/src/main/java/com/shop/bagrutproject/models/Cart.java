@@ -12,6 +12,9 @@ public class Cart implements Serializable {
         this.items = items;
     }
 
+    public Cart() {
+    }
+
     public String getId() {
         return id;
     }
@@ -26,5 +29,13 @@ public class Cart implements Serializable {
 
     public void setItems(List<Item> items) {
         this.items = items;
+    }
+
+    @Override
+    public String toString() {
+        return "Cart{" +
+                "id='" + id + '\'' +
+                ", items=" + items +
+                '}';
     }
 }

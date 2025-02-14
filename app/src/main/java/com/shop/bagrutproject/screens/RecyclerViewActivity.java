@@ -19,6 +19,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.shop.bagrutproject.models.User;
+import com.shop.bagrutproject.services.AuthenticationService;
+import com.shop.bagrutproject.services.DatabaseService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +36,9 @@ public class RecyclerViewActivity extends AppCompatActivity {
     private Cart cart;
     private Button cartButton;
     private TextView totalPriceText;
+    DatabaseService databaseService;
+    AuthenticationService authenticationService;
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +50,6 @@ public class RecyclerViewActivity extends AppCompatActivity {
         totalPriceText = findViewById(R.id.cartItemsText);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // מאתחל את העגלה
-        cart = new Cart(UUID.randomUUID().toString(), new ArrayList<Item>());
 
         // מאתחל את itemsAdapter ומעביר את שני הפרמטרים
         itemsAdapter = new ItemsAdapter(cartItems, this);
@@ -68,7 +72,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                cartItems.clear();
+
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Item item = snapshot.getValue(Item.class);
                     cartItems.add(item);
@@ -88,6 +92,8 @@ public class RecyclerViewActivity extends AppCompatActivity {
         cart.getItems().add(item);
         updateTotalPrice();  // עדכון המחיר הכולל
         Toast.makeText(RecyclerViewActivity.this, "המוצר נוסף לעגלה", Toast.LENGTH_SHORT).show();
+
+
     }
 
     // עדכון המחיר הכולל בעגלה

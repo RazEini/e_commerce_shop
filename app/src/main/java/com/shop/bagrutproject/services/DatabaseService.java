@@ -163,8 +163,8 @@ public class DatabaseService {
     /// @return void
     /// @see DatabaseCallback
     /// @see Cart
-    public void getCart(@NotNull final String cartId, @NotNull final DatabaseCallback<Cart> callback) {
-        getData("carts/" + cartId, Cart.class, callback);
+    public void getCart(@NotNull final String cartId, String uid,@NotNull final DatabaseCallback<Cart> callback) {
+        getData("Users/" + uid+"/cart/ " + cartId, Cart.class, callback);
     }
 
     /// generate a new id for a new item in the database
@@ -203,8 +203,8 @@ public class DatabaseService {
     /// @return void
     /// @see DatabaseCallback
     /// @see Cart
-    public void createNewCart(@NotNull final Cart cart, @Nullable final DatabaseCallback<Void> callback) {
-        writeData("carts/" + cart.getId(), cart, callback);
+    public void createNewCart(@NotNull final Cart cart,String uid ,@Nullable final DatabaseCallback<Void> callback) {
+        writeData("Users/" + uid+"/cart/ "+ cart.getId(), cart, callback);
     }
 
 
