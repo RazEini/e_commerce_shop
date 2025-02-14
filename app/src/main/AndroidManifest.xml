@@ -13,6 +13,9 @@
         android:theme="@style/Theme.BagrutProject"
         tools:targetApi="31">
         <activity
+            android:name=".screens.UserAfterLoginPage"
+            android:exported="false" />
+        <activity
             android:name=".screens.UserDetailActivity"
             android:exported="false" />
         <activity

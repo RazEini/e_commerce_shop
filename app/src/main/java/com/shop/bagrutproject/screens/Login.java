@@ -1,6 +1,7 @@
 package com.shop.bagrutproject.screens;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -20,8 +21,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.shop.bagrutproject.R;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
@@ -29,10 +28,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     EditText etEmail, etPassword;
     Button btnLog;
     String email, pass;
-    FirebaseDatabase database;
-    DatabaseReference myRef;
-    private FirebaseAuth mAuth;
-
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,8 +49,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         btnLog = findViewById(R.id.btnSubmit);
         btnLog.setOnClickListener(this);
         mAuth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("Users");
     }
 
     @Override
@@ -72,20 +66,54 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                             FirebaseUser user = mAuth.getCurrentUser();
                             final String userUid = user.getUid();
 
+                            // שמירת ה-UID ופרטי המשתמש ב-SharedPreferences
+                            SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("userUid", userUid);
+                            editor.putString("email", email); // שמירת האימייל
+                            editor.apply(); // שמירה של השינויים
 
-                            Intent go = new Intent(getApplicationContext(), RecyclerViewActivity.class);
+                            // מעבר למסך הבא
+                            Intent go = new Intent(getApplicationContext(), UserAfterLoginPage.class);
                             startActivity(go);
                         } else {
-
-//                                // If sign in fails, display a message to the user.
+                            // If sign in fails, display a message to the user
                             Log.w("TAG", "signInWithEmail:failure", task.getException());
                             Toast.makeText(getApplicationContext(), "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-//                                updateUI(null);
                         }
-
-
                     }
                 });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // קריאת ה-UID מ-SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        String userUid = sharedPreferences.getString("userUid", null);
+
+        if (userUid != null) {
+            // אם יש UID, זה אומר שהמשתמש כבר מחובר
+            Intent go = new Intent(getApplicationContext(), UserAfterLoginPage.class);
+            startActivity(go);
+        }
+    }
+
+    // פונקציה להתנתקות
+    public void logout() {
+        // מנקה את ה-SharedPreferences כאשר המשתמש מתנתק
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear(); // מנקה את כל הנתונים
+        editor.apply();
+
+        // מבצע יציאה מהחשבון ב-Firebase
+        mAuth.signOut();
+
+        // מעביר את המשתמש למסך ההתחברות
+        Intent go = new Intent(getApplicationContext(), Login.class);
+        startActivity(go);
     }
 }
