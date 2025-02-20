@@ -138,7 +138,7 @@ public class DatabaseService {
     /// @see DatabaseCallback
     /// @see User
     public void createNewUser(@NotNull final User user, @Nullable final DatabaseCallback<Void> callback) {
-        writeData("users/" + user.getUid(), user, callback);
+        writeData("Users/" + user.getUid(), user, callback);
     }
 
   
@@ -152,7 +152,7 @@ public class DatabaseService {
     /// @see DatabaseCallback
     /// @see User
     public void getUser(@NotNull final String uid, @NotNull final DatabaseCallback<User> callback) {
-        getData("users/" + uid, User.class, callback);
+        getData("Users/" + uid, User.class, callback);
     }
 
     /// get a cart from the database
@@ -163,8 +163,8 @@ public class DatabaseService {
     /// @return void
     /// @see DatabaseCallback
     /// @see Cart
-    public void getCart(@NotNull final String cartId, String uid,@NotNull final DatabaseCallback<Cart> callback) {
-        getData("Users/" + uid+"/cart/ " + cartId, Cart.class, callback);
+    public void getCart(@NotNull final  String uid,@NotNull final DatabaseCallback<Cart> callback) {
+        getData("Users/" + uid+"/cart" , Cart.class, callback);
     }
 
     /// generate a new id for a new item in the database
@@ -203,8 +203,8 @@ public class DatabaseService {
     /// @return void
     /// @see DatabaseCallback
     /// @see Cart
-    public void createNewCart(@NotNull final Cart cart,String uid ,@Nullable final DatabaseCallback<Void> callback) {
-        writeData("Users/" + uid+"/cart/ "+ cart.getId(), cart, callback);
+    public void updateCart(@NotNull final Cart cart,String uid ,@Nullable final DatabaseCallback<Void> callback) {
+        writeData("Users/" + uid+"/cart", cart, callback);
     }
 
 

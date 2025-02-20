@@ -30,7 +30,9 @@ import com.shop.bagrutproject.R;
 import com.shop.bagrutproject.models.Cart;
 import com.shop.bagrutproject.models.Item;
 import com.shop.bagrutproject.models.User;
+import com.shop.bagrutproject.services.AuthenticationService;
 import com.shop.bagrutproject.services.DatabaseService;
+import com.shop.bagrutproject.utils.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -42,13 +44,14 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
     Button btnReg;
     String fName,lName, phone, email, pass;
 
-    private FirebaseAuth mAuth;
-    private FirebaseDatabase database;
-    private DatabaseReference myRef;
-    public static final String MyPREFERENCES = "MyPrefs" ;
-    SharedPreferences sharedpreferences;
+
 
     DatabaseService databaseService;
+
+    private static final String TAG = "RegisterActivity";
+
+
+    private AuthenticationService authenticationService;
 
 
     @Override
@@ -61,18 +64,19 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        databaseService=DatabaseService.getInstance();
 
 
-        sharedpreferences = getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+        /// get the instance of the authentication service
+        authenticationService = AuthenticationService.getInstance();
+        /// get the instance of the database service
+        databaseService = DatabaseService.getInstance();
+
+
+
         init_views();
 
 
-        // Write a message to the database
-        database = FirebaseDatabase.getInstance();
-        myRef = database.getReference("Users");
 
-        mAuth = FirebaseAuth.getInstance();
 
     }
 
@@ -124,53 +128,72 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
 
         if (isValid==true){
 
-            mAuth.createUserWithEmailAndPassword(email, pass)
-                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d("TAG", "createUserWithEmail:success");
-                                FirebaseUser fireuser = mAuth.getCurrentUser();
-                                User newUser=new User(fireuser.getUid(), email, pass, fName, lName, phone);
-                                myRef.child(fireuser.getUid()).setValue(newUser);
-                                SharedPreferences.Editor editor = sharedpreferences.edit();
 
-                                editor.putString("email", email);
-                                editor.putString("password", pass);
-
-                                // מאתחל את העגלה
-                             Cart   cart = new Cart(UUID.randomUUID().toString(), new ArrayList<Item>());
-
-                                databaseService.createNewCart(cart,newUser.getUid(), new DatabaseService.DatabaseCallback<Void>() {
-                                    @Override
-                                    public void onCompleted(Void object) {
-
-                                    }
-
-                                    @Override
-                                    public void onFailed(Exception e) {
-
-                                    }
-                                });
-                                editor.commit();
-                                Intent goLog=new Intent(getApplicationContext(), Login.class);
-                                startActivity(goLog);
-
-
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Log.w("TAG", "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(Register.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
-
-                            }
-
-                            // ...
-                        }
-                    });
+                  registerUser(email,pass,fName,lName,phone);
         }
 
 
     }
+
+    /// Register the user
+    private void registerUser(String email, String password, String fName, String lName, String phone) {
+        Log.d(TAG, "registerUser: Registering user...");
+
+        /// call the sign up method of the authentication service
+        authenticationService.signUp(email, password, new AuthenticationService.AuthCallback<String>() {
+
+            @Override
+            public void onCompleted(String uid) {
+                Log.d(TAG, "onCompleted: User registered successfully");
+                /// create a new user object
+                User user = new User();
+                user.setUid(uid);
+                user.setEmail(email);
+                user.setPassword(password);
+                user.setFName(fName);
+                user.setLName(lName);
+                user.setPhone(phone);
+
+                /// call the createNewUser method of the database service
+                databaseService.createNewUser(user, new DatabaseService.DatabaseCallback<Void>() {
+
+                    @Override
+                    public void onCompleted(Void object) {
+                        Log.d(TAG, "onCompleted: User registered successfully");
+                        /// save the user to shared preferences
+                        SharedPreferencesUtil.saveUser(Register.this, user);
+
+
+
+                        Log.d(TAG, "onCompleted: Redirecting to MainActivity");
+                        /// Redirect to MainActivity and clear back stack to prevent user from going back to register screen
+                        Intent mainIntent = new Intent(Register.this, MainActivity.class);
+                        /// clear the back stack (clear history) and start the MainActivity
+                        mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(mainIntent);
+                    }
+
+                    @Override
+                    public void onFailed(Exception e) {
+                        Log.e(TAG, "onFailed: Failed to register user", e);
+                        /// show error message to user
+                        Toast.makeText(Register.this, "Failed to register user", Toast.LENGTH_SHORT).show();
+                        /// sign out the user if failed to register
+                        /// this is to prevent the user from being logged in again
+                        authenticationService.signOut();
+                    }
+                });
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                Log.e(TAG, "onFailed: Failed to sign up user", e);
+                /// show error message to user
+                Toast.makeText(Register.this, "Failed to register user", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+    }
+
 }

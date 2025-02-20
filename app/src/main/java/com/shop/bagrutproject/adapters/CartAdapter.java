@@ -62,4 +62,10 @@ public class CartAdapter extends BaseAdapter {
 
         return convertView;
     }
+
+    public void setItems(List<Item> items) {
+        this.cartItems.clear();
+        this.cartItems.addAll(items);
+        this.notifyDataSetChanged();
+    }
 }

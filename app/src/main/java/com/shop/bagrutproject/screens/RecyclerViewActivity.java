@@ -2,6 +2,7 @@ package com.shop.bagrutproject.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,21 +30,37 @@ import java.util.UUID;
 
 public class RecyclerViewActivity extends AppCompatActivity {
 
+    /// tag for logging
+    private static final String TAG = "ShopActivity";
+
+
     private RecyclerView recyclerView;
     private ItemsAdapter itemsAdapter;
     private List<Item> cartItems = new ArrayList<>();
+
+    private ArrayList<Item> allItems=new ArrayList<>();
     private DatabaseReference databaseReference;
     private Cart cart;
     private Button cartButton;
     private TextView totalPriceText;
     DatabaseService databaseService;
     AuthenticationService authenticationService;
-    User user;
+    User user=null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recycler_view);
+
+
+        /// get the instance of the database service
+        databaseService = DatabaseService.getInstance();
+        user=Login.user;
+        cart=Login.cart;
+
+
+
 
         recyclerView = findViewById(R.id.recyclerViewItems);
         cartButton = findViewById(R.id.cartButton);
@@ -52,54 +69,89 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
 
         // מאתחל את itemsAdapter ומעביר את שני הפרמטרים
-        itemsAdapter = new ItemsAdapter(cartItems, this);
+        itemsAdapter = new ItemsAdapter(allItems, this);
         recyclerView.setAdapter(itemsAdapter);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("items");
-
-        // נוודא שלחיצה על כפתור "עגלת קניות" תציג את העגלה
         cartButton.setOnClickListener(v -> {
             Intent intent = new Intent(RecyclerViewActivity.this, CartActivity.class);
-            intent.putExtra("cart", cart); // שליחה של העגלה כ-Extra
+
             startActivity(intent);
         });
+
+
+
+        // נוודא שלחיצה על כפתור "עגלת קניות" תציג את העגלה
+
 
         // טוען את המוצרים מ-Firebase
         fetchItemsFromFirebase();
     }
 
     private void fetchItemsFromFirebase() {
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseService.getItems(new DatabaseService.DatabaseCallback<List<Item>>() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Item item = snapshot.getValue(Item.class);
-                    cartItems.add(item);
-                }
+            public void onCompleted(List<Item> object) {
+                Log.d(TAG, "onCompleted: " + object);
+                allItems.clear();
+                allItems.addAll(object);
+                /// notify the adapter that the data has changed
+                /// this specifies that the data has changed
+                /// and the adapter should update the view
+                /// @see FoodSpinnerAdapter#notifyDataSetChanged()
                 itemsAdapter.notifyDataSetChanged();
+
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // טיפול בשגיאות
+            public void onFailed(Exception e) {
+
             }
-        });
+
+
+
+    });
     }
+
 
     // הוספת מוצר לעגלה
     public void addItemToCart(Item item) {
-        cart.getItems().add(item);
+
+        if(user==null){
+
+
+
+            return;
+        }
+
+        if(Login.cart==null) {
+            Cart newCart = new Cart();
+
+            Login.cart=newCart;
+        }
+        Login.cart.addItem(item);
         updateTotalPrice();  // עדכון המחיר הכולל
         Toast.makeText(RecyclerViewActivity.this, "המוצר נוסף לעגלה", Toast.LENGTH_SHORT).show();
 
+
+        databaseService.updateCart(Login.cart,user.getUid(), new DatabaseService.DatabaseCallback<Void>() {
+            @Override
+            public void onCompleted(Void object) {
+
+
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+
+            }
+        });
 
     }
 
     // עדכון המחיר הכולל בעגלה
     private void updateTotalPrice() {
         double totalPrice = 0;
-        for (Item item : cart.getItems()) {
+        for (Item item : Login.cart.getItems()) {
             totalPrice += item.getPrice();
         }
         totalPriceText.setText("סך הכל: ₪" + totalPrice);

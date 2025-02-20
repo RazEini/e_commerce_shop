@@ -1,30 +1,35 @@
 package com.shop.bagrutproject.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Cart implements Serializable {
-    private String id;
+
     private List<Item> items;
 
-    public Cart(String id, List<Item> items) {
-        this.id = id;
+    public Cart( List<Item> items) {
+
         this.items = items;
     }
 
     public Cart() {
+        this.items = items;
     }
 
-    public String getId() {
-        return id;
+    public void addItem(Item item) {
+
+        if(this.items==null){
+            this.items=new ArrayList<>();
+        }
+        this.items.add(item);
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
+
+
 
     public List<Item> getItems() {
-        return items;
+        return this.items;
     }
 
     public void setItems(List<Item> items) {
@@ -34,8 +39,8 @@ public class Cart implements Serializable {
     @Override
     public String toString() {
         return "Cart{" +
-                "id='" + id + '\'' +
-                ", items=" + items +
+
+                ", items=" +this.items +
                 '}';
     }
 }
