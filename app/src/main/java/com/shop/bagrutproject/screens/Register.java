@@ -75,9 +75,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
 
         init_views();
 
-
-
-
     }
 
     private void init_views(){

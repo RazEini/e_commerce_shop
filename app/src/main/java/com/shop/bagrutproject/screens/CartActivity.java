@@ -26,7 +26,6 @@ public class CartActivity extends AppCompatActivity {
     private TextView totalPriceText;
     private Cart cart;
     private CartAdapter cartAdapter;
-    /// get the instance of the authentication service
     private DatabaseService databaseService;
     User user=null;
 
@@ -65,13 +64,8 @@ public class CartActivity extends AppCompatActivity {
             @Override
             public void onFailed(Exception e) {
                 Log.e(TAG, "onFailed: Failed to read cart", e);
-
             }
         });
-
-        // קבלת העגלה שנשלחה מ-RecyclerViewActivity
-
-
     }
 
     // עדכון המחיר הכולל

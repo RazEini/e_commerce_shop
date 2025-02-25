@@ -117,9 +117,6 @@ public class RecyclerViewActivity extends AppCompatActivity {
     public void addItemToCart(Item item) {
 
         if(user==null){
-
-
-
             return;
         }
 

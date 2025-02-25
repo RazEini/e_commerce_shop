@@ -25,9 +25,6 @@ public class Cart implements Serializable {
         this.items.add(item);
     }
 
-
-
-
     public List<Item> getItems() {
         return this.items;
     }

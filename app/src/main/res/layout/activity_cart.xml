@@ -5,9 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- רשימת פריטי העגלה -->
-
-    <!-- תצוגת המחיר הכולל -->
     <TextView
         android:id="@+id/cartItemsText"
         android:layout_width="wrap_content"

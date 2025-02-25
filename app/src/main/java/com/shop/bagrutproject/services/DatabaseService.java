@@ -156,7 +156,7 @@ public class DatabaseService {
     }
 
     /// get a cart from the database
-    /// @param cartId the id of the cart to get
+    /// @param uid the id of the cart to get
     /// @param callback the callback to call when the operation is completed
     ///                the callback will receive the cart object
     ///               if the operation fails, the callback will receive an exception

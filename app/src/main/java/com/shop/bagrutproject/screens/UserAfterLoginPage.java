@@ -36,7 +36,6 @@ public class UserAfterLoginPage extends AppCompatActivity {
         });
     }
     public void goToShop(View view) {
-        // כאן תוכל לשים את הקוד שיבצע את המעבר לעמוד החנות
         Intent intent = new Intent(UserAfterLoginPage.this, RecyclerViewActivity.class);
         startActivity(intent);
     }
@@ -48,9 +47,8 @@ public class UserAfterLoginPage extends AppCompatActivity {
     }
 
     public void goToPersonalArea(View view) {
-        // כאן תוכל לשים את הקוד שיבצע את המעבר לאזור אישי
-        // Intent intent = new Intent(UserAfterLoginPage.this, PersonalAreaActivity.class);
-       //startActivity(intent);
+        Intent intent = new Intent(UserAfterLoginPage.this, UpdateUserDetailsActivity.class);
+        startActivity(intent);
     }
 
     public void logout() {

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#f0f0f0"
+    tools:context=".screens.UpdateUserDetailsActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="50dp">
+
+        <TextView
+            android:id="@+id/tvUpdate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="40dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="עדכון פרטי משתמש"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/editTextFirstName"
+            android:layout_width="350sp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:hint="שם פרטי"
+            android:inputType="textPersonName"
+            android:padding="12dp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/editTextLastName"
+            android:layout_width="350sp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:hint="שם משפחה"
+            android:inputType="textPersonName"
+            android:padding="12dp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/editTextPhone"
+            android:layout_width="350sp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:hint="מספר טלפון"
+            android:inputType="phone"
+            android:padding="12dp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/editTextEmail"
+            android:layout_width="350sp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:hint="אימייל"
+            android:inputType="textEmailAddress"
+            android:padding="12dp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/editTextPassword"
+            android:layout_width="350sp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
+            android:hint="סיסמה"
+            android:inputType="textPassword"
+            android:padding="12dp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/buttonUpdate"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:padding="12dp"
+            android:text="עדכן"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:backgroundTint="@color/black" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
+
