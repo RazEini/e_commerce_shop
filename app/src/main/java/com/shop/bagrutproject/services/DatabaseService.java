@@ -280,6 +280,17 @@ public class DatabaseService {
         });
     }
 
+    public void deleteUser(String uid, DatabaseCallback<Void> callback) {
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
+        userRef.removeValue().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                callback.onCompleted(null);
+            } else {
+                callback.onFailed(task.getException());
+            }
+        });
+    }
+
 
 }
 

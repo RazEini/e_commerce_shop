@@ -87,6 +87,11 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         btnReg.setOnClickListener(this);
     }
 
+    public void btnBack(View view) {
+        Intent intent = new Intent(Register.this, MainActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public void onClick(View v) {
         fName=etFName.getText().toString();

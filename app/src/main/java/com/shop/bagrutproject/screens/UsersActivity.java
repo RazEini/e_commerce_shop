@@ -1,8 +1,9 @@
 package com.shop.bagrutproject.screens;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,6 +26,7 @@ public class UsersActivity extends AppCompatActivity {
     private List<User> usersList = new ArrayList<>();
     private FirebaseDatabase database;
     private DatabaseReference myRef;
+    private Button backButton; // הוספת משתנה לכפתור
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +39,14 @@ public class UsersActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         myRef = database.getReference("Users");
 
-        // Fetching users from Firebase
+        backButton = findViewById(R.id.backButton);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish(); // חוזר לעמוד הקודם
+            }
+        });
+
         fetchUsers();
     }
 
@@ -48,15 +57,17 @@ public class UsersActivity extends AppCompatActivity {
                 usersList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     User user = snapshot.getValue(User.class);
-                    usersList.add(user);
+                    if (user != null) {
+                        user.setUid(snapshot.getKey());
+                        usersList.add(user);
+                    }
                 }
-                usersAdapter = new UsersAdapter(usersList, UsersActivity.this);  // Pass context here
+                usersAdapter = new UsersAdapter(usersList, UsersActivity.this);
                 recyclerView.setAdapter(usersAdapter);
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
-                // Failed to read value
                 Log.w("UsersActivity", "Failed to read value.", error.toException());
                 Toast.makeText(UsersActivity.this, "Failed to load users.", Toast.LENGTH_SHORT).show();
             }

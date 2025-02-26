@@ -78,17 +78,16 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         mAuth = FirebaseAuth.getInstance();
     }
 
+    public void btnBack2(View view) {
+        Intent intent = new Intent(Login.this, MainActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public void onClick(View view) {
         email = etEmail.getText().toString();
         pass = etPassword.getText().toString();
-
-
-
-
         loginUser(email,pass);
-
-
     }
 
     @Override
