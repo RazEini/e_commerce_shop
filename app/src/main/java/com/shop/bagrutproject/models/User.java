@@ -12,7 +12,20 @@ public class User {
     protected String lName;
     protected String phone;
 
+    protected Cart cart;
+
     public User() {
+        cart = new Cart();
+    }
+
+    public User(String uid, String email, String password, String fName, String lName, String phone, Cart cart) {
+        this.uid = uid;
+        this.email = email;
+        this.password = password;
+        this.fName = fName;
+        this.lName = lName;
+        this.phone = phone;
+        this.cart = cart;
     }
 
     public User(String uid, String email, String password, String fName, String lName, String phone) {
@@ -22,7 +35,9 @@ public class User {
         this.fName = fName;
         this.lName = lName;
         this.phone = phone;
+
     }
+
 
     public String getUid() {
         return uid;
@@ -48,19 +63,19 @@ public class User {
         this.password = password;
     }
 
-    public String getFName() {
+    public String getfName() {
         return fName;
     }
 
-    public void setFName(String fName) {
+    public void setfName(String fName) {
         this.fName = fName;
     }
 
-    public String getLName() {
+    public String getlName() {
         return lName;
     }
 
-    public void setLName(String lName) {
+    public void setlName(String lName) {
         this.lName = lName;
     }
 
@@ -72,7 +87,14 @@ public class User {
         this.phone = phone;
     }
 
-    @NotNull
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -82,7 +104,7 @@ public class User {
                 ", fName='" + fName + '\'' +
                 ", lName='" + lName + '\'' +
                 ", phone='" + phone + '\'' +
+                ", cart=" + cart +
                 '}';
     }
-
 }

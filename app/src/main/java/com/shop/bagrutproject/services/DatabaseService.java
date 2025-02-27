@@ -211,6 +211,17 @@ public class DatabaseService {
 
 
 
+    public void updateUser(@NotNull final User user ,@Nullable final DatabaseCallback<Void> callback) {
+        writeData("Users/" + user.getUid(), user, callback);
+
+
+
+    }
+
+
+
+
+
     /// get a item from the database
     /// @param itemId the id of the item to get
     /// @param callback the callback to call when the operation is completed

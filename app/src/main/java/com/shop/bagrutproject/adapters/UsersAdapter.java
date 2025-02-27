@@ -41,14 +41,14 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersViewHol
     @Override
     public void onBindViewHolder(@NonNull UsersViewHolder holder, int position) {
         User user = usersList.get(position);
-        holder.nameTextView.setText(user.getFName() + " " + user.getLName());
+        holder.nameTextView.setText(user.getfName() + " " + user.getlName());
 
         // On click, pass data to UserDetailActivity
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, UserDetailActivity.class);
             intent.putExtra("USER_UID", user.getUid());
-            intent.putExtra("USER_FNAME", user.getFName());
-            intent.putExtra("USER_LNAME", user.getLName());
+            intent.putExtra("USER_FNAME", user.getfName());
+            intent.putExtra("USER_LNAME", user.getlName());
             intent.putExtra("USER_EMAIL", user.getEmail());
             intent.putExtra("USER_PHONE", user.getPhone());
             context.startActivity(intent);

@@ -33,6 +33,11 @@ public class Cart implements Serializable {
         this.items = items;
     }
 
+    public void removeItem(int index) {
+        this.items.remove(index);
+    }
+
+
     @Override
     public String toString() {
         return "Cart{" +

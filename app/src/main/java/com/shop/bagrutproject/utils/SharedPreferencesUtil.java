@@ -3,6 +3,7 @@ package com.shop.bagrutproject.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.shop.bagrutproject.models.Cart;
 import com.shop.bagrutproject.models.User;
 
 /// Utility class for shared preferences operations
@@ -106,11 +107,13 @@ public class SharedPreferencesUtil {
         editor.putString("uid", user.getUid());
         editor.putString("email", user.getEmail());
         editor.putString("password", user.getPassword());
-        editor.putString("fName", user.getFName());
-        editor.putString("lName", user.getLName());
+        editor.putString("fName", user.getfName());
+        editor.putString("lName", user.getlName());
         editor.putString("phone", user.getPhone());
         editor.apply();
     }
+
+
 
     /// Get the user object from shared preferences
     /// @param context The context to use
@@ -129,7 +132,8 @@ public class SharedPreferencesUtil {
         String fName = sharedPreferences.getString("fName", "");
         String lName = sharedPreferences.getString("lName", "");
         String phone = sharedPreferences.getString("phone", "");
-        return new User(uid, email, password, fName, lName, phone);
+        return new User(uid, email, password, fName, lName, phone,null);
+
 
     }
 

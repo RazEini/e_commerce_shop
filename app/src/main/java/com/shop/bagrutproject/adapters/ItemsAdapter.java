@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.shop.bagrutproject.R;
@@ -20,12 +22,19 @@ import java.util.List;
 
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
 
+    public interface ItemClickListener {
+        public void onClick(Item item);
+    }
+
     private List<Item> itemsList;
     private Context context;
+    @Nullable
+    final ItemClickListener itemClickListener;
 
-    public ItemsAdapter(List<Item> itemsList, Context context) {
+    public ItemsAdapter(List<Item> itemsList, Context context, @Nullable final ItemClickListener itemClickListener) {
         this.itemsList = itemsList;
         this.context = context;
+        this.itemClickListener = itemClickListener;
     }
 
     @Override
@@ -38,6 +47,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
     public void onBindViewHolder(ItemViewHolder holder, int position) {
         Item item = itemsList.get(position);
         holder.bindItem(item);
+
     }
 
     @Override
@@ -68,13 +78,14 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
             });
         }
 
-        public void bindItem(Item item) {
+        public void bindItem(final Item item) {
             previewImageView.setImageBitmap(ImageUtil.convertFrom64base(item.getPic()));
             previewTextView.setText(item.getName());
             previewPriceTextView.setText("₪" + item.getPrice());
 
             addToCartButton.setOnClickListener(v -> {
-                ((RecyclerViewActivity) context).addItemToCart(item); // הוספת המוצר לעגלה
+                if (itemClickListener != null)
+                    itemClickListener.onClick(item);
             });
         }
     }

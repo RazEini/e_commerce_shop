@@ -45,7 +45,6 @@ public class RecyclerViewActivity extends AppCompatActivity {
     private TextView totalPriceText;
     DatabaseService databaseService;
     AuthenticationService authenticationService;
-    User user=null;
 
 
     @Override
@@ -56,11 +55,6 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
         /// get the instance of the database service
         databaseService = DatabaseService.getInstance();
-        user=Login.user;
-        cart=Login.cart;
-
-
-
 
         recyclerView = findViewById(R.id.recyclerViewItems);
         cartButton = findViewById(R.id.cartButton);
@@ -69,7 +63,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
 
         // מאתחל את itemsAdapter ומעביר את שני הפרמטרים
-        itemsAdapter = new ItemsAdapter(allItems, this);
+        itemsAdapter = new ItemsAdapter(allItems, this, this::addItemToCart);
         recyclerView.setAdapter(itemsAdapter);
 
         cartButton.setOnClickListener(v -> {
@@ -77,17 +71,32 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
             startActivity(intent);
         });
-
-
-
         // נוודא שלחיצה על כפתור "עגלת קניות" תציג את העגלה
 
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         // טוען את המוצרים מ-Firebase
         fetchItemsFromFirebase();
+
     }
 
     private void fetchItemsFromFirebase() {
+
+        databaseService.getCart(AuthenticationService.getInstance().getCurrentUserId(), new DatabaseService.DatabaseCallback<Cart>() {
+            @Override
+            public void onCompleted(Cart cart) {
+                RecyclerViewActivity.this.cart = cart;
+                updateTotalPrice();
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+
+            }
+        });
         databaseService.getItems(new DatabaseService.DatabaseCallback<List<Item>>() {
             @Override
             public void onCompleted(List<Item> object) {
@@ -107,33 +116,21 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
             }
 
-
-
-    });
+        });
     }
 
 
     // הוספת מוצר לעגלה
     public void addItemToCart(Item item) {
+        this.cart.addItem(item);
 
-        if(user==null){
-            return;
-        }
-
-        if(Login.cart==null) {
-            Cart newCart = new Cart();
-
-            Login.cart=newCart;
-        }
-        Login.cart.addItem(item);
-        updateTotalPrice();  // עדכון המחיר הכולל
         Toast.makeText(RecyclerViewActivity.this, "המוצר נוסף לעגלה", Toast.LENGTH_SHORT).show();
 
 
-        databaseService.updateCart(Login.cart,user.getUid(), new DatabaseService.DatabaseCallback<Void>() {
+        databaseService.updateCart(this.cart, AuthenticationService.getInstance().getCurrentUserId(), new DatabaseService.DatabaseCallback<Void>() {
             @Override
             public void onCompleted(Void object) {
-
+                updateTotalPrice();  // עדכון המחיר הכולל
 
             }
 
@@ -148,7 +145,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
     // עדכון המחיר הכולל בעגלה
     private void updateTotalPrice() {
         double totalPrice = 0;
-        for (Item item : Login.cart.getItems()) {
+        for (Item item : this.cart.getItems()) {
             totalPrice += item.getPrice();
         }
         totalPriceText.setText("סך הכל: ₪" + totalPrice);

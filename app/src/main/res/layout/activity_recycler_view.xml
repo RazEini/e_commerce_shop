@@ -23,6 +23,7 @@
         app:layout_constraintStart_toStartOf="@+id/recyclerViewItems"
         app:layout_constraintTop_toTopOf="@+id/recyclerViewItems" />
 
+
     <!-- TextView עבור המחיר הכולל בעגלה -->
     <TextView
         android:id="@+id/cartItemsText"

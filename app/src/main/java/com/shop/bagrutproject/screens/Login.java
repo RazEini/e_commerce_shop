@@ -33,16 +33,13 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private static final String TAG = "LoginActivity";
     private AuthenticationService authenticationService;
     private DatabaseService databaseService;
-    public static User user=null;
-
-
 
     EditText etEmail, etPassword;
     Button btnLog;
     String email, pass;
     FirebaseAuth mAuth;
+    private User user=null;
 
-    public  static  Cart cart=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +59,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
 
         initViews();
-        user=SharedPreferencesUtil.getUser(Login.this);
-        if(user!=null) {
-            etEmail.setText(user.getEmail());
-            etPassword.setText(user.getPassword());
-        }
-
     }
 
     private void initViews() {
@@ -94,11 +85,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     protected void onStart() {
         super.onStart();
 
-        // קריאת ה-UID מ-SharedPreferences
-        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-        String userUid = sharedPreferences.getString("userUid", null);
+   user= SharedPreferencesUtil.getUser(this);
+        if (user != null) {
 
-        if (userUid != null) {
+
             // אם יש UID, זה אומר שהמשתמש כבר מחובר
             Intent go = new Intent(getApplicationContext(), UserAfterLoginPage.class);
             startActivity(go);
@@ -134,27 +124,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
                 databaseService.getUser(uid, new DatabaseService.DatabaseCallback<User>() {
                     @Override
-                    public void onCompleted(User u) {
-                        user = u;
+                    public void onCompleted(User user) {
                         Log.d(TAG, "onCompleted: User data retrieved successfully");
                         /// save the user data to shared preferences
                         SharedPreferencesUtil.saveUser(Login.this, user);
                         /// Redirect to main activity and clear back stack to prevent user from going back to login screen
-
-                        databaseService.getCart(uid, new DatabaseService.DatabaseCallback<Cart>() {
-                            @Override
-                            public void onCompleted(Cart object) {
-                                cart=object;
-
-                            }
-
-                            @Override
-                            public void onFailed(Exception e) {
-                                Log.e(TAG, "onFailed: Failed to read cart", e);
-
-                            }
-                        });
-
 
 
                         Intent mainIntent = new Intent(Login.this, UserAfterLoginPage.class);

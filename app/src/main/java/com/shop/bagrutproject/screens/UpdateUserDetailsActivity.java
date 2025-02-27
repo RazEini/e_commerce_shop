@@ -1,7 +1,5 @@
 package com.shop.bagrutproject.screens;
 
-import static com.shop.bagrutproject.screens.Login.cart;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -16,20 +14,42 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.shop.bagrutproject.R;
+import com.shop.bagrutproject.models.Cart;
 import com.shop.bagrutproject.models.User;
+import com.shop.bagrutproject.services.AuthenticationService;
 import com.shop.bagrutproject.services.DatabaseService;
 
 public class UpdateUserDetailsActivity extends AppCompatActivity {
 
     private EditText editTextEmail, editTextPassword, editTextFirstName, editTextLastName, editTextPhone;
     private Button buttonUpdate;
-    private DatabaseReference usersRef;
-    private String uid;
+
+
+    private User user = null;
+    private String uid = "";
+
+    DatabaseService databaseService;
+
+    private static final String TAG = "UpdateUserDetiailsActivity";
+    private AuthenticationService authenticationService;
+    private Cart cart = null;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_user_details);
+
+
+        /// get the instance of the authentication service
+        authenticationService = AuthenticationService.getInstance();
+        /// get the instance of the database service
+        databaseService = DatabaseService.getInstance();
+
+        uid = authenticationService.getCurrentUserId();
+
+        // מילוי הנתונים הקיימים מהפיירבייס
+
 
         // חיבור לשדות במסך
         editTextEmail = findViewById(R.id.editTextEmail);
@@ -39,32 +59,37 @@ public class UpdateUserDetailsActivity extends AppCompatActivity {
         editTextPhone = findViewById(R.id.editTextPhone);
         buttonUpdate = findViewById(R.id.buttonUpdate);
 
-        // קבלת UID של המשתמש המחובר
-        uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        usersRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
 
-        // מילוי הנתונים הקיימים מהפיירבייס
-        DatabaseService.getInstance().getUser(uid, new DatabaseService.DatabaseCallback<User>() {
+        // כפתור עדכון
+        buttonUpdate.setOnClickListener(v -> updateUserDetails());
+
+        databaseService.getUser(uid, new DatabaseService.DatabaseCallback<User>() {
             @Override
-            public void onCompleted(User user) {
+            public void onCompleted(User object) {
+                user = object;
                 if (user != null) {
                     editTextEmail.setText(user.getEmail());
-                    editTextFirstName.setText(user.getFName());
-                    editTextLastName.setText(user.getLName());
+                    editTextFirstName.setText(user.getfName());
+                    editTextLastName.setText(user.getlName());
                     editTextPhone.setText(user.getPhone());
                     editTextPassword.setText(user.getPassword());
+
+                    cart = user.getCart();
                 }
+
             }
 
             @Override
             public void onFailed(Exception e) {
-                // טיפול בשגיאות
+
                 Toast.makeText(UpdateUserDetailsActivity.this, "Failed to load user data", Toast.LENGTH_SHORT).show();
             }
+
+
         });
 
-        // כפתור עדכון
-        buttonUpdate.setOnClickListener(v -> updateUserDetails());
+
+
     }
 
     private void updateUserDetails() {
@@ -99,31 +124,29 @@ public class UpdateUserDetailsActivity extends AppCompatActivity {
         }
 
         // יצירת אובייקט משתמש מעודכן
-        User updatedUser = new User(uid, email, password, fName, lName, phone);
 
-        // עדכון הנתונים בפיירבייס
-        usersRef.setValue(updatedUser)
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(UpdateUserDetailsActivity.this, "Updated Successfully!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(UpdateUserDetailsActivity.this, UserAfterLoginPage.class);
-                    startActivity(intent);
 
-                    // לאחר עדכון המידע, עדכן גם את העגלה
-                    if (cart != null) { // הנח ש-cart הוא משתנה גלובלי שמכיל את העגלה
-                        DatabaseService.getInstance().updateCart(cart, uid, new DatabaseService.DatabaseCallback<Void>() {
-                            @Override
-                            public void onCompleted(Void aVoid) {
-                                Toast.makeText(UpdateUserDetailsActivity.this, "Cart updated successfully!", Toast.LENGTH_SHORT).show();
-                            }
+        user.setlName(lName);
+        user.setfName(fName);
+        //  user.setEmail(email);
+        user.setPhone(phone);
+        databaseService.updateUser(user, new DatabaseService.DatabaseCallback<Void>() {
+            @Override
+            public void onCompleted(Void object) {
+                Toast.makeText(UpdateUserDetailsActivity.this, "User updated successfully!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(UpdateUserDetailsActivity.this, UserAfterLoginPage.class);
+                startActivity(intent);
+                finish();
+            }
 
-                            @Override
-                            public void onFailed(Exception e) {
-                                Toast.makeText(UpdateUserDetailsActivity.this, "Failed to update cart: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                })
-                .addOnFailureListener(e -> Toast.makeText(UpdateUserDetailsActivity.this, "Update Failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+            @Override
+            public void onFailed(Exception e) {
+                Toast.makeText(UpdateUserDetailsActivity.this, "Failed to update User: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+
+
+            }
+        });
+
+
     }
-
 }

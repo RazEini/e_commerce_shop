@@ -152,8 +152,8 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                 user.setUid(uid);
                 user.setEmail(email);
                 user.setPassword(password);
-                user.setFName(fName);
-                user.setLName(lName);
+                user.setfName(fName);
+                user.setlName(lName);
                 user.setPhone(phone);
 
                 /// call the createNewUser method of the database service
