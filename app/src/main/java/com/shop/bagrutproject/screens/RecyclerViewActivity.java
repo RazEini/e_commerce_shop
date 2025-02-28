@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,9 +31,7 @@ import java.util.UUID;
 
 public class RecyclerViewActivity extends AppCompatActivity {
 
-    /// tag for logging
     private static final String TAG = "ShopActivity";
-
 
     private RecyclerView recyclerView;
     private ItemsAdapter itemsAdapter;
@@ -42,6 +41,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
     private DatabaseReference databaseReference;
     private Cart cart;
     private Button cartButton;
+    private ImageButton btnBack;
     private TextView totalPriceText;
     DatabaseService databaseService;
     AuthenticationService authenticationService;
@@ -53,16 +53,15 @@ public class RecyclerViewActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recycler_view);
 
 
-        /// get the instance of the database service
         databaseService = DatabaseService.getInstance();
 
         recyclerView = findViewById(R.id.recyclerViewItems);
         cartButton = findViewById(R.id.cartButton);
+        btnBack = findViewById(R.id.btnBack2);
         totalPriceText = findViewById(R.id.cartItemsText);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
-        // מאתחל את itemsAdapter ומעביר את שני הפרמטרים
         itemsAdapter = new ItemsAdapter(allItems, this, this::addItemToCart);
         recyclerView.setAdapter(itemsAdapter);
 
@@ -71,7 +70,11 @@ public class RecyclerViewActivity extends AppCompatActivity {
 
             startActivity(intent);
         });
-        // נוודא שלחיצה על כפתור "עגלת קניות" תציג את העגלה
+
+        btnBack.setOnClickListener(v -> {
+            onBackPressed();
+            finish();
+        });
 
     }
 
