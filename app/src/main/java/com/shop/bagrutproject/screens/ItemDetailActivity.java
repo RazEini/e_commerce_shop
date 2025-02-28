@@ -44,7 +44,7 @@ public class ItemDetailActivity extends AppCompatActivity {
         btnGoBack = findViewById(R.id.btnGoToShop);
 
         btnGoBack.setOnClickListener(v -> {
-            Intent intent = new Intent(ItemDetailActivity.this, RecyclerViewActivity.class);
+            Intent intent = new Intent(ItemDetailActivity.this, ShopActivity.class);
             startActivity(intent);
             finish();
         });

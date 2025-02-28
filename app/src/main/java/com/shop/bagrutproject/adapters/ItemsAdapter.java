@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.shop.bagrutproject.R;
 import com.shop.bagrutproject.models.Item;
 import com.shop.bagrutproject.screens.ItemDetailActivity;
-import com.shop.bagrutproject.screens.RecyclerViewActivity;
+import com.shop.bagrutproject.screens.ShopActivity;
 import com.shop.bagrutproject.utils.ImageUtil;
 
 import java.util.List;

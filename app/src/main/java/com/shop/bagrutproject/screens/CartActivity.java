@@ -103,7 +103,7 @@ public class CartActivity extends AppCompatActivity {
     }
 
     public void ReturnToShop(View view) {
-        Intent intent = new Intent(CartActivity.this, RecyclerViewActivity.class);
+        Intent intent = new Intent(CartActivity.this, ShopActivity.class);
         startActivity(intent);
     }
 }

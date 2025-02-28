@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- RecyclerView עבור הצגת המוצרים -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewItems"
         android:layout_width="0dp"
@@ -24,7 +23,6 @@
         app:layout_constraintTop_toTopOf="@+id/recyclerViewItems" />
 
 
-    <!-- TextView עבור המחיר הכולל בעגלה -->
     <TextView
         android:id="@+id/cartItemsText"
         android:layout_width="wrap_content"

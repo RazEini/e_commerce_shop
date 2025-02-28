@@ -16,20 +16,14 @@ import com.shop.bagrutproject.R;
 import com.shop.bagrutproject.adapters.ItemsAdapter;
 import com.shop.bagrutproject.models.Cart;
 import com.shop.bagrutproject.models.Item;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.shop.bagrutproject.models.User;
 import com.shop.bagrutproject.services.AuthenticationService;
 import com.shop.bagrutproject.services.DatabaseService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-public class RecyclerViewActivity extends AppCompatActivity {
+public class ShopActivity extends AppCompatActivity {
 
     private static final String TAG = "ShopActivity";
 
@@ -50,7 +44,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_recycler_view);
+        setContentView(R.layout.activity_shop);
 
 
         databaseService = DatabaseService.getInstance();
@@ -66,13 +60,14 @@ public class RecyclerViewActivity extends AppCompatActivity {
         recyclerView.setAdapter(itemsAdapter);
 
         cartButton.setOnClickListener(v -> {
-            Intent intent = new Intent(RecyclerViewActivity.this, CartActivity.class);
+            Intent intent = new Intent(ShopActivity.this, CartActivity.class);
 
             startActivity(intent);
         });
 
         btnBack.setOnClickListener(v -> {
-            onBackPressed();
+            Intent intent = new Intent(ShopActivity.this, UserAfterLoginPage.class);
+            startActivity(intent);
             finish();
         });
 
@@ -91,7 +86,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
         databaseService.getCart(AuthenticationService.getInstance().getCurrentUserId(), new DatabaseService.DatabaseCallback<Cart>() {
             @Override
             public void onCompleted(Cart cart) {
-                RecyclerViewActivity.this.cart = cart;
+                ShopActivity.this.cart = cart;
                 updateTotalPrice();
             }
 
@@ -106,10 +101,6 @@ public class RecyclerViewActivity extends AppCompatActivity {
                 Log.d(TAG, "onCompleted: " + object);
                 allItems.clear();
                 allItems.addAll(object);
-                /// notify the adapter that the data has changed
-                /// this specifies that the data has changed
-                /// and the adapter should update the view
-                /// @see FoodSpinnerAdapter#notifyDataSetChanged()
                 itemsAdapter.notifyDataSetChanged();
 
             }
@@ -127,7 +118,7 @@ public class RecyclerViewActivity extends AppCompatActivity {
     public void addItemToCart(Item item) {
         this.cart.addItem(item);
 
-        Toast.makeText(RecyclerViewActivity.this, "המוצר נוסף לעגלה", Toast.LENGTH_SHORT).show();
+        Toast.makeText(ShopActivity.this, "המוצר נוסף לעגלה", Toast.LENGTH_SHORT).show();
 
 
         databaseService.updateCart(this.cart, AuthenticationService.getInstance().getCurrentUserId(), new DatabaseService.DatabaseCallback<Void>() {

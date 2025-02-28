@@ -3,14 +3,13 @@ package com.shop.bagrutproject.screens;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.shop.bagrutproject.R;
@@ -31,19 +30,20 @@ public class UserAfterLoginPage extends AppCompatActivity {
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                logout(); // נקרא לפונקציה logout
+                logout();
             }
         });
     }
+
     public void goToShop(View view) {
-        Intent intent = new Intent(UserAfterLoginPage.this, RecyclerViewActivity.class);
+        Intent intent = new Intent(UserAfterLoginPage.this, ShopActivity.class);
         startActivity(intent);
     }
 
     public void goToPurchaseHistory(View view) {
         // כאן תוכל לשים את הקוד שיבצע את המעבר לעמוד עגלת הקניות
-        //Intent intent = new Intent(UserAfterLoginPage.this, PurchaseHistory.class);
-        //startActivity(intent);
+        // Intent intent = new Intent(UserAfterLoginPage.this, PurchaseHistory.class);
+        // startActivity(intent);
     }
 
     public void goToPersonalArea(View view) {
@@ -52,19 +52,23 @@ public class UserAfterLoginPage extends AppCompatActivity {
     }
 
     public void logout() {
-        // מנקה את ה-SharedPreferences כאשר המשתמש מתנתק
+        // ניקוי SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear(); // מנקה את כל הנתונים
+        editor.clear();
         editor.apply();
 
-        // מבצע יציאה מהחשבון ב-Firebase
+        // התנתקות מ-Firebase
         mAuth.signOut();
+        Log.d("Logout", "User successfully logged out");
 
-        // מעביר את המשתמש למסך ההתחברות
-        Intent go = new Intent(getApplicationContext(), Login.class);
+        // מעבר לדף ההתחברות
+        Intent go = new Intent(UserAfterLoginPage.this, Login.class);
+        go.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(go);
-        finish(); // לסיים את ה-Activity הנוכחי כדי שלא יחזור למסך הקודם
-    }
+        Log.d("Logout", "Navigated to Login activity");
 
+        finishAffinity();
+        Toast.makeText(UserAfterLoginPage.this, "התנתקת בהצלחה!", Toast.LENGTH_SHORT).show();
+    }
 }

@@ -3,6 +3,7 @@ package com.shop.bagrutproject.screens;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -85,14 +86,15 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     protected void onStart() {
         super.onStart();
 
-   user= SharedPreferencesUtil.getUser(this);
-        if (user != null) {
-
-
-            // אם יש UID, זה אומר שהמשתמש כבר מחובר
-            Intent go = new Intent(getApplicationContext(), UserAfterLoginPage.class);
-            startActivity(go);
-        }
+        // השהייה קטנה כדי לוודא ש-Firebase מספיק להתעדכן
+        new Handler().postDelayed(() -> {
+            if (mAuth.getCurrentUser() != null) {
+                Log.d("LoginCheck", "User is already logged in, redirecting...");
+                Intent go = new Intent(getApplicationContext(), UserAfterLoginPage.class);
+                startActivity(go);
+                finish();
+            }
+        }, 1000);
     }
 
     // פונקציה להתנתקות

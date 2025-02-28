@@ -31,10 +31,7 @@
             android:name=".screens.ItemDetailActivity"
             android:exported="false" />
         <activity
-            android:name=".screens.ItemDetailsActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screens.RecyclerViewActivity"
+            android:name=".screens.ShopActivity"
             android:exported="false" />
         <activity
             android:name=".screens.LoginAdmin"
