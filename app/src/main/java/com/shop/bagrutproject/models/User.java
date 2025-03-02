@@ -4,7 +4,6 @@ import org.jetbrains.annotations.NotNull;
 
 public class User {
 
-    /// unique id of the user
     protected String uid;
     protected String email;
     protected String password;

@@ -4,18 +4,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.shop.bagrutproject.R;
 import com.shop.bagrutproject.adapters.CartAdapter;
 import com.shop.bagrutproject.models.Cart;
 import com.shop.bagrutproject.models.Item;
+import com.shop.bagrutproject.models.Order;
 import com.shop.bagrutproject.models.User;
-import com.shop.bagrutproject.services.AuthenticationService;
 import com.shop.bagrutproject.services.DatabaseService;
 import com.shop.bagrutproject.utils.SharedPreferencesUtil;
 
@@ -27,12 +30,11 @@ public class CartActivity extends AppCompatActivity {
 
     private ListView cartListView;
     private TextView totalPriceText;
+    private Button checkoutButton;
     private Cart cart;
     private CartAdapter cartAdapter;
-    /// get the instance of the authentication service
     private DatabaseService databaseService;
-    User user=null;
-
+    private User user = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +43,9 @@ public class CartActivity extends AppCompatActivity {
 
         cartListView = findViewById(R.id.lvCart);
         totalPriceText = findViewById(R.id.cartItemsText);
+        checkoutButton = findViewById(R.id.checkoutButton); // כפתור חדש
 
-        /// get the instance of the database service
         databaseService = DatabaseService.getInstance();
-
         user = SharedPreferencesUtil.getUser(this);
 
         if (user == null) {
@@ -64,7 +65,6 @@ public class CartActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailed(Exception e) {
-
                     }
                 });
             }
@@ -72,11 +72,10 @@ public class CartActivity extends AppCompatActivity {
 
         cartListView.setAdapter(cartAdapter);
 
-
         databaseService.getCart(user.getUid(), new DatabaseService.DatabaseCallback<Cart>() {
             @Override
             public void onCompleted(Cart object) {
-                cart=object;
+                cart = object;
                 cartAdapter.setItems(cart.getItems());
                 updateTotalPrice();
             }
@@ -84,16 +83,13 @@ public class CartActivity extends AppCompatActivity {
             @Override
             public void onFailed(Exception e) {
                 Log.e(TAG, "onFailed: Failed to read cart", e);
-
             }
         });
 
-        // קבלת העגלה שנשלחה מ-RecyclerViewActivity
-
-
+        // כפתור "סיום הזמנה"
+        checkoutButton.setOnClickListener(v -> processOrder());
     }
 
-    // עדכון המחיר הכולל
     private void updateTotalPrice() {
         double totalPrice = 0;
         for (Item item : cart.getItems()) {
@@ -106,4 +102,28 @@ public class CartActivity extends AppCompatActivity {
         Intent intent = new Intent(CartActivity.this, ShopActivity.class);
         startActivity(intent);
     }
+
+    private void processOrder() {
+        if (cart == null || cart.getItems().isEmpty()) {
+            Toast.makeText(this, "העגלה ריקה!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Order order = new Order(user.getUid(), cart.getItems());
+
+        DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("orders");
+        ordersRef.child(order.getOrderId()).setValue(order)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(CartActivity.this, "הזמנה נשמרה!", Toast.LENGTH_SHORT).show();
+
+                    // מעבר לעמוד סיכום ההזמנה
+                    Intent intent = new Intent(CartActivity.this, OrderSummaryActivity.class);
+                    intent.putExtra("orderId", order.getOrderId());
+                    startActivity(intent);
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(CartActivity.this, "שגיאה בשמירת ההזמנה", Toast.LENGTH_SHORT).show()
+                );
+    }
+
 }

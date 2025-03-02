@@ -2,10 +2,15 @@ package com.shop.bagrutproject.services;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 import com.shop.bagrutproject.models.Cart;
 import com.shop.bagrutproject.models.Item;
+import com.shop.bagrutproject.models.Order;
 import com.shop.bagrutproject.models.User;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -301,6 +306,40 @@ public class DatabaseService {
             }
         });
     }
+
+    public void getOrder(String orderId, DatabaseCallback<Order> callback) {
+        DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("orders").child(orderId);
+
+        orderRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Order order = snapshot.getValue(Order.class);
+                if (order != null) {
+                    callback.onCompleted(order);
+                } else {
+                    callback.onFailed(new Exception("Order not found"));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                callback.onFailed(error.toException());
+            }
+        });
+    }
+
+    public void clearCart(String userId, DatabaseCallback<Void> callback) {
+        DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("carts").child(userId);
+        cartRef.removeValue()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        callback.onCompleted(null);
+                    } else {
+                        callback.onFailed(task.getException());
+                    }
+                });
+    }
+
 
 
 }

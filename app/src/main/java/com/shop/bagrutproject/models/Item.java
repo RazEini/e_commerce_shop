@@ -3,7 +3,7 @@ package com.shop.bagrutproject.models;
 import java.io.Serializable;  // הוספתי את ה-Serializable
 import java.util.List;
 
-public class Item implements Serializable {  // הוספתי את ה-Serializable פה
+public class Item implements Serializable {
 
     protected String id;
 
