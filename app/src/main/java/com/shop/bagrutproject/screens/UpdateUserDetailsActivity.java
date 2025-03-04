@@ -48,10 +48,7 @@ public class UpdateUserDetailsActivity extends AppCompatActivity {
 
         uid = authenticationService.getCurrentUserId();
 
-        // מילוי הנתונים הקיימים מהפיירבייס
 
-
-        // חיבור לשדות במסך
         editTextEmail = findViewById(R.id.editTextEmail);
         editTextPassword = findViewById(R.id.editTextPassword);
         editTextFirstName = findViewById(R.id.editTextFirstName);
@@ -59,8 +56,10 @@ public class UpdateUserDetailsActivity extends AppCompatActivity {
         editTextPhone = findViewById(R.id.editTextPhone);
         buttonUpdate = findViewById(R.id.buttonUpdate);
 
+        editTextEmail.setEnabled(false);
+        editTextPassword.setEnabled(false);
 
-        // כפתור עדכון
+
         buttonUpdate.setOnClickListener(v -> updateUserDetails());
 
         databaseService.getUser(uid, new DatabaseService.DatabaseCallback<User>() {
@@ -84,12 +83,7 @@ public class UpdateUserDetailsActivity extends AppCompatActivity {
 
                 Toast.makeText(UpdateUserDetailsActivity.this, "Failed to load user data", Toast.LENGTH_SHORT).show();
             }
-
-
         });
-
-
-
     }
 
     private void updateUserDetails() {
@@ -105,17 +99,6 @@ public class UpdateUserDetailsActivity extends AppCompatActivity {
             return;
         }
 
-        // בדיקת תקינות המייל
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(this, "Invalid email format", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // בדיקת תקינות הסיסמא (למשל, לפחות 6 תווים)
-        if (password.length() < 6) {
-            Toast.makeText(this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show();
-            return;
-        }
 
         // בדיקת תקינות מספר הטלפון (למשל, לפחות 10 תווים)
         if (phone.length() < 10) {
@@ -123,13 +106,12 @@ public class UpdateUserDetailsActivity extends AppCompatActivity {
             return;
         }
 
-        // יצירת אובייקט משתמש מעודכן
-
 
         user.setlName(lName);
         user.setfName(fName);
-        //  user.setEmail(email);
         user.setPhone(phone);
+
+
         databaseService.updateUser(user, new DatabaseService.DatabaseCallback<Void>() {
             @Override
             public void onCompleted(Void object) {
@@ -142,8 +124,6 @@ public class UpdateUserDetailsActivity extends AppCompatActivity {
             @Override
             public void onFailed(Exception e) {
                 Toast.makeText(UpdateUserDetailsActivity.this, "Failed to update User: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-
-
             }
         });
 

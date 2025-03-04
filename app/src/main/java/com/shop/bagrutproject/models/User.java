@@ -27,16 +27,6 @@ public class User {
         this.cart = cart;
     }
 
-    public User(String uid, String email, String password, String fName, String lName, String phone) {
-        this.uid = uid;
-        this.email = email;
-        this.password = password;
-        this.fName = fName;
-        this.lName = lName;
-        this.phone = phone;
-
-    }
-
 
     public String getUid() {
         return uid;

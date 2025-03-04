@@ -218,9 +218,6 @@ public class DatabaseService {
 
     public void updateUser(@NotNull final User user ,@Nullable final DatabaseCallback<Void> callback) {
         writeData("Users/" + user.getUid(), user, callback);
-
-
-
     }
 
 

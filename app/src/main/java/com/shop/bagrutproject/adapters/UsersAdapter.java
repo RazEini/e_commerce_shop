@@ -41,9 +41,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersViewHol
     @Override
     public void onBindViewHolder(@NonNull UsersViewHolder holder, int position) {
         User user = usersList.get(position);
-        holder.nameTextView.setText(user.getfName() + " " + user.getfName());
+        holder.nameTextView.setText(user.getfName() + " " + user.getlName());
 
-        // On click, pass data to UserDetailActivity
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(context, UserDetailActivity.class);
             intent.putExtra("USER_UID", user.getUid());
@@ -54,7 +53,6 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersViewHol
             context.startActivity(intent);
         });
 
-        // Long click to delete user
         holder.itemView.setOnLongClickListener(v -> {
             if (user.getUid() != null) { // Ensure UID is not null
                 new AlertDialog.Builder(context)
