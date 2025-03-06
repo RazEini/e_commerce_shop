@@ -30,10 +30,43 @@
             android:id="@+id/addressEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="16dp"
             android:hint="הזן כתובת למשלוח"
             android:inputType="textPostalAddress"
             android:padding="12dp" />
+
+        <!-- בחירת שיטת תשלום -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="בחר שיטת תשלום"
+            android:textSize="16sp"
+            android:layout_marginBottom="8dp"/>
+
+        <RadioGroup
+            android:id="@+id/paymentMethodGroup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/googlePayOption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Google Pay" />
+
+            <RadioButton
+                android:id="@+id/payPalOption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PayPal" />
+
+            <RadioButton
+                android:id="@+id/creditCardOption"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="כרטיס אשראי" />
+        </RadioGroup>
 
         <Button
             android:id="@+id/completePaymentButton"
@@ -42,8 +75,8 @@
             android:background="@android:color/holo_blue_dark"
             android:padding="12dp"
             android:text="סיים תשלום"
-            android:textColor="#FFFFFF" />
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="16dp" />
     </LinearLayout>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

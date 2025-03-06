@@ -3,8 +3,10 @@ package com.shop.bagrutproject.screens;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +36,6 @@ public class ShopActivity extends AppCompatActivity {
     private ArrayList<Item> allItems=new ArrayList<>();
     private DatabaseReference databaseReference;
     private Cart cart;
-    private Button cartButton;
     private ImageButton btnBack;
     private TextView totalPriceText;
     DatabaseService databaseService;
@@ -50,7 +51,7 @@ public class ShopActivity extends AppCompatActivity {
         databaseService = DatabaseService.getInstance();
 
         recyclerView = findViewById(R.id.recyclerViewItems);
-        cartButton = findViewById(R.id.cartButton);
+        ImageView cartIcon = findViewById(R.id.cartButton);
         btnBack = findViewById(R.id.btnBack2);
         totalPriceText = findViewById(R.id.cartItemsText);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -59,10 +60,12 @@ public class ShopActivity extends AppCompatActivity {
         itemsAdapter = new ItemsAdapter(allItems, this, this::addItemToCart);
         recyclerView.setAdapter(itemsAdapter);
 
-        cartButton.setOnClickListener(v -> {
-            Intent intent = new Intent(ShopActivity.this, CartActivity.class);
-
-            startActivity(intent);
+        cartIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ShopActivity.this, CartActivity.class);
+                startActivity(intent);
+            }
         });
 
         btnBack.setOnClickListener(v -> {

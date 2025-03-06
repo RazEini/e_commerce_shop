@@ -3,6 +3,8 @@ package com.shop.bagrutproject.screens;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,6 +19,7 @@ public class PaymentActivity extends AppCompatActivity {
     private TextView orderSummaryText;
     private EditText addressEditText;
     private Button completePaymentButton;
+    private RadioGroup paymentMethodGroup;
     private Order order;
 
     @Override
@@ -27,6 +30,7 @@ public class PaymentActivity extends AppCompatActivity {
         orderSummaryText = findViewById(R.id.orderSummaryText);
         addressEditText = findViewById(R.id.addressEditText);
         completePaymentButton = findViewById(R.id.completePaymentButton);
+        paymentMethodGroup = findViewById(R.id.paymentMethodGroup);
 
         String orderId = getIntent().getStringExtra("orderId");
 
@@ -51,19 +55,51 @@ public class PaymentActivity extends AppCompatActivity {
             }
         });
 
-        completePaymentButton.setOnClickListener(v -> {
-            String address = addressEditText.getText().toString().trim();
-            if (address.isEmpty()) {
-                Toast.makeText(PaymentActivity.this, "נא להזין כתובת", Toast.LENGTH_SHORT).show();
-                return;
-            }
+        completePaymentButton.setOnClickListener(v -> completePayment());
+    }
 
-            // כאן תוכל להוסיף את הלוגיקה של תשלום אם תרצה
-            Toast.makeText(PaymentActivity.this, "הזמנה בוצעה בהצלחה!", Toast.LENGTH_SHORT).show();
+    private void completePayment() {
+        String address = addressEditText.getText().toString().trim();
+        if (address.isEmpty()) {
+            Toast.makeText(this, "נא להזין כתובת", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-            // מעבר למסך תודה
-            finish();
-        });
+        int selectedId = paymentMethodGroup.getCheckedRadioButtonId();
+        if (selectedId == -1) {
+            Toast.makeText(this, "בחר שיטת תשלום", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        RadioButton selectedPaymentMethod = findViewById(selectedId);
+        String paymentMethod = selectedPaymentMethod.getText().toString();
+
+        switch (paymentMethod) {
+            case "Google Pay":
+                handleGooglePay();
+                break;
+            case "PayPal":
+                handlePayPal();
+                break;
+            case "כרטיס אשראי":
+                handleCreditCard();
+                break;
+        }
+    }
+
+    private void handleGooglePay() {
+        Toast.makeText(this, "מעבר לתשלום דרך Google Pay...", Toast.LENGTH_SHORT).show();
+        // כאן יהיה קוד האינטגרציה עם Google Pay
+    }
+
+    private void handlePayPal() {
+        Toast.makeText(this, "מעבר לתשלום דרך PayPal...", Toast.LENGTH_SHORT).show();
+        // כאן יהיה קוד האינטגרציה עם PayPal
+    }
+
+    private void handleCreditCard() {
+        Toast.makeText(this, "מעבר לתשלום בכרטיס אשראי...", Toast.LENGTH_SHORT).show();
+        // כאן יהיה קוד לעמוד תשלום בכרטיס אשראי
     }
 
     private void updateOrderSummary() {

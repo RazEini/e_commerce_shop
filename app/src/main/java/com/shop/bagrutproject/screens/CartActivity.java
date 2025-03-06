@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,7 +44,8 @@ public class CartActivity extends AppCompatActivity {
 
         cartListView = findViewById(R.id.lvCart);
         totalPriceText = findViewById(R.id.cartItemsText);
-        checkoutButton = findViewById(R.id.checkoutButton); // כפתור חדש
+        ImageView cartCheckoutIcon = findViewById(R.id.cartCheckoutButton);
+
 
         databaseService = DatabaseService.getInstance();
         user = SharedPreferencesUtil.getUser(this);
@@ -86,8 +88,7 @@ public class CartActivity extends AppCompatActivity {
             }
         });
 
-        // כפתור "סיום הזמנה"
-        checkoutButton.setOnClickListener(v -> processOrder());
+        cartCheckoutIcon.setOnClickListener(v -> processOrder());
     }
 
     private void updateTotalPrice() {

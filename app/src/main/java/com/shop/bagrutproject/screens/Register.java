@@ -156,7 +156,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                 user.setlName(lName);
                 user.setPhone(phone);
 
-                /// call the createNewUser method of the database service
                 databaseService.createNewUser(user, new DatabaseService.DatabaseCallback<Void>() {
 
                     @Override
@@ -168,9 +167,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
 
 
                         Log.d(TAG, "onCompleted: Redirecting to MainActivity");
-                        /// Redirect to MainActivity and clear back stack to prevent user from going back to register screen
-                        Intent mainIntent = new Intent(Register.this, MainActivity.class);
-                        /// clear the back stack (clear history) and start the MainActivity
+                        Intent mainIntent = new Intent(Register.this, Login.class);
                         mainIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(mainIntent);
                     }

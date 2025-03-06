@@ -46,15 +46,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/checkoutButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="סיום הזמנה"
-        android:layout_gravity="center"
-        android:backgroundTint="@color/black"
-        android:textStyle="bold"
-        android:padding="10dp"
-        android:textColor="@android:color/white"/>
+    <ImageView
+        android:id="@+id/cartCheckoutButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/shopping_cart_checkout_16dp"
+        android:contentDescription="Cart Checkout Icon"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="8dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

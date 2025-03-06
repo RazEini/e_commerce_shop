@@ -213,9 +213,6 @@ public class DatabaseService {
     }
 
 
-
-
-
     public void updateUser(@NotNull final User user ,@Nullable final DatabaseCallback<Void> callback) {
         writeData("Users/" + user.getUid(), user, callback);
     }
@@ -333,6 +330,27 @@ public class DatabaseService {
                         callback.onCompleted(null);
                     } else {
                         callback.onFailed(task.getException());
+                    }
+                });
+    }
+
+    public void createCartForUser(String uid, Cart cart, DatabaseCallback<Void> callback) {
+        // Reference to the Firebase database under the user's cart node
+        DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("carts").child(uid);
+
+        // Save the cart to the Firebase database
+        cartRef.setValue(cart)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d(TAG, "Cart created and saved successfully.");
+                        if (callback != null) {
+                            callback.onCompleted(null); // Indicate successful creation
+                        }
+                    } else {
+                        Log.e(TAG, "Failed to create cart", task.getException());
+                        if (callback != null) {
+                            callback.onFailed(task.getException()); // Pass the error
+                        }
                     }
                 });
     }

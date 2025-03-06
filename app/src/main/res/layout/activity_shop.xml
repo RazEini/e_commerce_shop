@@ -13,14 +13,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
+
+    <ImageView
         android:id="@+id/cartButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="עגלת קניות"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/shopping_cart_16dp"
+        android:contentDescription="Cart Icon"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="8dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
         app:layout_constraintStart_toStartOf="@+id/recyclerViewItems"
         app:layout_constraintTop_toTopOf="@+id/recyclerViewItems" />
+
 
 
     <TextView
