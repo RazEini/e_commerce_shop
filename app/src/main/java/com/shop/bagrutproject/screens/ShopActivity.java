@@ -86,6 +86,9 @@ public class ShopActivity extends AppCompatActivity {
         databaseService.getCart(AuthenticationService.getInstance().getCurrentUserId(), new DatabaseService.DatabaseCallback<Cart>() {
             @Override
             public void onCompleted(Cart cart) {
+                if (cart == null) {
+                    cart = new Cart();
+                }
                 ShopActivity.this.cart = cart;
                 updateTotalPrice();
             }

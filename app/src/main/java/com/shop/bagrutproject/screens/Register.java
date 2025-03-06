@@ -45,13 +45,14 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
     String fName,lName, phone, email, pass;
 
 
-
     DatabaseService databaseService;
 
     private static final String TAG = "RegisterActivity";
 
 
     private AuthenticationService authenticationService;
+
+
 
 
     @Override
@@ -70,7 +71,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         authenticationService = AuthenticationService.getInstance();
         /// get the instance of the database service
         databaseService = DatabaseService.getInstance();
-
 
 
         init_views();

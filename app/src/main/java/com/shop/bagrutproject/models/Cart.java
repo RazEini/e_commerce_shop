@@ -9,12 +9,11 @@ public class Cart implements Serializable {
     private List<Item> items;
 
     public Cart( List<Item> items) {
-
         this.items = items;
     }
 
     public Cart() {
-        this.items = items;
+        this.items = new ArrayList<>();
     }
 
     public void addItem(Item item) {
