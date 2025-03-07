@@ -31,21 +31,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/btnShop2"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:backgroundTint="@color/black"
-        android:onClick="ReturnToShop"
-        android:text="חזרה לחנות"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/cartItemsText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
     <ImageView
         android:id="@+id/cartCheckoutButton"
         android:layout_width="50dp"
@@ -56,6 +41,18 @@
         android:focusable="true"
         android:padding="8dp"
         android:background="?android:attr/selectableItemBackgroundBorderless"/>
+
+    <ImageButton
+        android:id="@+id/btnBackToShop"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="344dp"
+        android:layout_marginTop="24dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Back"
+        android:src="@android:drawable/ic_menu_revert"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

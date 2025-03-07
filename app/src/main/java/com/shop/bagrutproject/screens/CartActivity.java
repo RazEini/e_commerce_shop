@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -32,6 +33,7 @@ public class CartActivity extends AppCompatActivity {
     private ListView cartListView;
     private TextView totalPriceText;
     private Button checkoutButton;
+    private ImageButton btnShop;
     private Cart cart;
     private CartAdapter cartAdapter;
     private DatabaseService databaseService;
@@ -45,7 +47,13 @@ public class CartActivity extends AppCompatActivity {
         cartListView = findViewById(R.id.lvCart);
         totalPriceText = findViewById(R.id.cartItemsText);
         ImageView cartCheckoutIcon = findViewById(R.id.cartCheckoutButton);
+        btnShop = findViewById(R.id.btnBackToShop);
 
+        btnShop.setOnClickListener(v -> {
+            Intent intent = new Intent(CartActivity.this, ShopActivity.class);
+            startActivity(intent);
+            finish();
+        });
 
         databaseService = DatabaseService.getInstance();
         user = SharedPreferencesUtil.getUser(this);
@@ -97,11 +105,6 @@ public class CartActivity extends AppCompatActivity {
             totalPrice += item.getPrice();
         }
         totalPriceText.setText("סך הכל: ₪" + totalPrice);
-    }
-
-    public void ReturnToShop(View view) {
-        Intent intent = new Intent(CartActivity.this, ShopActivity.class);
-        startActivity(intent);
     }
 
     private void processOrder() {
