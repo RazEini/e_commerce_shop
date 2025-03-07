@@ -23,7 +23,7 @@ public class ItemDetailActivity extends AppCompatActivity {
     private ImageView itemImage;
     private DatabaseReference databaseReference;
     private String itemId;
-    private Button btnGoBack;
+    private Button btnGoBack, btnViewComments;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +42,20 @@ public class ItemDetailActivity extends AppCompatActivity {
         itemImage = findViewById(R.id.itemImage);
 
         btnGoBack = findViewById(R.id.btnGoToShop);
+        btnViewComments = findViewById(R.id.btnViewComments);
 
+        // חזרה לעמוד החנות
         btnGoBack.setOnClickListener(v -> {
             Intent intent = new Intent(ItemDetailActivity.this, ShopActivity.class);
             startActivity(intent);
             finish();
+        });
+
+        // מעבר לעמוד התגובות
+        btnViewComments.setOnClickListener(v -> {
+            Intent intent = new Intent(ItemDetailActivity.this, CommentActivity.class);
+            intent.putExtra("itemId", itemId); // שליחת ה-ID של המוצר
+            startActivity(intent);
         });
 
         // משיכת המידע של המוצר מ-Firebase
@@ -83,4 +92,3 @@ public class ItemDetailActivity extends AppCompatActivity {
         });
     }
 }
-

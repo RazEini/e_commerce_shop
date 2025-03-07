@@ -1,52 +1,27 @@
 package com.shop.bagrutproject.models;
 
 public class Comment {
-    protected String id;
-    protected User user;
-    protected Item item;
-    protected String date;
-    protected String commentText;
-    protected double rate;
 
-    public Comment(String id, User user, Item item, String date, String commentText, double rate) {
-        this.id = id;
-        this.user = user;
-        this.item = item;
-        this.date = date;
+    private String userId;
+    private String commentText;
+    private float rating;
+
+    public Comment() {
+
+    }
+
+    public Comment(String userId, String commentText, float rating) {
+        this.userId = userId;
         this.commentText = commentText;
-        this.rate = rate;
+        this.rating = rating;
     }
 
-    public String getId() {
-        return id;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Item getItem() {
-        return item;
-    }
-
-    public void setItem(Item item) {
-        this.item = item;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-        this.date = date;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getCommentText() {
@@ -57,23 +32,11 @@ public class Comment {
         this.commentText = commentText;
     }
 
-    public double getRate() {
-        return rate;
+    public float getRating() {
+        return rating;
     }
 
-    public void setRate(double rate) {
-        this.rate = rate;
-    }
-
-    @Override
-    public String toString() {
-        return "Comment{" +
-                "id='" + id + '\'' +
-                ", user=" + user +
-                ", item=" + item +
-                ", date='" + date + '\'' +
-                ", commentText='" + commentText + '\'' +
-                ", rate=" + rate +
-                '}';
+    public void setRating(float rating) {
+        this.rating = rating;
     }
 }

@@ -28,7 +28,6 @@
         app:layout_constraintTop_toTopOf="@+id/recyclerViewItems" />
 
 
-
     <TextView
         android:id="@+id/cartItemsText"
         android:layout_width="wrap_content"

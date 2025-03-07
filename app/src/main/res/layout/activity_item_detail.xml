@@ -1,94 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <ImageView
         android:id="@+id/itemImage"
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:scaleType="centerCrop" />
+        android:layout_gravity="center"
+        android:src="@drawable/ic_launcher_foreground" />
 
     <TextView
         android:id="@+id/itemName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="right"
         android:text="שם המוצר"
-        android:textSize="24sp"
         android:textStyle="bold"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/itemImage"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:textSize="20sp"
+        android:layout_marginTop="16dp" />
 
     <TextView
         android:id="@+id/itemPrice"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="מחיר"
-        android:textSize="20sp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/itemName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_gravity="center"
+        android:text="₪100"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:layout_marginTop="8dp" />
 
     <TextView
         android:id="@+id/itemInfo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="מידע על המוצר"
-        android:textSize="18sp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/itemPrice"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_gravity="right"
+        android:text="פרטי המוצר"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp" />
 
     <TextView
         android:id="@+id/itemCompany"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="right"
         android:text="חברה"
-        android:textSize="18sp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/itemInfo"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp" />
 
     <TextView
         android:id="@+id/itemColor"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="right"
         android:text="צבע"
-        android:textSize="18sp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/itemCompany"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp" />
 
     <TextView
         android:id="@+id/itemType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="right"
         android:text="סוג"
-        android:textSize="18sp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/itemColor"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:layout_marginTop="8dp" />
 
     <Button
         android:id="@+id/btnGoToShop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="חזור לחנות"
-        android:layout_marginTop="30dp"
-        app:layout_constraintTop_toBottomOf="@id/itemType"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:backgroundTint="@color/black"
+        android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
+        android:text="חזרה לחנות"
+        android:textStyle="bold"
+        android:layout_marginTop="50dp" />
+
+    <Button
+        android:id="@+id/btnViewComments"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/black"
+        android:layout_gravity="center"
+        android:text="צפה בתגובות"
+        android:textStyle="bold"
+        android:layout_marginTop="8dp" />
+
+</LinearLayout>

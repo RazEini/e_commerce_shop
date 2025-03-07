@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewComments"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <EditText
+        android:id="@+id/commentInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="הוסף תגובה"
+        android:inputType="text" />
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="5"
+        android:stepSize="0.5"
+        android:rating="5"
+        android:layout_marginTop="8dp"
+        android:layout_gravity="right"/>
+
+    <Button
+        android:id="@+id/btnSubmitComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="שלח תגובה"
+        android:backgroundTint="@color/black"
+        android:textStyle="bold"
+        android:layout_marginTop="8dp" />
+
+    <TextView
+        android:id="@+id/averageRatingText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ממוצע דירוגים: 0"
+        android:textStyle="bold"
+        android:layout_marginTop="8dp"
+        android:textSize="16sp"
+        android:layout_gravity="right"/>
+
+    <Button
+        android:id="@+id/btnGoToItemDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="חזרה לפרטי המוצר"
+        android:backgroundTint="@color/black"
+        android:textStyle="bold"
+        android:layout_marginTop="8dp"/>
+</LinearLayout>
