@@ -6,7 +6,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,7 +30,6 @@ public class CommentActivity extends AppCompatActivity {
     private Button btnSubmitComment;
     private DatabaseReference commentsRef;
     private String itemId;
-    private TextView averageRatingText;
     private RatingBar ratingBar;
 
     @Override
@@ -39,13 +37,11 @@ public class CommentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
 
-
         itemId = getIntent().getStringExtra("itemId");
 
         recyclerView = findViewById(R.id.recyclerViewComments);
         commentInput = findViewById(R.id.commentInput);
         btnSubmitComment = findViewById(R.id.btnSubmitComment);
-        averageRatingText = findViewById(R.id.averageRatingText); // טקסט הממוצע
         ratingBar = findViewById(R.id.ratingBar); // ה-RatingBar
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -77,7 +73,6 @@ public class CommentActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
-
     }
 
     private void loadComments() {
@@ -85,24 +80,12 @@ public class CommentActivity extends AppCompatActivity {
             @Override
             public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
                 commentList.clear();
-                float totalRating = 0;
-                int ratingCount = 0;
 
                 for (com.google.firebase.database.DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Comment comment = snapshot.getValue(Comment.class);
                     if (comment != null) {
                         commentList.add(comment);
-                        totalRating += comment.getRating();
-                        ratingCount++;
                     }
-                }
-
-                // חישוב ממוצע הדירוגים
-                if (ratingCount > 0) {
-                    float averageRating = totalRating / ratingCount;
-                    averageRatingText.setText("ממוצע דירוג: " + String.format("%.1f", averageRating)); // הצגת הממוצע
-                } else {
-                    averageRatingText.setText("אין דירוגים עדיין");
                 }
 
                 commentAdapter.notifyDataSetChanged();

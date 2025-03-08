@@ -6,4 +6,11 @@
     </style>
 
     <style name="Theme.BagrutProject" parent="Base.Theme.BagrutProject" />
+
+    <style name="RatingBarStyle" parent="Base.Widget.AppCompat.RatingBar">
+        <item name="colorControlNormal">#E0E0E0</item>
+        <item name="colorControlActivated">#FFD700</item>
+        <item name="colorAccent">#FFD700</item>
+    </style>
+
 </resources>

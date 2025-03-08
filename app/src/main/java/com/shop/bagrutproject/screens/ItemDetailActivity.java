@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.database.DataSnapshot;
@@ -14,6 +16,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.shop.bagrutproject.R;
+import com.shop.bagrutproject.models.Comment;
 import com.shop.bagrutproject.models.Item;
 import com.shop.bagrutproject.utils.ImageUtil;
 
@@ -40,9 +43,37 @@ public class ItemDetailActivity extends AppCompatActivity {
         itemColor = findViewById(R.id.itemColor);
         itemType = findViewById(R.id.itemType);
         itemImage = findViewById(R.id.itemImage);
+        RatingBar itemAverageRatingBar = findViewById(R.id.itemAverageRatingBar);
 
         btnGoBack = findViewById(R.id.btnGoToShop);
         btnViewComments = findViewById(R.id.btnViewComments);
+
+        DatabaseReference commentsRef = FirebaseDatabase.getInstance().getReference("comments").child(itemId);
+        commentsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                double sum = 0;
+                int count = 0;
+
+                for (DataSnapshot commentSnapshot : snapshot.getChildren()) {
+                    Comment comment = commentSnapshot.getValue(Comment.class);
+                    if (comment != null) {
+                        sum += comment.getRating();
+                        count++;
+                    }
+                }
+
+                double averageRating = count > 0 ? sum / count : 0;
+
+                // הצגת ממוצע הדירוגים בכוכבים
+                itemAverageRatingBar.setRating((float) averageRating);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // טיפול בשגיאות
+            }
+        });
 
         // חזרה לעמוד החנות
         btnGoBack.setOnClickListener(v -> {

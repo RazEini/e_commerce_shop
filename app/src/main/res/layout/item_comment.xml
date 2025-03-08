@@ -3,30 +3,31 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp"
-    android:layout_marginBottom="8dp"
-    android:background="?android:attr/selectableItemBackground">
+    android:padding="12dp"
+    android:layout_margin="8dp"
+    android:background="@drawable/comment_background"
+    android:elevation="4dp">
 
-    <!-- שם המשתמש -->
     <TextView
         android:id="@+id/userName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="שם משתמש"
         android:textStyle="bold"
-        android:textSize="14sp"
-        android:layout_marginBottom="4dp"/>
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:layout_marginBottom="6dp"/>
 
-    <!-- התגובה -->
     <TextView
         android:id="@+id/commentText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="התגובה תוצג כאן"
-        android:textSize="16sp"
-        android:layout_marginBottom="4dp"/>
+        android:textSize="14sp"
+        android:textColor="@color/dark_gray"
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="8dp"/>
 
-    <!-- דירוג התגובה -->
     <RatingBar
         android:id="@+id/ratingBar"
         android:layout_width="wrap_content"
@@ -34,6 +35,7 @@
         android:numStars="5"
         android:stepSize="0.5"
         android:rating="5"
-        android:isIndicator="true" />
+        android:isIndicator="true"
+        android:theme="@style/RatingBarStyle"/>
 
 </LinearLayout>
