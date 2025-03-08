@@ -16,12 +16,6 @@
             android:name=".screens.CommentActivity"
             android:exported="false" />
         <activity
-            android:name=".screens.ProductInfoActivity"
-            android:exported="false" />
-        <activity
-            android:name=".screens.CommentsActivity"
-            android:exported="false" />
-        <activity
             android:name=".screens.PaymentActivity"
             android:exported="false" />
         <activity
