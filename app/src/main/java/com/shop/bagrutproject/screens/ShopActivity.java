@@ -54,28 +54,25 @@ public class ShopActivity extends AppCompatActivity {
         totalPriceText = findViewById(R.id.cartItemsText);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        // יצירת ה-ItemsAdapter עם כל המוצרים
         itemsAdapter = new ItemsAdapter(allItems, this, this::addItemToCart);
         recyclerView.setAdapter(itemsAdapter);
 
-        // חיבור ה-SearchView
         SearchView searchView = findViewById(R.id.searchView);
         searchView.setVisibility(View.VISIBLE);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                itemsAdapter.filter(query);  // חיפוש לאחר לחיצה על "החיפוש"
+                itemsAdapter.filter(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                itemsAdapter.filter(newText);  // חיפוש בזמן כתיבה
+                itemsAdapter.filter(newText);
                 return false;
             }
         });
 
-        // פעולת מעבר לעגלת קניות
         cartIcon.setOnClickListener(v -> {
             Intent intent = new Intent(ShopActivity.this, CartActivity.class);
             startActivity(intent);
@@ -87,14 +84,12 @@ public class ShopActivity extends AppCompatActivity {
             finish();
         });
 
-        // טוען את המוצרים מ-Firebase כבר ב-onCreate
         fetchItemsFromFirebase();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // טוען את המוצרים מ-Firebase
         fetchItemsFromFirebase();
     }
 
@@ -112,6 +107,10 @@ public class ShopActivity extends AppCompatActivity {
             @Override
             public void onFailed(Exception e) {
                 Log.e(TAG, "Failed to load cart: ", e);
+                new android.app.AlertDialog.Builder(ShopActivity.this)
+                        .setMessage("נראה שקרתה תקלה בטעינת העגלה, נסה שוב")
+                        .setPositiveButton("אוקי", null)
+                        .show();
             }
         });
 
@@ -123,57 +122,46 @@ public class ShopActivity extends AppCompatActivity {
                 allItems.addAll(object);
                 itemsAdapter.notifyDataSetChanged();
 
-                // ביצוע חיפוש אם יש טקסט ב-SearchView
                 String query = ((SearchView) findViewById(R.id.searchView)).getQuery().toString();
-                itemsAdapter.filter(query);  // סינון עם הטקסט הנוכחי, אם קיים
+                itemsAdapter.filter(query);
             }
 
             @Override
             public void onFailed(Exception e) {
                 Log.e(TAG, "Failed to load items: ", e);
+                new android.app.AlertDialog.Builder(ShopActivity.this)
+                        .setMessage("נראה שקרתה תקלה בטעינת המוצרים, נסה שוב מאוחר יותר")
+                        .setPositiveButton("אוקי", null)
+                        .show();
             }
         });
     }
 
+    public void addItemToCart(Item item) {
+        this.cart.addItem(item);
 
-    private void fetchCartFromFirebase() {
-        databaseService.getCart(AuthenticationService.getInstance().getCurrentUserId(), new DatabaseService.DatabaseCallback<Cart>() {
+        new android.app.AlertDialog.Builder(ShopActivity.this)
+                .setMessage("המוצר נוסף לעגלה בהצלחה!")
+                .setPositiveButton("אוקי", null)
+                .show();
+
+        databaseService.updateCart(this.cart, AuthenticationService.getInstance().getCurrentUserId(), new DatabaseService.DatabaseCallback<Void>() {
             @Override
-            public void onCompleted(Cart cart) {
-                if (cart == null) {
-                    cart = new Cart();
-                }
-                ShopActivity.this.cart = cart;
+            public void onCompleted(Void object) {
                 updateTotalPrice();
             }
 
             @Override
             public void onFailed(Exception e) {
-                Log.e(TAG, "Failed to load cart: ", e);
-            }
-        });
-    }
-
-    // הוספת מוצר לעגלה
-    public void addItemToCart(Item item) {
-        this.cart.addItem(item);
-
-        Toast.makeText(ShopActivity.this, "המוצר נוסף לעגלה", Toast.LENGTH_SHORT).show();
-
-        databaseService.updateCart(this.cart, AuthenticationService.getInstance().getCurrentUserId(), new DatabaseService.DatabaseCallback<Void>() {
-            @Override
-            public void onCompleted(Void object) {
-                updateTotalPrice();  // עדכון המחיר הכולל
-            }
-
-            @Override
-            public void onFailed(Exception e) {
                 Log.e(TAG, "Failed to update cart: ", e);
+                new android.app.AlertDialog.Builder(ShopActivity.this)
+                        .setMessage("נראה שקרתה תקלה בהוספת המוצר לעגלה, נסה שוב")
+                        .setPositiveButton("אוקי", null)
+                        .show();
             }
         });
     }
 
-    // עדכון המחיר הכולל בעגלה
     private void updateTotalPrice() {
         double totalPrice = 0;
         for (Item item : this.cart.getItems()) {
@@ -182,5 +170,3 @@ public class ShopActivity extends AppCompatActivity {
         totalPriceText.setText("סך הכל: ₪" + totalPrice);
     }
 }
-
-

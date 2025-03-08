@@ -1,12 +1,18 @@
 package com.shop.bagrutproject.screens;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -15,7 +21,8 @@ import com.shop.bagrutproject.R;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnReg , btnLog , btnOd , btnAdmin;
+    Button btnReg, btnLog, btnOd, btnAdmin;
+    private static final String CHANNEL_ID = "shop_notifications";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +35,10 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        initViews();
+        createNotificationChannel(); // יצירת ערוץ התראות
+        sendNotification("🔥 מבצע לוהט!", "קבל 20% הנחה על מוצרי חשמל היום בלבד!"); // שליחת התראה
 
+        initViews();
     }
 
     private void initViews() {
@@ -38,37 +47,36 @@ public class MainActivity extends AppCompatActivity {
         btnOd = findViewById(R.id.btnOdot);
         btnAdmin = findViewById(R.id.btnAdmin);
 
-        btnReg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, Register.class);
-                startActivity(intent);
-            }
-        });
+        btnReg.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, Register.class)));
+        btnLog.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, Login.class)));
+        btnOd.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, Odot.class)));
+        btnAdmin.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, LoginAdmin.class)));
+    }
 
-        btnLog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, Login.class);
-                startActivity(intent);
-            }
-        });
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Shop Notifications";
+            String description = "התראות על מבצעים ומוצרים";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
 
-        btnOd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, Odot.class);
-                startActivity(intent);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
             }
-        });
+        }
+    }
 
-        btnAdmin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, LoginAdmin.class);
-                startActivity(intent);
-            }
-        });
+    private void sendNotification(String title, String message) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_launcher_foreground) // לוודא שיש לך אייקון מתאים
+                .setContentTitle(title)
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true);
 
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        notificationManager.notify(1, builder.build());
     }
 }
