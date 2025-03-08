@@ -2,9 +2,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#F5F5F5">
 
-    <!-- כפתור חזרה בצד ימין -->
     <ImageButton
         android:id="@+id/btnBack2"
         android:layout_width="50dp"
@@ -17,7 +17,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- כפתור עגלת קניות בצד שמאל למעלה -->
     <ImageView
         android:id="@+id/cartButton"
         android:layout_width="50dp"
@@ -31,7 +30,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- שדה חיפוש עם מצב מכווץ (Collapsed) -->
     <SearchView
         android:id="@+id/searchView"
         android:layout_width="0dp"
@@ -45,7 +43,6 @@
         android:layout_margin="16dp"
         android:visibility="visible" />
 
-    <!-- RecyclerView המוצרי -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewItems"
         android:layout_width="0dp"
@@ -55,7 +52,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchView" />
 
-    <!-- טקסט סכום עגלה -->
     <TextView
         android:id="@+id/cartItemsText"
         android:layout_width="wrap_content"
