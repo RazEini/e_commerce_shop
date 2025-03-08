@@ -4,16 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerViewItems"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <!-- כפתור חזרה בצד ימין -->
+    <ImageButton
+        android:id="@+id/btnBack2"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Back"
+        android:src="@android:drawable/ic_menu_revert"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
+    <!-- כפתור עגלת קניות בצד שמאל למעלה -->
     <ImageView
         android:id="@+id/cartButton"
         android:layout_width="50dp"
@@ -24,10 +28,34 @@
         android:focusable="true"
         android:padding="8dp"
         android:background="?android:attr/selectableItemBackgroundBorderless"
-        app:layout_constraintStart_toStartOf="@+id/recyclerViewItems"
-        app:layout_constraintTop_toTopOf="@+id/recyclerViewItems" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- שדה חיפוש עם מצב מכווץ (Collapsed) -->
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:iconifiedByDefault="true"
+        android:queryHint="חפש מוצר..."
+        app:layout_constraintTop_toBottomOf="@+id/cartButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_margin="16dp"
+        android:visibility="visible" />
 
+    <!-- RecyclerView המוצרי -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewItems"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchView" />
+
+    <!-- טקסט סכום עגלה -->
     <TextView
         android:id="@+id/cartItemsText"
         android:layout_width="wrap_content"
@@ -37,17 +65,5 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <ImageButton
-        android:id="@+id/btnBack2"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="344dp"
-        android:layout_marginTop="24dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Back"
-        android:src="@android:drawable/ic_menu_revert"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,39 +2,42 @@ package com.shop.bagrutproject.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.shop.bagrutproject.R;
 import com.shop.bagrutproject.models.Item;
 import com.shop.bagrutproject.screens.ItemDetailActivity;
-import com.shop.bagrutproject.screens.ShopActivity;
+import com.shop.bagrutproject.services.DatabaseService;
 import com.shop.bagrutproject.utils.ImageUtil;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
 
     public interface ItemClickListener {
-        public void onClick(Item item);
+        void onClick(Item item);
     }
 
-    private List<Item> itemsList;
+    private static final String TAG = "ItemsAdapter";
+    private List<Item> originalItemsList; // רשימת כל הפריטים
+    private List<Item> filteredItemsList; // רשימה מסוננת לחיפוש
     private Context context;
     @Nullable
-    final ItemClickListener itemClickListener;
+    private final ItemClickListener itemClickListener;
 
     public ItemsAdapter(List<Item> itemsList, Context context, @Nullable final ItemClickListener itemClickListener) {
-        this.itemsList = itemsList;
+        this.originalItemsList = itemsList;
+        this.filteredItemsList = new ArrayList<>(itemsList);
         this.context = context;
         this.itemClickListener = itemClickListener;
+        filter("");
     }
 
     @Override
@@ -45,18 +48,16 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
 
     @Override
     public void onBindViewHolder(ItemViewHolder holder, int position) {
-        Item item = itemsList.get(position);
+        Item item = filteredItemsList.get(position);
         holder.bindItem(item);
-
     }
 
     @Override
     public int getItemCount() {
-        return itemsList.size();
+        return filteredItemsList.size();
     }
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
-
         private ImageView previewImageView;
         private TextView previewTextView;
         private TextView previewPriceTextView;
@@ -69,11 +70,10 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
             previewPriceTextView = itemView.findViewById(R.id.PreviewPriceTextView);
             addToCartButton = itemView.findViewById(R.id.addToCartButton);
 
-            // הוספת לחיצה על כל מוצר כדי להוביל לדף המידע של המוצר
             itemView.setOnClickListener(v -> {
-                Item item = itemsList.get(getAdapterPosition());  // מקבל את המוצר שנלחץ
+                Item item = filteredItemsList.get(getAdapterPosition());
                 Intent intent = new Intent(context, ItemDetailActivity.class);
-                intent.putExtra("itemId", item.getId()); // שולח את ה-ID של המוצר
+                intent.putExtra("itemId", item.getId());
                 context.startActivity(intent);
             });
         }
@@ -89,4 +89,36 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
             });
         }
     }
+
+    public void filter(String query) {
+        filteredItemsList.clear();
+        if (query.isEmpty()) {
+            filteredItemsList.addAll(originalItemsList);
+        } else {
+            String lowerCaseQuery = query.toLowerCase();
+            try {
+                double queryPrice = Double.parseDouble(query);
+
+                for (Item item : originalItemsList) {
+                    if (item.getPrice() == queryPrice) {
+                        filteredItemsList.add(item);
+                    }
+                }
+            } catch (NumberFormatException e) {
+                for (Item item : originalItemsList) {
+                    if (item.getName().toLowerCase().contains(lowerCaseQuery) ||
+                            item.getCompany().toLowerCase().contains(lowerCaseQuery) ||
+                            item.getType().toLowerCase().contains(lowerCaseQuery) ||
+                            item.getColor().toLowerCase().contains(lowerCaseQuery)) {
+                        filteredItemsList.add(item);
+                    }
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+
+
+
 }
