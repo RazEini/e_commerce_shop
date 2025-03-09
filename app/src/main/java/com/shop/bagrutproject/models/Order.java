@@ -1,8 +1,11 @@
 package com.shop.bagrutproject.models;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 public class Order implements Serializable {
@@ -17,7 +20,7 @@ public class Order implements Serializable {
         this.orderId = UUID.randomUUID().toString(); // מזהה ייחודי להזמנה
         this.items = items != null ? items : new ArrayList<>();
         this.totalPrice = calculateTotalPrice();
-        this.status = "Pending"; // סטטוס ברירת מחדל
+        this.status = "Pending";
         this.timestamp = System.currentTimeMillis(); // זמן יצירת ההזמנה
         this.userId = userId;
     }
@@ -62,8 +65,17 @@ public class Order implements Serializable {
         return timestamp;
     }
 
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp; // הגדרת הזמן של ההזמנה
+    }
+
     public String getUserId() {
         return userId;
+    }
+
+    public String getFormattedTimestamp() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
+        return sdf.format(new Date(this.timestamp));
     }
 
     @Override
@@ -78,4 +90,3 @@ public class Order implements Serializable {
                 '}';
     }
 }
-

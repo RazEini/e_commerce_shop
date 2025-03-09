@@ -130,7 +130,7 @@ public class CartActivity extends AppCompatActivity {
         }
 
         Order order = new Order(user.getUid(), cart.getItems());
-
+        order.setTimestamp(System.currentTimeMillis());
         DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("orders");
         ordersRef.child(order.getOrderId()).setValue(order)
                 .addOnSuccessListener(aVoid -> {

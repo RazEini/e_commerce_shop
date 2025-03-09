@@ -355,6 +355,27 @@ public class DatabaseService {
                 });
     }
 
+    public void getOrders(String userId, final DatabaseCallback<List<Order>> callback) {
+        DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("orders");
+        ordersRef.orderByChild("userId").equalTo(userId).addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        List<Order> orders = new ArrayList<>();
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            Order order = snapshot.getValue(Order.class);
+                            orders.add(order);
+                        }
+                        callback.onCompleted(orders);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        callback.onFailed(databaseError.toException());
+                    }
+                }
+        );
+    }
 
 
 }

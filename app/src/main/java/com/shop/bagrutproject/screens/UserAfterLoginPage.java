@@ -41,9 +41,8 @@ public class UserAfterLoginPage extends AppCompatActivity {
     }
 
     public void goToPurchaseHistory(View view) {
-        // כאן תוכל לשים את הקוד שיבצע את המעבר לעמוד עגלת הקניות
-        // Intent intent = new Intent(UserAfterLoginPage.this, PurchaseHistory.class);
-        // startActivity(intent);
+         Intent intent = new Intent(UserAfterLoginPage.this, OrderHistoryActivity.class);
+         startActivity(intent);
     }
 
     public void goToPersonalArea(View view) {
