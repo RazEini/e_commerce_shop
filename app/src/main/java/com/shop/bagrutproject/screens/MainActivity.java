@@ -4,6 +4,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.graphics.Insets;
@@ -18,6 +20,8 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.shop.bagrutproject.R;
+
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,14 +33,16 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        createNotificationChannel(); // יצירת ערוץ התראות
-        sendNotification("🔥 מבצע לוהט!", "קבל 20% הנחה על מוצרי חשמל היום בלבד!"); // שליחת התראה
+        createNotificationChannel();
+        requestNotificationPermission();
+        sendRandomNotification();
 
         initViews();
     }
@@ -51,6 +57,24 @@ public class MainActivity extends AppCompatActivity {
         btnLog.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, Login.class)));
         btnOd.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, Odot.class)));
         btnAdmin.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, LoginAdmin.class)));
+    }
+
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            boolean isFirstTime = getSharedPreferences("AppPrefs", MODE_PRIVATE)
+                    .getBoolean("isFirstTime", true);
+
+            if (isFirstTime) {
+                getSharedPreferences("AppPrefs", MODE_PRIVATE)
+                        .edit()
+                        .putBoolean("isFirstTime", false)
+                        .apply();
+
+                if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 102);
+                }
+            }
+        }
     }
 
     private void createNotificationChannel() {
@@ -68,15 +92,32 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void sendNotification(String title, String message) {
+    private void sendRandomNotification() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            return;
+        }
+
+        String[] titles = {"🔥 מבצע לוהט!", "⚡ הנחה מטורפת!", "💡 חדש בחנות!", "🎉 אל תפספס!"};
+        String[] messages = {
+                "קבל 20% הנחה על מוצרי חשמל היום בלבד!",
+                "המבצע נגמר בקרוב - אל תפספס!",
+                "מוצרים חדשים במחירים מטורפים!",
+                "קנה מוצר וקבל השני ב-50% הנחה!"
+        };
+
+        Random random = new Random();
+        String randomTitle = titles[random.nextInt(titles.length)];
+        String randomMessage = messages[random.nextInt(messages.length)];
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_foreground) // לוודא שיש לך אייקון מתאים
-                .setContentTitle(title)
-                .setContentText(message)
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle(randomTitle)
+                .setContentText(randomMessage)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setAutoCancel(true);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(1, builder.build());
+        notificationManager.notify(random.nextInt(1000), builder.build());
     }
 }
