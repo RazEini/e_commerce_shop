@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -38,6 +39,7 @@ public class ShopActivity extends AppCompatActivity {
     private Cart cart;
     private ImageButton btnBack;
     private TextView totalPriceText;
+    private ProgressBar progressBar; // הוספת ה-ProgressBar
     DatabaseService databaseService;
     AuthenticationService authenticationService;
 
@@ -52,6 +54,7 @@ public class ShopActivity extends AppCompatActivity {
         ImageView cartIcon = findViewById(R.id.cartButton);
         btnBack = findViewById(R.id.btnBack2);
         totalPriceText = findViewById(R.id.cartItemsText);
+        progressBar = findViewById(R.id.progressBar); // חיבור ל-ProgressBar
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         itemsAdapter = new ItemsAdapter(allItems, this, this::addItemToCart);
@@ -62,13 +65,13 @@ public class ShopActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                itemsAdapter.filter(query);
+                itemsAdapter.filter(query); // ביצוע חיפוש על פי המילה המוגשת
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                itemsAdapter.filter(newText);
+                itemsAdapter.filter(newText); // ביצוע חיפוש בזמן הקלד
                 return false;
             }
         });
@@ -94,9 +97,12 @@ public class ShopActivity extends AppCompatActivity {
     }
 
     private void fetchItemsFromFirebase() {
+        progressBar.setVisibility(View.VISIBLE);  // הצגת ה-ProgressBar
+
         databaseService.getCart(AuthenticationService.getInstance().getCurrentUserId(), new DatabaseService.DatabaseCallback<Cart>() {
             @Override
             public void onCompleted(Cart cart) {
+                progressBar.setVisibility(View.GONE);  // סיום הטעינה, נסתיר את ה-ProgressBar
                 if (cart == null) {
                     cart = new Cart();
                 }
@@ -106,6 +112,7 @@ public class ShopActivity extends AppCompatActivity {
 
             @Override
             public void onFailed(Exception e) {
+                progressBar.setVisibility(View.GONE);  // סיום הטעינה, נסתיר את ה-ProgressBar
                 Log.e(TAG, "Failed to load cart: ", e);
                 new android.app.AlertDialog.Builder(ShopActivity.this)
                         .setMessage("נראה שקרתה תקלה בטעינת העגלה, נסה שוב")
@@ -117,6 +124,7 @@ public class ShopActivity extends AppCompatActivity {
         databaseService.getItems(new DatabaseService.DatabaseCallback<List<Item>>() {
             @Override
             public void onCompleted(List<Item> object) {
+                progressBar.setVisibility(View.GONE);  // סיום הטעינה, נסתיר את ה-ProgressBar
                 Log.d(TAG, "onCompleted: " + object);
                 allItems.clear();
                 allItems.addAll(object);
@@ -128,6 +136,7 @@ public class ShopActivity extends AppCompatActivity {
 
             @Override
             public void onFailed(Exception e) {
+                progressBar.setVisibility(View.GONE);  // סיום הטעינה, נסתיר את ה-ProgressBar
                 Log.e(TAG, "Failed to load items: ", e);
                 new android.app.AlertDialog.Builder(ShopActivity.this)
                         .setMessage("נראה שקרתה תקלה בטעינת המוצרים, נסה שוב מאוחר יותר")
