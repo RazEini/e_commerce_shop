@@ -7,8 +7,10 @@ import androidx.annotation.Nullable;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.shop.bagrutproject.models.Cart;
+import com.shop.bagrutproject.models.Comment;
 import com.shop.bagrutproject.models.Item;
 import com.shop.bagrutproject.models.Order;
 import com.shop.bagrutproject.models.User;
@@ -18,7 +20,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 /// a service to interact with the Firebase Realtime Database.
@@ -119,6 +123,34 @@ public class DatabaseService {
             callback.onCompleted(data);
         });
     }
+
+    /// get a list of data from the database at a specific path
+    /// @param path the path to get the data from
+    /// @param clazz the class of the objects to return
+    /// @param callback the callback to call when the operation is completed
+    private <T> void getDataList(@NotNull final String path, @NotNull final Class<T> clazz, @NotNull Map<String, String> filter, @NotNull final DatabaseCallback<List<T>> callback) {
+        Query dbRef = readData(path);
+
+        for (Map.Entry<String, String> entry : filter.entrySet()) {
+            dbRef = dbRef.orderByChild(entry.getKey()).equalTo(entry.getValue());
+        }
+
+        dbRef.get().addOnCompleteListener(task -> {
+            if (!task.isSuccessful()) {
+                Log.e(TAG, "Error getting data", task.getException());
+                callback.onFailed(task.getException());
+                return;
+            }
+            List<T> tList = new ArrayList<>();
+            task.getResult().getChildren().forEach(dataSnapshot -> {
+                T t = dataSnapshot.getValue(clazz);
+                tList.add(t);
+            });
+
+            callback.onCompleted(tList);
+        });
+    }
+
 
     /// generate a new id for a new object in the database
     /// @param path the path to generate the id for
@@ -246,21 +278,7 @@ public class DatabaseService {
     /// @see Item
     /// @see #getData(String, Class, DatabaseCallback)
     public void getItems(@NotNull final DatabaseCallback<List<Item>> callback) {
-        readData("items").get().addOnCompleteListener(task -> {
-            if (!task.isSuccessful()) {
-                Log.e(TAG, "Error getting data", task.getException());
-                callback.onFailed(task.getException());
-                return;
-            }
-            List<Item> items = new ArrayList<>();
-            task.getResult().getChildren().forEach(dataSnapshot -> {
-                Item item = dataSnapshot.getValue(Item.class);
-                Log.d(TAG, "Got item: " + item);
-                items.add(item);
-            });
-
-            callback.onCompleted(items);
-        });
+        getDataList("items", Item.class, new HashMap<>(), callback);
     }
 
     /// get all the users from the database
@@ -375,6 +393,10 @@ public class DatabaseService {
                     }
                 }
         );
+    }
+
+    public void getComments(String itemId, DatabaseCallback<List<Comment>> callback) {
+        getDataList("comments/"+itemId, Comment.class, new HashMap<>(), callback);
     }
 
 

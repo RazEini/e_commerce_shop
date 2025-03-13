@@ -18,20 +18,25 @@ import com.google.firebase.database.ValueEventListener;
 import com.shop.bagrutproject.R;
 import com.shop.bagrutproject.models.Comment;
 import com.shop.bagrutproject.models.Item;
+import com.shop.bagrutproject.services.DatabaseService;
 import com.shop.bagrutproject.utils.ImageUtil;
+
+import java.util.List;
 
 public class ItemDetailActivity extends AppCompatActivity {
 
     private TextView itemName, itemPrice, itemInfo, itemCompany, itemColor, itemType;
     private ImageView itemImage;
-    private DatabaseReference databaseReference;
     private String itemId;
     private Button btnGoBack, btnViewComments;
+    DatabaseService databaseService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_detail);
+
+        databaseService = DatabaseService.getInstance();
 
         // קבלת ה-ID של המוצר שנבחר
         itemId = getIntent().getStringExtra("itemId");
@@ -48,21 +53,15 @@ public class ItemDetailActivity extends AppCompatActivity {
         btnGoBack = findViewById(R.id.btnGoToShop);
         btnViewComments = findViewById(R.id.btnViewComments);
 
-        DatabaseReference commentsRef = FirebaseDatabase.getInstance().getReference("comments").child(itemId);
-        commentsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseService.getComments(itemId, new DatabaseService.DatabaseCallback<List<Comment>>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+            public void onCompleted(List<Comment> comments) {
                 double sum = 0;
                 int count = 0;
-
-                for (DataSnapshot commentSnapshot : snapshot.getChildren()) {
-                    Comment comment = commentSnapshot.getValue(Comment.class);
-                    if (comment != null) {
-                        sum += comment.getRating();
-                        count++;
-                    }
+                for (Comment comment : comments) {
+                    sum += comment.getRating();
+                    count++;
                 }
-
                 double averageRating = count > 0 ? sum / count : 0;
 
                 // הצגת ממוצע הדירוגים בכוכבים
@@ -70,8 +69,8 @@ public class ItemDetailActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                // טיפול בשגיאות
+            public void onFailed(Exception e) {
+
             }
         });
 
@@ -89,36 +88,26 @@ public class ItemDetailActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // משיכת המידע של המוצר מ-Firebase
-        databaseReference = FirebaseDatabase.getInstance().getReference("items").child(itemId);
-
-        fetchItemDetails();
-    }
-
-    private void fetchItemDetails() {
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseService.getItem(itemId, new DatabaseService.DatabaseCallback<Item>() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Item item = dataSnapshot.getValue(Item.class);
-                if (item != null) {
-                    itemName.setText(item.getName());
-                    itemPrice.setText("₪" + item.getPrice());
-                    itemInfo.setText(item.getAboutItem());
-                    itemCompany.setText(item.getCompany());
-                    itemColor.setText(item.getColor());
-                    itemType.setText(item.getType());
+            public void onCompleted(Item item) {
+                itemName.setText(item.getName());
+                itemPrice.setText("₪" + item.getPrice());
+                itemInfo.setText(item.getAboutItem());
+                itemCompany.setText(item.getCompany());
+                itemColor.setText(item.getColor());
+                itemType.setText(item.getType());
 
-                    if (item.getPic() != null && !item.getPic().isEmpty()) {
-                        itemImage.setImageBitmap(ImageUtil.convertFrom64base(item.getPic()));
-                    } else {
-                        itemImage.setImageResource(R.drawable.ic_launcher_foreground);
-                    }
+                if (item.getPic() != null && !item.getPic().isEmpty()) {
+                    itemImage.setImageBitmap(ImageUtil.convertFrom64base(item.getPic()));
+                } else {
+                    itemImage.setImageResource(R.drawable.ic_launcher_foreground);
                 }
             }
 
             @Override
-            public void onCancelled(DatabaseError databaseError) {
-                // טיפול בשגיאות
+            public void onFailed(Exception e) {
+
             }
         });
     }
