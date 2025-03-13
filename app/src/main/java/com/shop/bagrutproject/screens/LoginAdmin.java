@@ -14,6 +14,7 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import com.shop.bagrutproject.R;
+import com.shop.bagrutproject.utils.SharedPreferencesUtil;
 
 public class LoginAdmin extends AppCompatActivity {
 
@@ -40,6 +41,7 @@ public class LoginAdmin extends AppCompatActivity {
 
             if (username.equals(ADMIN_USERNAME) && password.equals(ADMIN_PASSWORD)) {
                 // Admin logged in successfully, show a Toast or go to the Admin Dashboard
+                SharedPreferencesUtil.setIsAdmin(this, true);
                 Intent intent = new Intent(LoginAdmin.this, AdminPage.class);
                 startActivity(intent);
             } else {

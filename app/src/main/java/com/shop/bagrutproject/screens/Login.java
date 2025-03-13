@@ -38,8 +38,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     EditText etEmail, etPassword;
     Button btnLog;
     String email, pass;
-    FirebaseAuth mAuth;
-    private User user=null;
 
 
     @Override
@@ -67,7 +65,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         etPassword = findViewById(R.id.etPassword);
         btnLog = findViewById(R.id.btnSubmit);
         btnLog.setOnClickListener(this);
-        mAuth = FirebaseAuth.getInstance();
     }
 
     public void btnBack2(View view) {
@@ -86,10 +83,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     protected void onStart() {
         super.onStart();
 
-        // השהייה קטנה כדי לוודא ש-Firebase מספיק להתעדכן
         new Handler().postDelayed(() -> {
-            if (mAuth.getCurrentUser() != null) {
+            if (authenticationService.isUserSignedIn()) {
                 Log.d("LoginCheck", "User is already logged in, redirecting...");
+                SharedPreferencesUtil.setIsAdmin(Login.this, false);
                 Intent go = new Intent(getApplicationContext(), UserAfterLoginPage.class);
                 startActivity(go);
                 finish();
@@ -97,7 +94,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         }, 1000);
     }
 
-    // פונקציה להתנתקות
     public void logout() {
         // מנקה את ה-SharedPreferences כאשר המשתמש מתנתק
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
@@ -106,7 +102,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         editor.apply();
 
         // מבצע יציאה מהחשבון ב-Firebase
-        mAuth.signOut();
+        authenticationService.signOut();
 
         // מעביר את המשתמש למסך ההתחברות
         Intent go = new Intent(getApplicationContext(), Login.class);
@@ -130,6 +126,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         Log.d(TAG, "onCompleted: User data retrieved successfully");
                         /// save the user data to shared preferences
                         SharedPreferencesUtil.saveUser(Login.this, user);
+                        SharedPreferencesUtil.setIsAdmin(Login.this, false);
                         /// Redirect to main activity and clear back stack to prevent user from going back to login screen
 
 

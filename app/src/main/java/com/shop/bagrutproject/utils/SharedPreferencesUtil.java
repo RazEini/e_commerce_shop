@@ -133,8 +133,6 @@ public class SharedPreferencesUtil {
         String lName = sharedPreferences.getString("lName", "");
         String phone = sharedPreferences.getString("phone", "");
         return new User(uid, email, password, fName, lName, phone,null);
-
-
     }
 
     /// Sign out the user by removing user data from shared preferences
@@ -160,5 +158,15 @@ public class SharedPreferencesUtil {
         return contains(context, "uid");
     }
 
+    public static boolean isAdmin(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean("isAdmin", false);
+    }
 
+    public static void setIsAdmin(Context context, boolean isAdmin) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("isAdmin", isAdmin);
+        editor.apply();
+    }
 }

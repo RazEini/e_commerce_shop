@@ -22,6 +22,7 @@ import com.shop.bagrutproject.models.Item;
 import com.google.firebase.database.DatabaseReference;
 import com.shop.bagrutproject.services.AuthenticationService;
 import com.shop.bagrutproject.services.DatabaseService;
+import com.shop.bagrutproject.utils.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class ShopActivity extends AppCompatActivity {
     private Cart cart;
     private ImageButton btnBack;
     private TextView totalPriceText;
-    private ProgressBar progressBar; // הוספת ה-ProgressBar
+    private ProgressBar progressBar;
     DatabaseService databaseService;
     AuthenticationService authenticationService;
 
@@ -54,7 +55,7 @@ public class ShopActivity extends AppCompatActivity {
         ImageView cartIcon = findViewById(R.id.cartButton);
         btnBack = findViewById(R.id.btnBack2);
         totalPriceText = findViewById(R.id.cartItemsText);
-        progressBar = findViewById(R.id.progressBar); // חיבור ל-ProgressBar
+        progressBar = findViewById(R.id.progressBar);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         itemsAdapter = new ItemsAdapter(allItems, this, this::addItemToCart);
@@ -65,24 +66,33 @@ public class ShopActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                itemsAdapter.filter(query); // ביצוע חיפוש על פי המילה המוגשת
+                itemsAdapter.filter(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                itemsAdapter.filter(newText); // ביצוע חיפוש בזמן הקלד
+                itemsAdapter.filter(newText);
                 return false;
             }
         });
 
         cartIcon.setOnClickListener(v -> {
-            Intent intent = new Intent(ShopActivity.this, CartActivity.class);
-            startActivity(intent);
+            if (!SharedPreferencesUtil.isAdmin(ShopActivity.this)) {
+                Intent intent = new Intent(ShopActivity.this, CartActivity.class);
+                startActivity(intent);
+            } else {
+                Toast.makeText(ShopActivity.this, "You are an Admin, you cannot access the cart", Toast.LENGTH_SHORT).show();
+            }
         });
 
         btnBack.setOnClickListener(v -> {
-            Intent intent = new Intent(ShopActivity.this, UserAfterLoginPage.class);
+            Intent intent;
+            if (SharedPreferencesUtil.isAdmin(ShopActivity.this)) {
+                intent = new Intent(ShopActivity.this, AdminPage.class);
+            } else {
+                intent = new Intent(ShopActivity.this, UserAfterLoginPage.class);
+            }
             startActivity(intent);
             finish();
         });
@@ -97,12 +107,12 @@ public class ShopActivity extends AppCompatActivity {
     }
 
     private void fetchItemsFromFirebase() {
-        progressBar.setVisibility(View.VISIBLE);  // הצגת ה-ProgressBar
+        progressBar.setVisibility(View.VISIBLE);
 
         databaseService.getCart(AuthenticationService.getInstance().getCurrentUserId(), new DatabaseService.DatabaseCallback<Cart>() {
             @Override
             public void onCompleted(Cart cart) {
-                progressBar.setVisibility(View.GONE);  // סיום הטעינה, נסתיר את ה-ProgressBar
+                progressBar.setVisibility(View.GONE);
                 if (cart == null) {
                     cart = new Cart();
                 }
@@ -112,7 +122,7 @@ public class ShopActivity extends AppCompatActivity {
 
             @Override
             public void onFailed(Exception e) {
-                progressBar.setVisibility(View.GONE);  // סיום הטעינה, נסתיר את ה-ProgressBar
+                progressBar.setVisibility(View.GONE);
                 Log.e(TAG, "Failed to load cart: ", e);
                 new android.app.AlertDialog.Builder(ShopActivity.this)
                         .setMessage("נראה שקרתה תקלה בטעינת העגלה, נסה שוב")
@@ -124,7 +134,7 @@ public class ShopActivity extends AppCompatActivity {
         databaseService.getItems(new DatabaseService.DatabaseCallback<List<Item>>() {
             @Override
             public void onCompleted(List<Item> object) {
-                progressBar.setVisibility(View.GONE);  // סיום הטעינה, נסתיר את ה-ProgressBar
+                progressBar.setVisibility(View.GONE);
                 Log.d(TAG, "onCompleted: " + object);
                 allItems.clear();
                 allItems.addAll(object);
@@ -136,7 +146,7 @@ public class ShopActivity extends AppCompatActivity {
 
             @Override
             public void onFailed(Exception e) {
-                progressBar.setVisibility(View.GONE);  // סיום הטעינה, נסתיר את ה-ProgressBar
+                progressBar.setVisibility(View.GONE);
                 Log.e(TAG, "Failed to load items: ", e);
                 new android.app.AlertDialog.Builder(ShopActivity.this)
                         .setMessage("נראה שקרתה תקלה בטעינת המוצרים, נסה שוב מאוחר יותר")
@@ -147,35 +157,45 @@ public class ShopActivity extends AppCompatActivity {
     }
 
     public void addItemToCart(Item item) {
-        this.cart.addItem(item);
+        if (!SharedPreferencesUtil.isAdmin(ShopActivity.this)) {
+            this.cart.addItem(item);
 
-        new android.app.AlertDialog.Builder(ShopActivity.this)
-                .setMessage("המוצר נוסף לעגלה בהצלחה!")
-                .setPositiveButton("אוקי", null)
-                .show();
+            new android.app.AlertDialog.Builder(ShopActivity.this)
+                    .setMessage("המוצר נוסף לעגלה בהצלחה!")
+                    .setPositiveButton("אוקי", null)
+                    .show();
 
-        databaseService.updateCart(this.cart, AuthenticationService.getInstance().getCurrentUserId(), new DatabaseService.DatabaseCallback<Void>() {
-            @Override
-            public void onCompleted(Void object) {
-                updateTotalPrice();
-            }
+            databaseService.updateCart(this.cart, AuthenticationService.getInstance().getCurrentUserId(), new DatabaseService.DatabaseCallback<Void>() {
+                @Override
+                public void onCompleted(Void object) {
+                    updateTotalPrice();
+                }
 
-            @Override
-            public void onFailed(Exception e) {
-                Log.e(TAG, "Failed to update cart: ", e);
-                new android.app.AlertDialog.Builder(ShopActivity.this)
-                        .setMessage("נראה שקרתה תקלה בהוספת המוצר לעגלה, נסה שוב")
-                        .setPositiveButton("אוקי", null)
-                        .show();
-            }
-        });
+                @Override
+                public void onFailed(Exception e) {
+                    Log.e(TAG, "Failed to update cart: ", e);
+                    new android.app.AlertDialog.Builder(ShopActivity.this)
+                            .setMessage("נראה שקרתה תקלה בהוספת המוצר לעגלה, נסה שוב")
+                            .setPositiveButton("אוקי", null)
+                            .show();
+                }
+            });
+        } else {
+            Toast.makeText(ShopActivity.this, "You are an Admin, you cannot add items to the cart", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void updateTotalPrice() {
-        double totalPrice = 0;
-        for (Item item : this.cart.getItems()) {
-            totalPrice += item.getPrice();
+        if (SharedPreferencesUtil.isAdmin(ShopActivity.this)) {
+            totalPriceText.setVisibility(View.GONE);
+        } else {
+            double totalPrice = 0;
+            for (Item item : this.cart.getItems()) {
+                totalPrice += item.getPrice();
+            }
+            totalPriceText.setText("סך הכל: ₪" + totalPrice);
+            totalPriceText.setVisibility(View.VISIBLE);
         }
-        totalPriceText.setText("סך הכל: ₪" + totalPrice);
     }
+
 }
