@@ -45,6 +45,8 @@ public class AdminPage extends AppCompatActivity {
             btnPurchaseHistory.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Intent go = new Intent(getApplicationContext(), AdminOrderHistoryActivity.class);
+                    startActivity(go);
                 }
             });
 

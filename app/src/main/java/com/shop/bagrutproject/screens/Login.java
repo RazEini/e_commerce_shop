@@ -83,6 +83,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     protected void onStart() {
         super.onStart();
 
+        // השהייה קטנה כדי לוודא ש-Firebase מספיק להתעדכן
         new Handler().postDelayed(() -> {
             if (authenticationService.isUserSignedIn()) {
                 Log.d("LoginCheck", "User is already logged in, redirecting...");
@@ -94,6 +95,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         }, 1000);
     }
 
+    // פונקציה להתנתקות
     public void logout() {
         // מנקה את ה-SharedPreferences כאשר המשתמש מתנתק
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
