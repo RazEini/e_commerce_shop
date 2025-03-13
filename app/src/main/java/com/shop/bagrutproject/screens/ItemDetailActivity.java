@@ -91,6 +91,7 @@ public class ItemDetailActivity extends AppCompatActivity {
         databaseService.getItem(itemId, new DatabaseService.DatabaseCallback<Item>() {
             @Override
             public void onCompleted(Item item) {
+                if (item == null) return;
                 itemName.setText(item.getName());
                 itemPrice.setText("₪" + item.getPrice());
                 itemInfo.setText(item.getAboutItem());

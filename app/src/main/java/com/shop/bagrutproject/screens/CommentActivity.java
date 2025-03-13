@@ -69,8 +69,6 @@ public class CommentActivity extends AppCompatActivity {
         Button btnGoToItemDetails = findViewById(R.id.btnGoToItemDetail);
 
         btnGoToItemDetails.setOnClickListener(v -> {
-            Intent intent = new Intent(CommentActivity.this, ItemDetailActivity.class);
-            startActivity(intent);
             finish();
         });
     }
