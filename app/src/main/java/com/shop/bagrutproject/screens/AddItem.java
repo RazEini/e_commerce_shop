@@ -63,6 +63,10 @@ public class AddItem extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_item);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         InitViews();
 
         /// request permission for the camera and storage

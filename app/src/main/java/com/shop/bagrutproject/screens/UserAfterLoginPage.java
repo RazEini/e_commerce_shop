@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -70,4 +72,31 @@ public class UserAfterLoginPage extends AppCompatActivity {
         finishAffinity();
         Toast.makeText(UserAfterLoginPage.this, "התנתקת בהצלחה!", Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_user, menu);
+        setTitle("תפריט חנות");
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_shop) {
+            startActivity(new Intent(this, ShopActivity.class));
+            return true;
+        } else if (id == R.id.action_orders) {
+            startActivity(new Intent(this, OrderHistoryActivity.class));
+            return true;
+        } else if (id == R.id.action_update) {
+            startActivity(new Intent(this, UpdateUserDetailsActivity.class));
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }

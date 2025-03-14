@@ -33,6 +33,10 @@ public class UsersActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_users);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         recyclerView = findViewById(R.id.UserRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 

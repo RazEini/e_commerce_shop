@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_shop"
+        android:title="מעבר לחנות"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_orders"
+        android:title="היסטורית הזמנות"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_update"
+        android:title="אזור אישי"
+        app:showAsAction="never" />
+
+</menu>

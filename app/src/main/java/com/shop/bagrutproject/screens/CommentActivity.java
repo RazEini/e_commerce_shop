@@ -37,6 +37,10 @@ public class CommentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comment);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         itemId = getIntent().getStringExtra("itemId");
 
         recyclerView = findViewById(R.id.recyclerViewComments);

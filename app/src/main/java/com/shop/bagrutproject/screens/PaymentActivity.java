@@ -27,6 +27,10 @@ public class PaymentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         orderSummaryText = findViewById(R.id.orderSummaryText);
         addressEditText = findViewById(R.id.addressEditText);
         completePaymentButton = findViewById(R.id.completePaymentButton);

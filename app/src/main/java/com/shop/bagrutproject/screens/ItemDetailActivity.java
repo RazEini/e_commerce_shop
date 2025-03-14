@@ -36,6 +36,10 @@ public class ItemDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_item_detail);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         databaseService = DatabaseService.getInstance();
 
         // קבלת ה-ID של המוצר שנבחר

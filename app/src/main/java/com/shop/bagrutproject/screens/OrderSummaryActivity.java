@@ -25,6 +25,10 @@ public class OrderSummaryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_summary);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         orderListView = findViewById(R.id.orderListView);
         totalPriceText = findViewById(R.id.totalPriceText);
         proceedToPaymentButton = findViewById(R.id.proceedToPaymentButton);

@@ -40,6 +40,10 @@ public class UpdateUserDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_update_user_details);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
 
         /// get the instance of the authentication service
         authenticationService = AuthenticationService.getInstance();

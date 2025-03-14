@@ -46,6 +46,10 @@ public class CartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         cartListView = findViewById(R.id.lvCart);
         totalPriceText = findViewById(R.id.cartItemsText);
         ImageView cartCheckoutIcon = findViewById(R.id.cartCheckoutButton);

@@ -21,6 +21,10 @@ public class UserDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_detail);
 
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+
         tvFName = findViewById(R.id.tvFName);
         tvLName = findViewById(R.id.tvLName);
         tvEmail = findViewById(R.id.tvEmail);

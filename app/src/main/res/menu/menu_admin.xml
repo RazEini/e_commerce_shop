@@ -1,0 +1,23 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_additem"
+        android:title="הוספת מוצר"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_orderadmin"
+        android:title="היסטורית רכישות"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_users"
+        android:title="עמוד משתמשים"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_shop"
+        android:title="מעבר לחנות"
+        app:showAsAction="never" />
+
+</menu>
