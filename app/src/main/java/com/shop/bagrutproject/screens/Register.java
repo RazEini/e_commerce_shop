@@ -200,6 +200,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_register, menu);
+        setTitle("תפריט חנות");
         return true;
     }
 
