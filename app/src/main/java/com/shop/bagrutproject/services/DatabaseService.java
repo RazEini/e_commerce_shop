@@ -396,10 +396,73 @@ public class DatabaseService {
     }
 
     public void getComments(String itemId, DatabaseCallback<List<Comment>> callback) {
-        getDataList("comments/"+itemId, Comment.class, new HashMap<>(), callback);
+        DatabaseReference commentsRef = FirebaseDatabase.getInstance().getReference("comments").child(itemId);
+        commentsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Comment> commentList = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Comment comment = snapshot.getValue(Comment.class);
+                    if (comment != null) {
+                        commentList.add(comment);
+                    }
+                }
+                callback.onCompleted(commentList);
+                // עדכון הדירוג הממוצע לאחר הוספת תגובה חדשה
+                updateAverageRating(itemId, new DatabaseCallback<Double>() {
+                    @Override
+                    public void onCompleted(Double result) {
+                        // אפשר כאן לעדכן את הדירוג הממוצע ב-UI אם צריך
+                    }
+
+                    @Override
+                    public void onFailed(Exception exception) {
+                        // טיפול בשגיאה אם יש
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onFailed(databaseError.toException());
+            }
+        });
     }
 
+    // פונקציה שתחשב את הממוצע של הדירוגים
+    public void updateAverageRating(String itemId, DatabaseCallback<Double> callback) {
+        DatabaseReference commentsRef = FirebaseDatabase.getInstance().getReference("comments").child(itemId);
+        commentsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                double sum = 0;
+                int count = 0;
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Comment comment = snapshot.getValue(Comment.class);
+                    if (comment != null) {
+                        sum += comment.getRating();
+                        count++;
+                    }
+                }
+                double averageRating = count > 0 ? sum / count : 0;
+                // עדכון הדירוג הממוצע של המוצר
+                DatabaseReference itemRef = FirebaseDatabase.getInstance().getReference("items").child(itemId);
+                itemRef.child("averageRating").setValue(averageRating)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                callback.onCompleted(averageRating);
+                            } else {
+                                callback.onFailed(task.getException());
+                            }
+                        });
+            }
 
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onFailed(databaseError.toException());
+            }
+        });
+    }
 }
 
 

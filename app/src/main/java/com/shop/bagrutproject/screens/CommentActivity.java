@@ -1,6 +1,5 @@
 package com.shop.bagrutproject.screens;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -63,7 +62,7 @@ public class CommentActivity extends AppCompatActivity {
             String commentText = commentInput.getText().toString().trim();
             float rating = ratingBar.getRating(); // קבלת הדירוג
 
-            if (!commentText.isEmpty() && rating > 0) {
+            if (!commentText.isEmpty()) { // אפשר לשלוח תגובה גם עם 0 כוכבים
                 submitComment(commentText, rating);
             } else {
                 Toast.makeText(CommentActivity.this, "אנא הזן תגובה ודירוג", Toast.LENGTH_SHORT).show();
@@ -83,19 +82,26 @@ public class CommentActivity extends AppCompatActivity {
             public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
                 commentList.clear();
 
+                double sum = 0;
+                int count = 0;
                 for (com.google.firebase.database.DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Comment comment = snapshot.getValue(Comment.class);
                     if (comment != null) {
                         commentList.add(comment);
+                        sum += comment.getRating();
+                        count++;
                     }
                 }
 
+                double averageRating = count > 0 ? sum / count : 0;
+                // Update the average rating immediately
+                // Set the average rating back to the UI (optional, if needed)
                 commentAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(com.google.firebase.database.DatabaseError databaseError) {
-                // טיפול בשגיאות
+                // Handle errors
             }
         });
     }

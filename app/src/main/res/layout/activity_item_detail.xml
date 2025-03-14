@@ -98,7 +98,10 @@
         android:isIndicator="true"
         android:layout_marginTop="12dp"
         android:layout_gravity="center"
-        android:progressTint="@android:color/holo_orange_light"/>
+        android:progressTint="@android:color/holo_orange_light"
+        android:secondaryProgressTint="@android:color/holo_orange_light"
+        android:backgroundTint="@android:color/holo_orange_light"/>
+
 
     <View
         android:layout_width="match_parent"

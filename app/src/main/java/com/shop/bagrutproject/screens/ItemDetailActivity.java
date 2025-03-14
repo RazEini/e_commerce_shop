@@ -1,20 +1,15 @@
 package com.shop.bagrutproject.screens;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.shop.bagrutproject.R;
 import com.shop.bagrutproject.models.Comment;
 import com.shop.bagrutproject.models.Item;
@@ -29,7 +24,7 @@ public class ItemDetailActivity extends AppCompatActivity {
     private ImageView itemImage;
     private String itemId;
     private Button btnGoBack, btnViewComments;
-    DatabaseService databaseService;
+    private DatabaseService databaseService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,41 +52,7 @@ public class ItemDetailActivity extends AppCompatActivity {
         btnGoBack = findViewById(R.id.btnGoToShop);
         btnViewComments = findViewById(R.id.btnViewComments);
 
-        databaseService.getComments(itemId, new DatabaseService.DatabaseCallback<List<Comment>>() {
-            @Override
-            public void onCompleted(List<Comment> comments) {
-                double sum = 0;
-                int count = 0;
-                for (Comment comment : comments) {
-                    sum += comment.getRating();
-                    count++;
-                }
-                double averageRating = count > 0 ? sum / count : 0;
-
-                // הצגת ממוצע הדירוגים בכוכבים
-                itemAverageRatingBar.setRating((float) averageRating);
-            }
-
-            @Override
-            public void onFailed(Exception e) {
-
-            }
-        });
-
-        // חזרה לעמוד החנות
-        btnGoBack.setOnClickListener(v -> {
-            Intent intent = new Intent(ItemDetailActivity.this, ShopActivity.class);
-            startActivity(intent);
-            finish();
-        });
-
-        // מעבר לעמוד התגובות
-        btnViewComments.setOnClickListener(v -> {
-            Intent intent = new Intent(ItemDetailActivity.this, CommentActivity.class);
-            intent.putExtra("itemId", itemId); // שליחת ה-ID של המוצר
-            startActivity(intent);
-        });
-
+        // הצגת פרטי המוצר
         databaseService.getItem(itemId, new DatabaseService.DatabaseCallback<Item>() {
             @Override
             public void onCompleted(Item item) {
@@ -108,12 +69,49 @@ public class ItemDetailActivity extends AppCompatActivity {
                 } else {
                     itemImage.setImageResource(R.drawable.ic_launcher_foreground);
                 }
+
+                // עדכון הממוצע של הדירוגים אחרי שהמידע על המוצר הוצג
+                updateAverageRating(itemAverageRatingBar);
             }
 
             @Override
             public void onFailed(Exception e) {
+                // טיפול בשגיאות
+            }
+        });
 
+        // חזרה לעמוד החנות
+        btnGoBack.setOnClickListener(v -> {
+            Intent intent = new Intent(ItemDetailActivity.this, ShopActivity.class);
+            startActivity(intent);
+            finish();
+        });
+
+        // מעבר לעמוד התגובות
+        btnViewComments.setOnClickListener(v -> {
+            Intent intent = new Intent(ItemDetailActivity.this, CommentActivity.class);
+            intent.putExtra("itemId", itemId); // שליחת ה-ID של המוצר
+            startActivity(intent);
+        });
+    }
+
+    private void updateAverageRating(RatingBar itemAverageRatingBar) {
+        databaseService.updateAverageRating(itemId, new DatabaseService.DatabaseCallback<Double>() {
+            @Override
+            public void onCompleted(Double averageRating) {
+                // עדכון הממוצע של הדירוג בעמוד פרטי המוצר
+                itemAverageRatingBar.setRating(averageRating.floatValue());
+
+                // קביעת הצבע של הכוכבים
+                itemAverageRatingBar.setProgressTintList(ColorStateList.valueOf(getResources().getColor(R.color.holo_orange_light)));
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                // טיפול בשגיאות
             }
         });
     }
+
+
 }
