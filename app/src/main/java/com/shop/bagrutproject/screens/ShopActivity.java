@@ -202,10 +202,4 @@ public class ShopActivity extends AppCompatActivity {
             totalPriceText.setVisibility(View.VISIBLE);
         }
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return false;
-    }
-
 }
