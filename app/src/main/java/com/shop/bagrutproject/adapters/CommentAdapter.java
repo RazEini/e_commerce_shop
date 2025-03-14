@@ -1,13 +1,22 @@
 package com.shop.bagrutproject.adapters;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.shop.bagrutproject.R;
 import com.shop.bagrutproject.models.Comment;
 
@@ -16,31 +25,47 @@ import java.util.List;
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
 
     private List<Comment> commentList;
+    private DatabaseReference commentsRef;
+    private Context context;
+    private String itemId; // מזהה הפריט שעליו יש תגובות
 
-    public CommentAdapter(List<Comment> commentList) {
+    public CommentAdapter(Context context, List<Comment> commentList, String itemId) {
+        this.context = context;
         this.commentList = commentList;
+        this.itemId = itemId;
+        this.commentsRef = FirebaseDatabase.getInstance().getReference("comments").child(itemId);
     }
 
+    @NonNull
     @Override
-    public CommentViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment, parent, false);
         return new CommentViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(CommentViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
         Comment comment = commentList.get(position);
 
-        // הצגת הטקסט של התגובה
         holder.commentText.setText(comment.getCommentText());
-
-        // הצגת הדירוג עם RatingBar לקריאה בלבד
         holder.ratingBar.setRating(comment.getRating());
         holder.ratingBar.setIsIndicator(true);
-
-        // הצגת שם המשתמש (אם יש צורך)
         holder.userName.setText(comment.getUserId());
+
+        // בדיקה אם יש commentId
+        if (comment.getCommentId() == null) {
+            Log.e("CommentAdapter", "commentId is null at position " + position);
+        } else {
+            Log.d("CommentAdapter", "commentId: " + comment.getCommentId());
+        }
+
+        // מחיקת תגובה בלחיצה ארוכה
+        holder.itemView.setOnLongClickListener(v -> {
+            showDeleteConfirmationDialog(comment, position);
+            return true;
+        });
     }
+
 
     @Override
     public int getItemCount() {
@@ -48,7 +73,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     }
 
     public static class CommentViewHolder extends RecyclerView.ViewHolder {
-
         TextView commentText;
         RatingBar ratingBar;
         TextView userName;
@@ -60,4 +84,33 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             userName = itemView.findViewById(R.id.userName);
         }
     }
+
+    private void showDeleteConfirmationDialog(Comment comment, int position) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle("מחיקת תגובה");
+        builder.setMessage("האם אתה בטוח שברצונך למחוק את התגובה?");
+        builder.setPositiveButton("כן", (dialog, which) -> deleteComment(comment, position));
+        builder.setNegativeButton("לא", (dialog, which) -> dialog.dismiss());
+        builder.show();
+    }
+
+    private void deleteComment(Comment comment, int position) {
+        if (position < 0 || position >= commentList.size()) {
+            Log.e("CommentAdapter", "Invalid index: " + position);
+            return;
+        }
+
+        commentsRef.child(comment.getCommentId()).removeValue()
+                .addOnSuccessListener(aVoid -> {
+                    Log.d("CommentAdapter", "Comment deleted successfully from Firebase.");
+
+                    // מחיקה מהרשימה המקומית ועדכון ה-RecyclerView
+                    commentList.remove(position);
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, commentList.size());
+                })
+                .addOnFailureListener(e -> Log.e("CommentAdapter", "Failed to delete comment", e));
+    }
+
+
 }

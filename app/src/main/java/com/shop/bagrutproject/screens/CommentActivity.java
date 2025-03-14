@@ -1,6 +1,7 @@
 package com.shop.bagrutproject.screens;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -49,7 +50,7 @@ public class CommentActivity extends AppCompatActivity {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         commentList = new ArrayList<>();
-        commentAdapter = new CommentAdapter(commentList);
+        commentAdapter = new CommentAdapter(this, commentList, itemId);
         recyclerView.setAdapter(commentAdapter);
 
         commentsRef = FirebaseDatabase.getInstance().getReference("comments").child(itemId);
@@ -77,16 +78,18 @@ public class CommentActivity extends AppCompatActivity {
     }
 
     private void loadComments() {
-        commentsRef.addValueEventListener(new com.google.firebase.database.ValueEventListener() {
+        commentsRef.addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
             @Override
             public void onDataChange(com.google.firebase.database.DataSnapshot dataSnapshot) {
                 commentList.clear();
+                Log.d("CommentActivity", "Loading comments...");
 
                 double sum = 0;
                 int count = 0;
                 for (com.google.firebase.database.DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Comment comment = snapshot.getValue(Comment.class);
                     if (comment != null) {
+                        comment.setCommentId(snapshot.getKey());
                         commentList.add(comment);
                         sum += comment.getRating();
                         count++;
@@ -94,33 +97,42 @@ public class CommentActivity extends AppCompatActivity {
                 }
 
                 double averageRating = count > 0 ? sum / count : 0;
-                // Update the average rating immediately
-                // Set the average rating back to the UI (optional, if needed)
+                Log.d("CommentActivity", "Total comments loaded: " + commentList.size());
+
                 commentAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(com.google.firebase.database.DatabaseError databaseError) {
-                // Handle errors
+                Log.e("CommentActivity", "Error loading comments", databaseError.toException());
             }
         });
     }
 
-    private void submitComment(String commentText, float rating) {
-        String userId = "anonymous"; // כאן תוכל לשים את שם המשתמש הנוכחי
 
-        Comment comment = new Comment(userId, commentText, rating);
-        String commentId = commentsRef.push().getKey();
+    private void submitComment(String commentText, float rating) {
+        String userId = "anonymous"; // כאן אפשר לשים את שם המשתמש האמיתי אם יש
+        String commentId = commentsRef.push().getKey(); // יצירת מזהה ייחודי
+
         if (commentId != null) {
+            Comment comment = new Comment(commentId, userId, commentText, rating);
+
             commentsRef.child(commentId).setValue(comment)
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(CommentActivity.this, "התגובה נשלחה!", Toast.LENGTH_SHORT).show();
-                        commentInput.setText(""); // ריקון השדה
-                        ratingBar.setIsIndicator(true); // מונע שינוי הדירוג אחרי שליחה
+                        commentInput.setText(""); // ריקון שדה הטקסט
+                        ratingBar.setRating(0); // איפוס הדירוג
+
+                        // טען מחדש את התגובות כדי שהמסך יתעדכן
+                        loadComments();
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(CommentActivity.this, "שגיאה בשליחת התגובה", Toast.LENGTH_SHORT).show();
                     });
         }
     }
+
+
+
+
 }

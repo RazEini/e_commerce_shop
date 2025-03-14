@@ -1,19 +1,27 @@
 package com.shop.bagrutproject.models;
 
 public class Comment {
-
+    private String commentId; // מזהה תגובה
     private String userId;
     private String commentText;
     private float rating;
 
     public Comment() {
-
     }
 
-    public Comment(String userId, String commentText, float rating) {
+    public Comment(String commentId, String userId, String commentText, float rating) {
+        this.commentId = commentId;
         this.userId = userId;
         this.commentText = commentText;
         this.rating = rating;
+    }
+
+    public String getCommentId() {
+        return commentId;
+    }
+
+    public void setCommentId(String commentId) {
+        this.commentId = commentId;
     }
 
     public String getUserId() {
