@@ -60,7 +60,7 @@ public class LoginAdmin extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_register, menu);
+        getMenuInflater().inflate(R.menu.menu_loginadmin, menu);
         setTitle("תפריט חנות");
         return true;
     }
