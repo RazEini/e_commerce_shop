@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -193,6 +195,34 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         });
 
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_register, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_homepage) {
+            startActivity(new Intent(this, MainActivity.class));
+            return true;
+        } else if (id == R.id.action_login) {
+            startActivity(new Intent(this, Login.class));
+            return true;
+        } else if (id == R.id.action_about) {
+            startActivity(new Intent(this, Odot.class));
+            return true;
+        } else if (id == R.id.action_admin) {
+            startActivity(new Intent(this, LoginAdmin.class));
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
 }

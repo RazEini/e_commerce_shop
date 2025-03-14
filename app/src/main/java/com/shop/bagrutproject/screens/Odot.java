@@ -2,6 +2,8 @@ package com.shop.bagrutproject.screens;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 
 import androidx.activity.EdgeToEdge;
@@ -28,5 +30,33 @@ public class Odot extends AppCompatActivity {
     public void btnBack3(View view) {
         Intent intent = new Intent(Odot.this, MainActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_register, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_homepage) {
+            startActivity(new Intent(this, MainActivity.class));
+            return true;
+        } else if (id == R.id.action_register) {
+            startActivity(new Intent(this, Register.class));
+            return true;
+        } else if (id == R.id.action_login) {
+            startActivity(new Intent(this, Login.class));
+            return true;
+        } else if (id == R.id.action_admin) {
+            startActivity(new Intent(this, LoginAdmin.class));
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

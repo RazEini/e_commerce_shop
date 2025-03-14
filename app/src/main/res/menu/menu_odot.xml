@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_homepage"
+        android:title="דף ראשי"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_register"
+        android:title="הרשמה"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_login"
+        android:title="התחברות"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_admin"
+        android:title="מנהל מערכת"
+        app:showAsAction="never" />
+</menu>
