@@ -52,7 +52,6 @@ public class ItemDetailActivity extends AppCompatActivity {
         btnGoBack = findViewById(R.id.btnGoToShop);
         btnViewComments = findViewById(R.id.btnViewComments);
 
-        // הצגת פרטי המוצר
         databaseService.getItem(itemId, new DatabaseService.DatabaseCallback<Item>() {
             @Override
             public void onCompleted(Item item) {
@@ -70,24 +69,20 @@ public class ItemDetailActivity extends AppCompatActivity {
                     itemImage.setImageResource(R.drawable.ic_launcher_foreground);
                 }
 
-                // עדכון הממוצע של הדירוגים אחרי שהמידע על המוצר הוצג
                 updateAverageRating(itemAverageRatingBar);
             }
 
             @Override
             public void onFailed(Exception e) {
-                // טיפול בשגיאות
             }
         });
 
-        // חזרה לעמוד החנות
         btnGoBack.setOnClickListener(v -> {
             Intent intent = new Intent(ItemDetailActivity.this, ShopActivity.class);
             startActivity(intent);
             finish();
         });
 
-        // מעבר לעמוד התגובות
         btnViewComments.setOnClickListener(v -> {
             Intent intent = new Intent(ItemDetailActivity.this, CommentActivity.class);
             intent.putExtra("itemId", itemId); // שליחת ה-ID של המוצר
@@ -99,11 +94,8 @@ public class ItemDetailActivity extends AppCompatActivity {
         databaseService.updateAverageRating(itemId, new DatabaseService.DatabaseCallback<Double>() {
             @Override
             public void onCompleted(Double averageRating) {
-                // עדכון הממוצע של הדירוג בעמוד פרטי המוצר
                 itemAverageRatingBar.setRating(averageRating.floatValue());
-
-                // קביעת הצבע של הכוכבים
-                itemAverageRatingBar.setProgressTintList(ColorStateList.valueOf(getResources().getColor(R.color.holo_orange_light)));
+                // הסר את העדכון של הצבע כדי שלא יתווסף גוון נוסף
             }
 
             @Override
@@ -112,6 +104,7 @@ public class ItemDetailActivity extends AppCompatActivity {
             }
         });
     }
+
 
 
 }

@@ -1,21 +1,34 @@
 package com.shop.bagrutproject.models;
 
 public class Comment {
-    private String commentId; // מזהה תגובה
+    private String commentId;
     private String userId;
     private String commentText;
     private float rating;
+    private String userName;  // שם המשתמש
 
     public Comment() {
+        // דרוש עבור Firebase
     }
 
-    public Comment(String commentId, String userId, String commentText, float rating) {
+    public Comment(String commentId, String userId, String commentText, float rating, String userName) {
         this.commentId = commentId;
         this.userId = userId;
         this.commentText = commentText;
         this.rating = rating;
+        this.userName = userName;
     }
 
+    // Getter ו-Setter עבור userName
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    // Getter ו-Setter עבור שדות נוספים
     public String getCommentId() {
         return commentId;
     }

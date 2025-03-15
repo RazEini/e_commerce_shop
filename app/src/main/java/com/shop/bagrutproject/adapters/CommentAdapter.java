@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.shop.bagrutproject.R;
@@ -50,9 +51,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         holder.commentText.setText(comment.getCommentText());
         holder.ratingBar.setRating(comment.getRating());
         holder.ratingBar.setIsIndicator(true);
-        holder.userName.setText(comment.getUserId());
+        holder.userName.setText(comment.getUserName()); // הצגת שם המשתמש
 
-        // בדיקה אם יש commentId
         if (comment.getCommentId() == null) {
             Log.e("CommentAdapter", "commentId is null at position " + position);
         } else {
@@ -61,10 +61,16 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
         // מחיקת תגובה בלחיצה ארוכה
         holder.itemView.setOnLongClickListener(v -> {
-            showDeleteConfirmationDialog(comment, position);
+            String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            if (comment.getUserId().equals(currentUserId)) {
+                showDeleteConfirmationDialog(comment, position);
+            } else {
+                Toast.makeText(context, "לא ניתן למחוק תגובה של משתמש אחר", Toast.LENGTH_SHORT).show();
+            }
             return true;
         });
     }
+
 
 
     @Override

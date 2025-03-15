@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.shop.bagrutproject.R;
@@ -55,15 +56,13 @@ public class CommentActivity extends AppCompatActivity {
 
         commentsRef = FirebaseDatabase.getInstance().getReference("comments").child(itemId);
 
-        // הצגת התגובות הקיימות
         loadComments();
 
-        // כפתור לשליחת תגובה חדשה
         btnSubmitComment.setOnClickListener(v -> {
             String commentText = commentInput.getText().toString().trim();
-            float rating = ratingBar.getRating(); // קבלת הדירוג
+            float rating = ratingBar.getRating();
 
-            if (!commentText.isEmpty()) { // אפשר לשלוח תגובה גם עם 0 כוכבים
+            if (!commentText.isEmpty()) {
                 submitComment(commentText, rating);
             } else {
                 Toast.makeText(CommentActivity.this, "אנא הזן תגובה ודירוג", Toast.LENGTH_SHORT).show();
@@ -90,6 +89,14 @@ public class CommentActivity extends AppCompatActivity {
                     Comment comment = snapshot.getValue(Comment.class);
                     if (comment != null) {
                         comment.setCommentId(snapshot.getKey());
+
+                        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+                        if (comment.getUserId().equals(currentUserId)) {
+                            comment.setUserName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                        } else {
+                            comment.setUserName("anonymous");
+                        }
+
                         commentList.add(comment);
                         sum += comment.getRating();
                         count++;
@@ -109,13 +116,13 @@ public class CommentActivity extends AppCompatActivity {
         });
     }
 
-
     private void submitComment(String commentText, float rating) {
-        String userId = "anonymous"; // כאן אפשר לשים את שם המשתמש האמיתי אם יש
-        String commentId = commentsRef.push().getKey(); // יצירת מזהה ייחודי
+        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String currentUserName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+        String commentId = commentsRef.push().getKey();
 
         if (commentId != null) {
-            Comment comment = new Comment(commentId, userId, commentText, rating);
+            Comment comment = new Comment(commentId, currentUserId, commentText, rating, currentUserName);
 
             commentsRef.child(commentId).setValue(comment)
                     .addOnSuccessListener(aVoid -> {
@@ -131,8 +138,4 @@ public class CommentActivity extends AppCompatActivity {
                     });
         }
     }
-
-
-
-
 }
