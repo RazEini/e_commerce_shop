@@ -9,25 +9,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.shop.bagrutproject.R;
 import com.shop.bagrutproject.models.User;
 import com.shop.bagrutproject.screens.UserDetailActivity;
 import com.shop.bagrutproject.services.DatabaseService;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersViewHolder> {
 
     private List<User> usersList;
+    private List<User> filteredList;
     private Context context;
-    private static final String TAG = "UsersAdapter"; // Add this line for logging
+    private static final String TAG = "UsersAdapter";
 
     public UsersAdapter(List<User> usersList, Context context) {
         this.usersList = usersList;
+        this.filteredList = new ArrayList<>(usersList); // יצירת עותק לרשימה מסוננת
         this.context = context;
     }
 
@@ -40,7 +40,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersViewHol
 
     @Override
     public void onBindViewHolder(@NonNull UsersViewHolder holder, int position) {
-        User user = usersList.get(position);
+        User user = filteredList.get(position);
         holder.nameTextView.setText(user.getfName() + " " + user.getlName());
 
         holder.itemView.setOnClickListener(v -> {
@@ -54,7 +54,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersViewHol
         });
 
         holder.itemView.setOnLongClickListener(v -> {
-            if (user.getUid() != null) { // Ensure UID is not null
+            if (user.getUid() != null) {
                 new AlertDialog.Builder(context)
                         .setTitle("Confirm Delete")
                         .setMessage("Are you sure you want to delete this user?")
@@ -70,6 +70,21 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersViewHol
         });
     }
 
+    public void filter(String query) {
+        filteredList.clear();
+        if (query.isEmpty()) {
+            filteredList.addAll(usersList);
+        } else {
+            for (User user : usersList) {
+                String fullName = user.getfName() + " " + user.getlName();
+                if (fullName.toLowerCase().contains(query.toLowerCase())) {
+                    filteredList.add(user);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
     private void deleteUserAndRefresh(String uid, int position) {
         if (uid == null || uid.isEmpty()) {
             Log.e(TAG, "Cannot delete user: uid is null or empty");
@@ -82,9 +97,8 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersViewHol
             @Override
             public void onCompleted(Void object) {
                 Log.d(TAG, "User deleted successfully");
-                usersList.remove(position); // Remove user from the list
-                notifyItemRemoved(position); // Notify the adapter about the removed item
-                notifyItemRangeChanged(position, usersList.size()); // Update the positions of remaining items
+                usersList.remove(position);
+                filter(""); // רענון הרשימה לאחר מחיקה
             }
 
             @Override
@@ -97,7 +111,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersViewHol
 
     @Override
     public int getItemCount() {
-        return usersList.size();
+        return filteredList.size();
     }
 
     public static class UsersViewHolder extends RecyclerView.ViewHolder {
