@@ -16,6 +16,7 @@
 
     <string-array name="ItemColorArray">
         <item>אדום</item>
+        <item>אפור</item>
         <item>שחור</item>
         <item>צהוב</item>
         <item>כחול</item>
@@ -30,5 +31,6 @@
         <item>King</item>
         <item>CRYSTAL</item>
         <item>SPECTRA</item>
+        <item>KSP</item>
     </string-array>
 </resources>

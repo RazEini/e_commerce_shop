@@ -14,14 +14,11 @@ public class Item implements Serializable {
     protected String aboutItem;
     protected double price;
     protected String pic;
-    protected int numberRate;
-    protected double rate;
-    protected double sumRate;
 
     public Item() {
     }
 
-    public Item(String id, String name, String type, String color, String company, String aboutItem, double price, String pic, int numberRate, double rate, double sumRate) {
+    public Item(String id, String name, String type, String color, String company, String aboutItem, double price, String pic) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -30,9 +27,6 @@ public class Item implements Serializable {
         this.aboutItem = aboutItem;
         this.price = price;
         this.pic = pic;
-        this.numberRate = numberRate;
-        this.rate = rate;
-        this.sumRate = sumRate;
     }
 
     public String getId() {
@@ -95,30 +89,6 @@ public class Item implements Serializable {
         this.pic = pic;
     }
 
-    public int getNumberRate() {
-        return numberRate;
-    }
-
-    public void setNumberRate(int numberRate) {
-        this.numberRate = numberRate;
-    }
-
-    public double getRate() {
-        return rate;
-    }
-
-    public void setRate(double rate) {
-        this.rate = rate;
-    }
-
-    public double getSumRate() {
-        return sumRate;
-    }
-
-    public void setSumRate(double sumRate) {
-        this.sumRate = sumRate;
-    }
-
     @Override
     public String toString() {
         return "Item{" +
@@ -129,9 +99,6 @@ public class Item implements Serializable {
                 ", company='" + company + '\'' +
                 ", aboutItem='" + aboutItem + '\'' +
                 ", price=" + price +
-                ", numberRate=" + numberRate +
-                ", rate=" + rate +
-                ", sumRate=" + sumRate +
                 '}';
     }
 }

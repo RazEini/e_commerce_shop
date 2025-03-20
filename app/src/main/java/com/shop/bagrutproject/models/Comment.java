@@ -5,10 +5,10 @@ public class Comment {
     private String userId;
     private String commentText;
     private float rating;
-    private String userName;  // שם המשתמש
+    private String userName;
 
     public Comment() {
-        // דרוש עבור Firebase
+
     }
 
     public Comment(String commentId, String userId, String commentText, float rating, String userName) {
@@ -19,7 +19,6 @@ public class Comment {
         this.userName = userName;
     }
 
-    // Getter ו-Setter עבור userName
     public String getUserName() {
         return userName;
     }
@@ -28,7 +27,6 @@ public class Comment {
         this.userName = userName;
     }
 
-    // Getter ו-Setter עבור שדות נוספים
     public String getCommentId() {
         return commentId;
     }

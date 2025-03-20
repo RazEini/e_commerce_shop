@@ -14,14 +14,14 @@ public class Order implements Serializable {
     private double totalPrice;
     private String status;
     private long timestamp;
-    private String userId; // כדי לדעת למי שייכת ההזמנה
+    private String userId;
 
     public Order(String userId, List<Item> items) {
-        this.orderId = UUID.randomUUID().toString(); // מזהה ייחודי להזמנה
+        this.orderId = UUID.randomUUID().toString();
         this.items = items != null ? items : new ArrayList<>();
         this.totalPrice = calculateTotalPrice();
         this.status = "Pending";
-        this.timestamp = System.currentTimeMillis(); // זמן יצירת ההזמנה
+        this.timestamp = System.currentTimeMillis();
         this.userId = userId;
     }
 
@@ -66,7 +66,7 @@ public class Order implements Serializable {
     }
 
     public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp; // הגדרת הזמן של ההזמנה
+        this.timestamp = timestamp;
     }
 
     public String getUserId() {

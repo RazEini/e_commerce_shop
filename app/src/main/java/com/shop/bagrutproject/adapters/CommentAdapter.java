@@ -28,7 +28,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
     private List<Comment> commentList;
     private DatabaseReference commentsRef;
     private Context context;
-    private String itemId; // מזהה הפריט שעליו יש תגובות
+    private String itemId;
 
     public CommentAdapter(Context context, List<Comment> commentList, String itemId) {
         this.context = context;
@@ -51,7 +51,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         holder.commentText.setText(comment.getCommentText());
         holder.ratingBar.setRating(comment.getRating());
         holder.ratingBar.setIsIndicator(true);
-        holder.userName.setText(comment.getUserName()); // הצגת שם המשתמש
+        holder.userName.setText(comment.getUserName());
 
         if (comment.getCommentId() == null) {
             Log.e("CommentAdapter", "commentId is null at position " + position);
@@ -59,7 +59,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             Log.d("CommentAdapter", "commentId: " + comment.getCommentId());
         }
 
-        // מחיקת תגובה בלחיצה ארוכה
         holder.itemView.setOnLongClickListener(v -> {
             String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
             if (comment.getUserId().equals(currentUserId)) {

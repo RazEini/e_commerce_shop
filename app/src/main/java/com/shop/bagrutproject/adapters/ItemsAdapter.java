@@ -26,8 +26,8 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
     }
 
     private static final String TAG = "ItemsAdapter";
-    private List<Item> originalItemsList; // רשימת כל הפריטים
-    private List<Item> filteredItemsList; // רשימה מסוננת לחיפוש
+    private List<Item> originalItemsList;
+    private List<Item> filteredItemsList;
     private Context context;
     @Nullable
     private final ItemClickListener itemClickListener;
@@ -117,8 +117,4 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
         }
         notifyDataSetChanged();
     }
-
-
-
-
 }

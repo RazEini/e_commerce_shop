@@ -27,7 +27,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersViewHol
 
     public UsersAdapter(List<User> usersList, Context context) {
         this.usersList = usersList;
-        this.filteredList = new ArrayList<>(usersList); // יצירת עותק לרשימה מסוננת
+        this.filteredList = new ArrayList<>(usersList);
         this.context = context;
     }
 
@@ -98,7 +98,7 @@ public class UsersAdapter extends RecyclerView.Adapter<UsersAdapter.UsersViewHol
             public void onCompleted(Void object) {
                 Log.d(TAG, "User deleted successfully");
                 usersList.remove(position);
-                filter(""); // רענון הרשימה לאחר מחיקה
+                filter("");
             }
 
             @Override
