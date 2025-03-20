@@ -15,8 +15,4 @@
         android:title="אודות"
         app:showAsAction="never" />
 
-    <item
-        android:id="@+id/action_admin"
-        android:title="מנהל מערכת"
-        app:showAsAction="never" />
 </menu>

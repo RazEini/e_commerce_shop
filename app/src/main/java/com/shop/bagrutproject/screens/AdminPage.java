@@ -1,73 +1,124 @@
 package com.shop.bagrutproject.screens;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-import com.shop.bagrutproject.R;
-
-import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.shop.bagrutproject.R;
+import com.shop.bagrutproject.utils.SharedPreferencesUtil;
+
 public class AdminPage extends AppCompatActivity {
+
+    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_admin_page);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        // אתחול FirebaseAuth
+        mAuth = FirebaseAuth.getInstance();
+
+        // אתחול כפתורים
+        Button btnLogoutAdmin = findViewById(R.id.btnLogoutAdmin);
+        Button btnAddItem = findViewById(R.id.btn_add_product);
+        Button btnOrderHistoryAdmin = findViewById(R.id.btn_purchase_history);
+        Button btnUsersList = findViewById(R.id.btn_users);
+        Button btnShop = findViewById(R.id.btn_shop);
+
+        // הגדרת פעולות לכפתורים
+        btnLogoutAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                logout();
+            }
         });
 
-            Button btnAddProduct = findViewById(R.id.btn_add_product);
-            Button btnPurchaseHistory = findViewById(R.id.btn_purchase_history);
-            Button btnUsers = findViewById(R.id.btn_users);
-            Button btnShop = findViewById(R.id.btn_shop);
+        btnAddItem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToAddItem(view);
+            }
+        });
 
-            btnAddProduct.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent go = new Intent(getApplicationContext(), AddItem.class);
-                    startActivity(go);
-                }
-            });
+        btnOrderHistoryAdmin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToAdminOrderHistory(view);
+            }
+        });
 
-            btnPurchaseHistory.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent go = new Intent(getApplicationContext(), AdminOrderHistoryActivity.class);
-                    startActivity(go);
-                }
-            });
+        btnUsersList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToUsersList(view);
+            }
+        });
 
-            btnUsers.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent go = new Intent(getApplicationContext(), UsersActivity.class);
-                    startActivity(go);
-                }
-            });
+        btnShop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToShop(view);
+            }
+        });
+    }
 
-            btnShop.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Intent go = new Intent(getApplicationContext(), ShopActivity.class);
-                    startActivity(go);
-                }
-            });
-        }
+    // פונקציות ניווט בין העמודים
+    public void goToAddItem(View view) {
+        Intent intent = new Intent(AdminPage.this, AddItem.class);
+        startActivity(intent);
+    }
+
+    public void goToAdminOrderHistory(View view) {
+        Intent intent = new Intent(AdminPage.this, AdminOrderHistoryActivity.class);
+        startActivity(intent);
+    }
+
+    public void goToUsersList(View view) {
+        Intent intent = new Intent(AdminPage.this, UsersActivity.class);
+        startActivity(intent);
+    }
+
+    public void goToShop(View view) {
+        Intent intent = new Intent(AdminPage.this, ShopActivity.class);
+        startActivity(intent);
+    }
+
+    public void logout() {
+        // קריאה לפונקציה שמתנתקת את האדמין מ-SharedPreferences
+        SharedPreferencesUtil.signOutAdmin(AdminPage.this);
+
+        // הסרת המידע מ-SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
+
+        // התנתקות מ-Firebase
+        mAuth.signOut();
+        Log.d("Logout", "Admin successfully logged out");
+
+        // מעבר לדף ההתחברות
+        Intent go = new Intent(AdminPage.this, Login.class);
+        go.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(go);
+        finishAffinity(); // זה יבטל את כל הפעילויות הקודמות
+
+        Log.d("Logout", "Navigated to Login activity");
+
+        Toast.makeText(AdminPage.this, "התנתקת בהצלחה!", Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -75,7 +126,6 @@ public class AdminPage extends AppCompatActivity {
         setTitle("תפריט חנות");
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -90,11 +140,11 @@ public class AdminPage extends AppCompatActivity {
         } else if (id == R.id.action_users) {
             startActivity(new Intent(this, UsersActivity.class));
             return true;
-        }else if (id == R.id.action_shop) {
+        } else if (id == R.id.action_shop) {
             startActivity(new Intent(this, ShopActivity.class));
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-    }
+}

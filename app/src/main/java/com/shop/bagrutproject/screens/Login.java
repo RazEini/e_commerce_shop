@@ -10,22 +10,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.shop.bagrutproject.R;
-import com.shop.bagrutproject.models.Cart;
 import com.shop.bagrutproject.models.User;
 import com.shop.bagrutproject.services.AuthenticationService;
 import com.shop.bagrutproject.services.DatabaseService;
@@ -37,10 +29,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private AuthenticationService authenticationService;
     private DatabaseService databaseService;
 
+    private static final String ADMIN_USERNAME = "admin";
+    private static final String ADMIN_PASSWORD = "2609";
+
     EditText etEmail, etPassword;
     Button btnLog;
     String email, pass;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +47,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             return insets;
         });
 
-        /// get the instance of the authentication service
         authenticationService = AuthenticationService.getInstance();
-        /// get the instance of the database service
         databaseService = DatabaseService.getInstance();
 
+        checkIfUserIsAlreadyLoggedIn(); // בדיקה האם משתמש או מנהל כבר מחוברים
 
         initViews();
     }
@@ -78,97 +71,89 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View view) {
         email = etEmail.getText().toString();
         pass = etPassword.getText().toString();
-        loginUser(email,pass);
+        loginUser(email, pass);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
+    private void checkIfUserIsAlreadyLoggedIn() {
+        boolean isAdmin = SharedPreferencesUtil.isAdmin(this);
+        if (isAdmin) {
+            Log.d(TAG, "Admin is already logged in, redirecting...");
+            Intent adminIntent = new Intent(this, AdminPage.class);
+            startActivity(adminIntent);
+            finish();
+            return;
+        }
 
-        // השהייה קטנה כדי לוודא ש-Firebase מספיק להתעדכן
         new Handler().postDelayed(() -> {
             if (authenticationService.isUserSignedIn()) {
-                Log.d("LoginCheck", "User is already logged in, redirecting...");
-                SharedPreferencesUtil.setIsAdmin(Login.this, false);
-                Intent go = new Intent(getApplicationContext(), UserAfterLoginPage.class);
+                Log.d(TAG, "User is already logged in, redirecting...");
+                SharedPreferencesUtil.setIsAdmin(this, false);
+                Intent go = new Intent(this, UserAfterLoginPage.class);
                 startActivity(go);
                 finish();
             }
         }, 1000);
     }
 
-    // פונקציה להתנתקות
     public void logout() {
-        // מנקה את ה-SharedPreferences כאשר המשתמש מתנתק
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear(); // מנקה את כל הנתונים
+        editor.clear();
         editor.apply();
 
-        // מבצע יציאה מהחשבון ב-Firebase
         authenticationService.signOut();
 
-        // מעביר את המשתמש למסך ההתחברות
-        Intent go = new Intent(getApplicationContext(), Login.class);
+        Intent go = new Intent(this, Login.class);
         startActivity(go);
+        finish();
     }
 
-
     private void loginUser(String email, String password) {
+        if (email.equals(ADMIN_USERNAME) && password.equals(ADMIN_PASSWORD)) {
+            SharedPreferencesUtil.setIsAdmin(this, true);
+
+            // דיליי של 2 שניות לפני המעבר לעמוד המנהל
+            new Handler().postDelayed(() -> {
+                Intent adminIntent = new Intent(this, AdminPage.class);
+                adminIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(adminIntent);
+                finish();
+            }, 2000);
+
+            return;
+        }
+
         authenticationService.signIn(email, password, new AuthenticationService.AuthCallback<String>() {
-            /// Callback method called when the operation is completed
-            /// @param uid the user ID of the user that is logged in
             @Override
             public void onCompleted(String uid) {
-                Log.d(TAG, "onCompleted: User logged in successfully");
-                /// get the user data from the database
-
-
                 databaseService.getUser(uid, new DatabaseService.DatabaseCallback<User>() {
                     @Override
                     public void onCompleted(User user) {
-                        Log.d(TAG, "onCompleted: User data retrieved successfully");
-                        /// save the user data to shared preferences
                         SharedPreferencesUtil.saveUser(Login.this, user);
                         SharedPreferencesUtil.setIsAdmin(Login.this, false);
-                        /// Redirect to main activity and clear back stack to prevent user from going back to login screen
-
-
                         Intent mainIntent = new Intent(Login.this, UserAfterLoginPage.class);
-                        /// Clear the back stack (clear history) and start the MainActivity
                         mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(mainIntent);
-
+                        finish(); // סוגרים את הפעילות הנוכחית
                     }
 
                     @Override
                     public void onFailed(Exception e) {
-                        Log.e(TAG, "onFailed: Failed to retrieve user data", e);
-                        /// Show error message to user
                         etPassword.setError("Invalid email or password");
                         etPassword.requestFocus();
-                        /// Sign out the user if failed to retrieve user data
-                        /// This is to prevent the user from being logged in again
                         authenticationService.signOut();
-
                     }
                 });
-
-
             }
-
-
 
             @Override
             public void onFailed(Exception e) {
-                Log.e(TAG, "onFailed: Failed to log in user", e);
-                /// Show error message to user
                 etPassword.setError("Invalid email or password");
                 etPassword.requestFocus();
-
             }
         });
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -176,7 +161,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         setTitle("תפריט חנות");
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -191,12 +175,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         } else if (id == R.id.action_about) {
             startActivity(new Intent(this, Odot.class));
             return true;
-        } else if (id == R.id.action_admin) {
-            startActivity(new Intent(this, LoginAdmin.class));
-            return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-
 }

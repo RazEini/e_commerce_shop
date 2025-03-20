@@ -169,4 +169,16 @@ public class SharedPreferencesUtil {
         editor.putBoolean("isAdmin", isAdmin);
         editor.apply();
     }
+
+    public static boolean isAdminLoggedIn(Context context) {
+        return isAdmin(context) && isUserLoggedIn(context);
+    }
+
+    public static void signOutAdmin(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("isAdmin");
+        editor.apply();
+    }
+
 }

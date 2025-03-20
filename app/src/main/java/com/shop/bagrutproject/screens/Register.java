@@ -218,9 +218,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         } else if (id == R.id.action_about) {
             startActivity(new Intent(this, Odot.class));
             return true;
-        } else if (id == R.id.action_admin) {
-            startActivity(new Intent(this, LoginAdmin.class));
-            return true;
         }
 
         return super.onOptionsItemSelected(item);

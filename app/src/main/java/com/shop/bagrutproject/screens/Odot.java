@@ -52,9 +52,6 @@ public class Odot extends AppCompatActivity {
         } else if (id == R.id.action_login) {
             startActivity(new Intent(this, Login.class));
             return true;
-        } else if (id == R.id.action_admin) {
-            startActivity(new Intent(this, LoginAdmin.class));
-            return true;
         }
 
         return super.onOptionsItemSelected(item);

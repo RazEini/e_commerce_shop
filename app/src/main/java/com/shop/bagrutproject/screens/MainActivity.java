@@ -32,7 +32,7 @@ import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnReg, btnLog, btnOd, btnAdmin;
+    Button btnReg, btnLog, btnOd;
     private static final String CHANNEL_ID = "shop_notifications";
 
     @Override
@@ -58,12 +58,10 @@ public class MainActivity extends AppCompatActivity {
         btnReg = findViewById(R.id.btnRegister);
         btnLog = findViewById(R.id.btnLogin);
         btnOd = findViewById(R.id.btnOdot);
-        btnAdmin = findViewById(R.id.btnAdmin);
 
         btnReg.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, Register.class)));
         btnLog.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, Login.class)));
         btnOd.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, Odot.class)));
-        btnAdmin.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, LoginAdmin.class)));
     }
 
     private void requestNotificationPermission() {
@@ -149,9 +147,6 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else if (id == R.id.action_about) {
             startActivity(new Intent(this, Odot.class));
-            return true;
-        } else if (id == R.id.action_admin) {
-            startActivity(new Intent(this, LoginAdmin.class));
             return true;
         }
 
