@@ -142,7 +142,7 @@ public class AddItem extends AppCompatActivity {
                 String id = databaseService.generateItemId();
 
 
-                Item newItem = new Item(id, itemName, itemType, itemColor, itemCompany, itemInfo, price, imageBase64, 0, 0.0, 0.0);
+                Item newItem = new Item(id, itemName, itemType, itemColor, itemCompany, itemInfo, price, imageBase64);
 
                 /// save the item to the database and get the result in the callback
                 databaseService.createNewItem(newItem, new DatabaseService.DatabaseCallback<Void>() {
