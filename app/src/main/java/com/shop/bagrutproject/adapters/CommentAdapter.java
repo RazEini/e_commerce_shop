@@ -20,6 +20,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.shop.bagrutproject.R;
 import com.shop.bagrutproject.models.Comment;
+import com.shop.bagrutproject.services.DatabaseService;
 
 import java.util.List;
 
@@ -105,17 +106,21 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             return;
         }
 
-        commentsRef.child(comment.getCommentId()).removeValue()
-                .addOnSuccessListener(aVoid -> {
-                    Log.d("CommentAdapter", "Comment deleted successfully from Firebase.");
+        DatabaseService.getInstance().removeComment(itemId, comment.getCommentId(), new DatabaseService.DatabaseCallback<Void>() {
+            @Override
+            public void onCompleted(Void object) {
+                Log.d("CommentAdapter", "Comment deleted successfully from Firebase.");
 
-                    // מחיקה מהרשימה המקומית ועדכון ה-RecyclerView
-                    commentList.remove(position);
-                    notifyItemRemoved(position);
-                    notifyItemRangeChanged(position, commentList.size());
-                })
-                .addOnFailureListener(e -> Log.e("CommentAdapter", "Failed to delete comment", e));
+                // מחיקה מהרשימה המקומית ועדכון ה-RecyclerView
+                commentList.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, commentList.size());
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                Log.e("CommentAdapter", "Failed to delete comment", e);
+            }
+        });
     }
-
-
 }

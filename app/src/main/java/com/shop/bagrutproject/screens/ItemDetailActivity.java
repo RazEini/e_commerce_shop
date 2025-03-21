@@ -78,8 +78,6 @@ public class ItemDetailActivity extends AppCompatActivity {
         });
 
         btnGoBack.setOnClickListener(v -> {
-            Intent intent = new Intent(ItemDetailActivity.this, ShopActivity.class);
-            startActivity(intent);
             finish();
         });
 

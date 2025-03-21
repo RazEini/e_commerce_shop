@@ -124,6 +124,22 @@ public class DatabaseService {
         });
     }
 
+    /// remove data from the database at a specific path
+    /// @param path the path to remove the data from
+    /// @param callback the callback to call when the operation is completed
+    /// @see DatabaseCallback
+    private void deleteData(@NotNull final String path, @Nullable final DatabaseCallback<Void> callback) {
+        readData(path).removeValue((error, ref) -> {
+            if (error != null) {
+                if (callback == null) return;
+                callback.onFailed(error.toException());
+            } else {
+                if (callback == null) return;
+                callback.onCompleted(null);
+            }
+        });
+    }
+
     /// get a list of data from the database at a specific path
     /// @param path the path to get the data from
     /// @param clazz the class of the objects to return
@@ -291,21 +307,7 @@ public class DatabaseService {
     /// @see Item
     /// @see #getData(String, Class, DatabaseCallback)
     public void getUsers(@NotNull final DatabaseCallback<List<User>> callback) {
-        readData("Users").get().addOnCompleteListener(task -> {
-            if (!task.isSuccessful()) {
-                Log.e(TAG, "Error getting data", task.getException());
-                callback.onFailed(task.getException());
-                return;
-            }
-            List<User> users = new ArrayList<>();
-            task.getResult().getChildren().forEach(dataSnapshot -> {
-                User user = dataSnapshot.getValue(User.class);
-                Log.d(TAG, "Got user: " + user);
-                users.add(user);
-            });
-
-            callback.onCompleted(users);
-        });
+        getDataList("Users", User.class, new HashMap<>(), callback);
     }
 
     public void deleteUser(String uid, DatabaseCallback<Void> callback) {
@@ -320,113 +322,30 @@ public class DatabaseService {
     }
 
     public void getOrder(String orderId, DatabaseCallback<Order> callback) {
-        DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("orders").child(orderId);
-
-        orderRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Order order = snapshot.getValue(Order.class);
-                if (order != null) {
-                    callback.onCompleted(order);
-                } else {
-                    callback.onFailed(new Exception("Order not found"));
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                callback.onFailed(error.toException());
-            }
-        });
+        getData("orders/"+orderId, Order.class, callback);
     }
 
-    public void clearCart(String userId, DatabaseCallback<Void> callback) {
-        DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("carts").child(userId);
-        cartRef.removeValue()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        callback.onCompleted(null);
-                    } else {
-                        callback.onFailed(task.getException());
-                    }
-                });
-    }
-
-    public void createCartForUser(String uid, Cart cart, DatabaseCallback<Void> callback) {
-        // Reference to the Firebase database under the user's cart node
-        DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("carts").child(uid);
-
-        // Save the cart to the Firebase database
-        cartRef.setValue(cart)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.d(TAG, "Cart created and saved successfully.");
-                        if (callback != null) {
-                            callback.onCompleted(null); // Indicate successful creation
-                        }
-                    } else {
-                        Log.e(TAG, "Failed to create cart", task.getException());
-                        if (callback != null) {
-                            callback.onFailed(task.getException()); // Pass the error
-                        }
-                    }
-                });
-    }
 
     public void getOrders(String userId, final DatabaseCallback<List<Order>> callback) {
-        DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("orders");
-        ordersRef.orderByChild("userId").equalTo(userId).addListenerForSingleValueEvent(
-                new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        List<Order> orders = new ArrayList<>();
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            Order order = snapshot.getValue(Order.class);
-                            orders.add(order);
-                        }
-                        callback.onCompleted(orders);
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        callback.onFailed(databaseError.toException());
-                    }
-                }
-        );
+        Map<String, String> map = new HashMap<>();
+        map.put("userId", userId);
+        getDataList("orders", Order.class, map, callback);
     }
 
     public void getComments(String itemId, DatabaseCallback<List<Comment>> callback) {
-        DatabaseReference commentsRef = FirebaseDatabase.getInstance().getReference("comments").child(itemId);
-        commentsRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Comment> commentList = new ArrayList<>();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Comment comment = snapshot.getValue(Comment.class);
-                    if (comment != null) {
-                        commentList.add(comment);
-                    }
-                }
-                callback.onCompleted(commentList);
-                // עדכון הדירוג הממוצע לאחר הוספת תגובה חדשה
-                updateAverageRating(itemId, new DatabaseCallback<Double>() {
-                    @Override
-                    public void onCompleted(Double result) {
-                        // אפשר כאן לעדכן את הדירוג הממוצע ב-UI אם צריך
-                    }
+        getDataList("comments/" + itemId, Comment.class, new HashMap<>(), callback);
+    }
 
-                    @Override
-                    public void onFailed(Exception exception) {
-                        // טיפול בשגיאה אם יש
-                    }
-                });
-            }
+    public void writeNewComment(String itemId, Comment comment, DatabaseCallback<Void> callback) {
+        writeData("comments/" + itemId + "/" + comment.getCommentId(), comment, callback);
+    }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                callback.onFailed(databaseError.toException());
-            }
-        });
+    public String generateNewCommentId(String itemId) {
+        return generateNewId("comments/" + itemId);
+    }
+
+    public void removeComment(String itemId, String commentId, DatabaseCallback<Void> callback) {
+        deleteData("comments/" + itemId + "/"+ commentId, callback)   ;
     }
 
     // פונקציה שתחשב את הממוצע של הדירוגים
