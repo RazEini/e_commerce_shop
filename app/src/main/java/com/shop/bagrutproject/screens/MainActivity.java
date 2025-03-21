@@ -2,19 +2,18 @@ package com.shop.bagrutproject.screens;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -25,15 +24,21 @@ import androidx.core.app.NotificationManagerCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.work.PeriodicWorkRequest;
+import androidx.work.WorkManager;
 
 import com.shop.bagrutproject.R;
+import com.shop.bagrutproject.services.AuthenticationService;
+import com.shop.bagrutproject.utils.NotificationWorker;
+import com.shop.bagrutproject.utils.SharedPreferencesUtil;
 
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button btnReg, btnLog, btnOd;
     private static final String CHANNEL_ID = "shop_notifications";
+    Button btnReg, btnLog, btnOd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         createNotificationChannel();
         requestNotificationPermission();
-        sendRandomNotification();
+        scheduleNotificationWorker();
 
         initViews();
     }
@@ -63,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         btnLog.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, Login.class)));
         btnOd.setOnClickListener(view -> startActivity(new Intent(MainActivity.this, Odot.class)));
     }
+
 
     private void requestNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -87,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = "Shop Notifications";
             String description = "התראות על מבצעים ומוצרים";
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
 
@@ -98,9 +104,15 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void sendRandomNotification() {
+    private void scheduleNotificationWorker() {
+        PeriodicWorkRequest workRequest = new PeriodicWorkRequest.Builder(NotificationWorker.class, 6, TimeUnit.HOURS)
+                .build();
+        WorkManager.getInstance(this).enqueue(workRequest);
+    }
+
+    public static void sendRandomNotification(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
-                checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                context.checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
 
@@ -116,14 +128,18 @@ public class MainActivity extends AppCompatActivity {
         String randomTitle = titles[random.nextInt(titles.length)];
         String randomMessage = messages[random.nextInt(messages.length)];
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+        Intent intent = new Intent(context, Login.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_electric_plug)
                 .setContentTitle(randomTitle)
                 .setContentText(randomMessage)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setAutoCancel(true);
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent);
 
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
         notificationManager.notify(random.nextInt(1000), builder.build());
     }
 
@@ -133,7 +149,6 @@ public class MainActivity extends AppCompatActivity {
         setTitle("תפריט חנות");
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -152,5 +167,4 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 }
