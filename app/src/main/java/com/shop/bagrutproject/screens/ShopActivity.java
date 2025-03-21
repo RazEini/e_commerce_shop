@@ -41,7 +41,6 @@ public class ShopActivity extends AppCompatActivity {
     private Cart cart;
     private ImageButton btnBack;
     private TextView totalPriceText;
-    private ProgressBar progressBar;
     DatabaseService databaseService;
     AuthenticationService authenticationService;
 
@@ -60,7 +59,6 @@ public class ShopActivity extends AppCompatActivity {
         ImageView cartIcon = findViewById(R.id.cartButton);
         btnBack = findViewById(R.id.btnBack2);
         totalPriceText = findViewById(R.id.cartItemsText);
-        progressBar = findViewById(R.id.progressBar);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         itemsAdapter = new ItemsAdapter(allItems, this, this::addItemToCart);
@@ -112,12 +110,10 @@ public class ShopActivity extends AppCompatActivity {
     }
 
     private void fetchItemsFromFirebase() {
-        progressBar.setVisibility(View.VISIBLE);
 
         databaseService.getCart(AuthenticationService.getInstance().getCurrentUserId(), new DatabaseService.DatabaseCallback<Cart>() {
             @Override
             public void onCompleted(Cart cart) {
-                progressBar.setVisibility(View.GONE);
                 if (cart == null) {
                     cart = new Cart();
                 }
@@ -127,7 +123,6 @@ public class ShopActivity extends AppCompatActivity {
 
             @Override
             public void onFailed(Exception e) {
-                progressBar.setVisibility(View.GONE);
                 Log.e(TAG, "Failed to load cart: ", e);
                 new android.app.AlertDialog.Builder(ShopActivity.this)
                         .setMessage("נראה שקרתה תקלה בטעינת העגלה, נסה שוב")
@@ -139,7 +134,6 @@ public class ShopActivity extends AppCompatActivity {
         databaseService.getItems(new DatabaseService.DatabaseCallback<List<Item>>() {
             @Override
             public void onCompleted(List<Item> object) {
-                progressBar.setVisibility(View.GONE);
                 Log.d(TAG, "onCompleted: " + object);
                 allItems.clear();
                 allItems.addAll(object);
@@ -151,7 +145,6 @@ public class ShopActivity extends AppCompatActivity {
 
             @Override
             public void onFailed(Exception e) {
-                progressBar.setVisibility(View.GONE);
                 Log.e(TAG, "Failed to load items: ", e);
                 new android.app.AlertDialog.Builder(ShopActivity.this)
                         .setMessage("נראה שקרתה תקלה בטעינת המוצרים, נסה שוב מאוחר יותר")
