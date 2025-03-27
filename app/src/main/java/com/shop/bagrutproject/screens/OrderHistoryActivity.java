@@ -28,6 +28,8 @@ import com.shop.bagrutproject.utils.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
 
 public class OrderHistoryActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
@@ -68,9 +70,17 @@ public class OrderHistoryActivity extends AppCompatActivity {
     }
 
     private void fetchOrders(String userId) {
-        databaseService.getOrders(userId, new DatabaseService.DatabaseCallback<List<Order>>() {
+        databaseService.getOrders(new DatabaseService.DatabaseCallback<List<Order>>() {
             @Override
             public void onCompleted(List<Order> ordersList) {
+
+                ordersList.removeIf(new Predicate<Order>() {
+                    @Override
+                    public boolean test(Order order) {
+                        return !Objects.equals(order.getUserId(), userId);
+                    }
+                });
+
                 orders.clear();
                 orders.addAll(ordersList);
                 orderAdapter = new OrderAdapter(orders);

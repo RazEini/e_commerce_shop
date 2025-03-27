@@ -326,10 +326,8 @@ public class DatabaseService {
     }
 
 
-    public void getOrders(String userId, final DatabaseCallback<List<Order>> callback) {
-        Map<String, String> map = new HashMap<>();
-        map.put("userId", userId);
-        getDataList("orders", Order.class, map, callback);
+    public void getOrders(final DatabaseCallback<List<Order>> callback) {
+        getDataList("orders", Order.class, new HashMap<>(), callback);
     }
 
     public void getComments(String itemId, DatabaseCallback<List<Comment>> callback) {
