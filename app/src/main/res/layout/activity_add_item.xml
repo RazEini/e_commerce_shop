@@ -13,6 +13,18 @@
         tools:context=".screens.AddItem"
         android:background="#f0f0f0">
 
+        <ImageButton
+            android:id="@+id/btnBack6"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Back"
+            android:src="@android:drawable/ic_menu_revert"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <LinearLayout
             android:id="@+id/linearLayout2"
             android:layout_width="match_parent"

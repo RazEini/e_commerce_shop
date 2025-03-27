@@ -8,6 +8,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
@@ -41,6 +42,8 @@ public class AddItem extends AppCompatActivity {
     private Button btnGallery, btnTakePic, btnAddItem;
     private ImageView imageView;
     private Uri imageUri;
+
+    private ImageButton btnBack;
 
     private static final int PICK_IMAGE_REQUEST = 1;
     private static final int CAMERA_REQUEST = 2;
@@ -97,6 +100,13 @@ public class AddItem extends AppCompatActivity {
                     }
                 });
 
+        btnBack = findViewById(R.id.btnBack6);
+
+        btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(AddItem.this, AdminPage.class);
+            startActivity(intent);
+            finish();
+        });
 
 
 
