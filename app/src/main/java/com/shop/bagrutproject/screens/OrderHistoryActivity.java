@@ -1,9 +1,11 @@
 package com.shop.bagrutproject.screens;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -36,6 +38,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
     private OrderAdapter orderAdapter;
     private List<Order> orders;
     private DatabaseService databaseService;
+    private ImageButton btnBack;
     private User user;
     private static final String TAG = "OrderHistoryActivity";
 
@@ -48,6 +51,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
 
+        btnBack = findViewById(R.id.btnBack5);
         recyclerView = findViewById(R.id.recyclerViewOrders);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -67,6 +71,11 @@ public class OrderHistoryActivity extends AppCompatActivity {
             }
         });
 
+        btnBack.setOnClickListener(v -> {
+            Intent intent = new Intent(OrderHistoryActivity.this, UserAfterLoginPage.class);
+            startActivity(intent);
+            finish();
+        });
     }
 
     private void fetchOrders(String userId) {
