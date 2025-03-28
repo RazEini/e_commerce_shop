@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.shop.bagrutproject.R;
+import com.shop.bagrutproject.services.AuthenticationService;
 
 public class UserAfterLoginPage extends AppCompatActivity {
 
@@ -94,6 +95,18 @@ public class UserAfterLoginPage extends AppCompatActivity {
         } else if (id == R.id.action_update) {
             startActivity(new Intent(this, UpdateUserDetailsActivity.class));
             return true;
+        }else if (id == R.id.action_logout) {
+            SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.apply();
+
+            AuthenticationService.getInstance().signOut();
+
+            Intent go = new Intent(this, Login.class);
+            go.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(go);
+            finishAffinity();
         }
 
         return super.onOptionsItemSelected(item);

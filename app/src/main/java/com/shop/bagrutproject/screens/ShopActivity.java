@@ -1,6 +1,7 @@
 package com.shop.bagrutproject.screens;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -213,8 +214,24 @@ public class ShopActivity extends AppCompatActivity {
 
         if(SharedPreferencesUtil.isAdmin(this)){
             if (id == R.id.action_admin_page) {
-                startActivity(new Intent(this, AdminPage.class));
+                startActivity(new Intent(this, ShopActivity.class));
                 return true;
+            }
+
+            if (id == R.id.action_logout_admin) {
+                SharedPreferencesUtil.signOutAdmin(ShopActivity.this);
+
+                SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.apply();
+
+                AuthenticationService.getInstance().signOut();
+
+                Intent go = new Intent(ShopActivity.this, Login.class);
+                go.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(go);
+                finishAffinity();
             }
         }
 
@@ -223,11 +240,26 @@ public class ShopActivity extends AppCompatActivity {
                 startActivity(new Intent(this, UserAfterLoginPage.class));
                 return true;
             }
-        }
 
-        if (id == R.id.action_cart) {
-            startActivity(new Intent(this, CartActivity.class));
-            return true;
+            if (id == R.id.action_cart) {
+                startActivity(new Intent(this, CartActivity.class));
+                return true;
+            }
+
+            if (id == R.id.action_logout) {
+                SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.apply();
+
+                AuthenticationService.getInstance().signOut();
+
+                Intent go = new Intent(this, Login.class);
+                go.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(go);
+                finishAffinity();
+
+            }
         }
 
         return super.onOptionsItemSelected(item);

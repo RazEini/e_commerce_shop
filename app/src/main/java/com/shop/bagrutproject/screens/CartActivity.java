@@ -2,8 +2,11 @@ package com.shop.bagrutproject.screens;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -23,6 +26,7 @@ import com.shop.bagrutproject.models.Cart;
 import com.shop.bagrutproject.models.Item;
 import com.shop.bagrutproject.models.Order;
 import com.shop.bagrutproject.models.User;
+import com.shop.bagrutproject.services.AuthenticationService;
 import com.shop.bagrutproject.services.DatabaseService;
 import com.shop.bagrutproject.utils.SharedPreferencesUtil;
 
@@ -45,10 +49,6 @@ public class CartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
-
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
 
         cartListView = findViewById(R.id.lvCart);
         totalPriceText = findViewById(R.id.cartItemsText);
@@ -149,4 +149,40 @@ public class CartActivity extends AppCompatActivity {
                         Toast.makeText(CartActivity.this, "שגיאה בשמירת ההזמנה", Toast.LENGTH_SHORT).show()
                 );
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_cart, menu);
+        setTitle("תפריט חנות");
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_user_page) {
+            startActivity(new Intent(this, UserAfterLoginPage.class));
+            return true;
+        } else if (id == R.id.action_backtoshop) {
+            startActivity(new Intent(this, ShopActivity.class));
+            return true;
+        } else if (id == R.id.action_logout) {
+            SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.apply();
+
+            AuthenticationService.getInstance().signOut();
+
+            Intent go = new Intent(this, Login.class);
+            go.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(go);
+            finishAffinity();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 }

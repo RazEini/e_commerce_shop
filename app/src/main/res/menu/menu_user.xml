@@ -15,4 +15,9 @@
         android:title="אזור אישי"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_logout"
+        android:title="התנתקות"
+        app:showAsAction="never" />
+
 </menu>

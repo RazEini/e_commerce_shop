@@ -20,4 +20,9 @@
         android:title="מעבר לחנות"
         app:showAsAction="never" />
 
+    <item
+        android:id="@+id/action_logout_admin"
+        android:title="התנתקות"
+        app:showAsAction="never" />
+
 </menu>

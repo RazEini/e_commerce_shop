@@ -15,11 +15,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.shop.bagrutproject.R;
+import com.shop.bagrutproject.services.AuthenticationService;
 import com.shop.bagrutproject.utils.SharedPreferencesUtil;
 
 public class AdminPage extends AppCompatActivity {
-
-    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,17 +26,12 @@ public class AdminPage extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_admin_page);
 
-        // אתחול FirebaseAuth
-        mAuth = FirebaseAuth.getInstance();
-
-        // אתחול כפתורים
         Button btnLogoutAdmin = findViewById(R.id.btnLogoutAdmin);
         Button btnAddItem = findViewById(R.id.btn_add_product);
         Button btnOrderHistoryAdmin = findViewById(R.id.btn_purchase_history);
         Button btnUsersList = findViewById(R.id.btn_users);
         Button btnShop = findViewById(R.id.btn_shop);
 
-        // הגדרת פעולות לכפתורים
         btnLogoutAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -74,7 +68,6 @@ public class AdminPage extends AppCompatActivity {
         });
     }
 
-    // פונקציות ניווט בין העמודים
     public void goToAddItem(View view) {
         Intent intent = new Intent(AdminPage.this, AddItem.class);
         startActivity(intent);
@@ -96,26 +89,19 @@ public class AdminPage extends AppCompatActivity {
     }
 
     public void logout() {
-        // קריאה לפונקציה שמתנתקת את האדמין מ-SharedPreferences
         SharedPreferencesUtil.signOutAdmin(AdminPage.this);
 
-        // הסרת המידע מ-SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
 
-        // התנתקות מ-Firebase
-        mAuth.signOut();
-        Log.d("Logout", "Admin successfully logged out");
+        AuthenticationService.getInstance().signOut();
 
-        // מעבר לדף ההתחברות
         Intent go = new Intent(AdminPage.this, Login.class);
         go.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(go);
-        finishAffinity(); // זה יבטל את כל הפעילויות הקודמות
-
-        Log.d("Logout", "Navigated to Login activity");
+        finishAffinity();
 
         Toast.makeText(AdminPage.this, "התנתקת בהצלחה!", Toast.LENGTH_SHORT).show();
     }
@@ -143,6 +129,20 @@ public class AdminPage extends AppCompatActivity {
         } else if (id == R.id.action_shop) {
             startActivity(new Intent(this, ShopActivity.class));
             return true;
+        }else if (id == R.id.action_logout_admin) {
+            SharedPreferencesUtil.signOutAdmin(AdminPage.this);
+
+            SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.apply();
+
+            AuthenticationService.getInstance().signOut();
+
+            Intent go = new Intent(AdminPage.this, Login.class);
+            go.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(go);
+            finishAffinity();
         }
 
         return super.onOptionsItemSelected(item);
