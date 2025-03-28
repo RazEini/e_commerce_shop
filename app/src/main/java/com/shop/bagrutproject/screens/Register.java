@@ -96,48 +96,74 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        fName=etFName.getText().toString();
-        lName=etLName.getText().toString();
-        phone=etPhone.getText().toString();
-        email=etEmail.getText().toString();
-        pass=etPass.getText().toString();
+        fName = etFName.getText().toString();
+        lName = etLName.getText().toString();
+        phone = etPhone.getText().toString();
+        email = etEmail.getText().toString();
+        pass = etPass.getText().toString();
 
-        //check if registration is valid
-        Boolean isValid=true;
-        if (fName.length()<2){
-            Toast.makeText(Register.this,"שם פרטי קצר מדי", Toast.LENGTH_LONG).show();
-            isValid = false;
-        }
-        if (lName.length()<2){
-            Toast.makeText(Register.this,"שם משפחה קצר מדי", Toast.LENGTH_LONG).show();
-            isValid = false;
-        }
-        if (phone.length()<9||phone.length()>10){
-            Toast.makeText(Register.this,"מספר הטלפון לא תקין", Toast.LENGTH_LONG).show();
+        // בדיקת תקינות הקלט
+        Boolean isValid = true;
+
+        // בדיקת שדות ריקים
+        if (fName.isEmpty()) {
+            etFName.setError("נא להזין שם פרטי");
             isValid = false;
         }
 
-        if (!email.contains("@")){
-            Toast.makeText(Register.this,"כתובת האימייל לא תקינה", Toast.LENGTH_LONG).show();
-            isValid = false;
-        }
-        if(pass.length()<6){
-            Toast.makeText(Register.this,"הסיסמה קצרה מדי", Toast.LENGTH_LONG).show();
-            isValid = false;
-        }
-        if(pass.length()>20){
-            Toast.makeText(Register.this,"הסיסמה ארוכה מדי", Toast.LENGTH_LONG).show();
+        if (lName.isEmpty()) {
+            etLName.setError("נא להזין שם משפחה");
             isValid = false;
         }
 
-        if (isValid==true){
-
-
-                  registerUser(email,pass,fName,lName,phone);
+        if (phone.isEmpty()) {
+            etPhone.setError("נא להזין מספר טלפון");
+            isValid = false;
         }
 
+        if (email.isEmpty()) {
+            etEmail.setError("נא להזין כתובת אימייל");
+            isValid = false;
+        }
 
+        if (pass.isEmpty()) {
+            etPass.setError("נא להזין סיסמא");
+            isValid = false;
+        }
+
+        // אם כל השדות מלאים, נעבור לבדיקת תקינות
+        if (isValid) {
+            if (fName.length() < 2) {
+                Toast.makeText(Register.this, "שם פרטי קצר מדי", Toast.LENGTH_LONG).show();
+                isValid = false;
+            }
+            if (lName.length() < 2) {
+                Toast.makeText(Register.this, "שם משפחה קצר מדי", Toast.LENGTH_LONG).show();
+                isValid = false;
+            }
+            if (phone.length() < 9 || phone.length() > 10) {
+                Toast.makeText(Register.this, "מספר הטלפון לא תקין", Toast.LENGTH_LONG).show();
+                isValid = false;
+            }
+            if (!email.contains("@")) {
+                Toast.makeText(Register.this, "כתובת האימייל לא תקינה", Toast.LENGTH_LONG).show();
+                isValid = false;
+            }
+            if (pass.length() < 6) {
+                Toast.makeText(Register.this, "הסיסמה קצרה מדי", Toast.LENGTH_LONG).show();
+                isValid = false;
+            }
+            if (pass.length() > 20) {
+                Toast.makeText(Register.this, "הסיסמה ארוכה מדי", Toast.LENGTH_LONG).show();
+                isValid = false;
+            }
+        }
+
+        if (isValid) {
+            registerUser(email, pass, fName, lName, phone);
+        }
     }
+
 
     /// Register the user
     private void registerUser(String email, String password, String fName, String lName, String phone) {

@@ -71,8 +71,22 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View view) {
         email = etEmail.getText().toString();
         pass = etPassword.getText().toString();
+
+        if (email.isEmpty()) {
+            etEmail.setError("נא להזין כתובת אימייל");
+            etEmail.requestFocus();
+            return;
+        }
+
+        if (pass.isEmpty()) {
+            etPassword.setError("נא להזין סיסמא");
+            etPassword.requestFocus();
+            return;
+        }
+
         loginUser(email, pass);
     }
+
 
     private void checkIfUserIsAlreadyLoggedIn() {
         boolean isAdmin = SharedPreferencesUtil.isAdmin(this);
