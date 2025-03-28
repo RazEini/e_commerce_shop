@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -48,10 +49,6 @@ public class ShopActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop);
-
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
 
         databaseService = DatabaseService.getInstance();
 
@@ -194,5 +191,45 @@ public class ShopActivity extends AppCompatActivity {
             totalPriceText.setText("סך הכל: ₪" + totalPrice);
             totalPriceText.setVisibility(View.VISIBLE);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if(SharedPreferencesUtil.isAdmin(this)){
+            getMenuInflater().inflate(R.menu.menu_shopadmin, menu);
+
+        }
+        else{
+            getMenuInflater().inflate(R.menu.menu_shop, menu);
+
+        }
+        setTitle("תפריט חנות");
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if(SharedPreferencesUtil.isAdmin(this)){
+            if (id == R.id.action_admin_page) {
+                startActivity(new Intent(this, AdminPage.class));
+                return true;
+            }
+        }
+
+        else{
+            if (id == R.id.action_user_page) {
+                startActivity(new Intent(this, UserAfterLoginPage.class));
+                return true;
+            }
+        }
+
+        if (id == R.id.action_cart) {
+            startActivity(new Intent(this, CartActivity.class));
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
