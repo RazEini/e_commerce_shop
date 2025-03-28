@@ -20,7 +20,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.shop.bagrutproject.R;
 import com.shop.bagrutproject.models.Comment;
+import com.shop.bagrutproject.services.AuthenticationService;
 import com.shop.bagrutproject.services.DatabaseService;
+import com.shop.bagrutproject.utils.SharedPreferencesUtil;
 
 import java.util.List;
 
@@ -61,8 +63,8 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         }
 
         holder.itemView.setOnLongClickListener(v -> {
-            String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            if (comment.getUserId().equals(currentUserId)) {
+            String currentUserId = AuthenticationService.getInstance().getCurrentUserId();
+            if (comment.getUserId().equals(currentUserId) || SharedPreferencesUtil.isAdmin(context)) {
                 showDeleteConfirmationDialog(comment, position);
             } else {
                 Toast.makeText(context, "לא ניתן למחוק תגובה של משתמש אחר", Toast.LENGTH_SHORT).show();

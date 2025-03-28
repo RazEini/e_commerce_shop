@@ -1,6 +1,7 @@
 package com.shop.bagrutproject.screens;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RatingBar;
@@ -51,8 +52,14 @@ public class CommentActivity extends AppCompatActivity {
         commentAdapter = new CommentAdapter(this, commentList, itemId);
         recyclerView.setAdapter(commentAdapter);
 
+        if (SharedPreferencesUtil.isAdmin(CommentActivity.this)){
+            commentInput.setVisibility(View.GONE);
+            ratingBar.setVisibility(View.GONE);
+            btnSubmitComment.setVisibility(View.GONE);
+        }
 
-        loadComments();
+
+            loadComments();
 
         btnSubmitComment.setOnClickListener(v -> {
             String commentText = commentInput.getText().toString().trim();

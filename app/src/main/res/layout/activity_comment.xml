@@ -11,38 +11,46 @@
         android:layout_height="0dp"
         android:layout_weight="1"/>
 
-    <EditText
-        android:id="@+id/commentInput"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="הוסף תגובה"
-        android:inputType="text" />
+        android:orientation="vertical"
+        android:visibility="visible">
 
-    <RatingBar
-        android:id="@+id/ratingBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:numStars="5"
-        android:stepSize="0.5"
-        android:rating="5"
-        android:layout_marginTop="8dp"
-        android:layout_gravity="right"/>
+        <EditText
+            android:id="@+id/commentInput"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="הוסף תגובה"
+            android:inputType="text" />
 
-    <Button
-        android:id="@+id/btnSubmitComment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="שלח תגובה"
-        android:backgroundTint="@color/black"
-        android:textStyle="bold"
-        android:layout_marginTop="8dp" />
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginTop="8dp"
+            android:numStars="5"
+            android:rating="5"
+            android:stepSize="0.5" />
+
+        <Button
+            android:id="@+id/btnSubmitComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@color/black"
+            android:text="שלח תגובה"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/btnGoToItemDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="חזרה לפרטי המוצר"
+        android:layout_marginTop="8dp"
         android:backgroundTint="@color/black"
-        android:textStyle="bold"
-        android:layout_marginTop="8dp"/>
+        android:text="חזרה לפרטי המוצר"
+        android:textStyle="bold" />
 </LinearLayout>

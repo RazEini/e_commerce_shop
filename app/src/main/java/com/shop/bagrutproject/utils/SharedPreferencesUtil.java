@@ -171,7 +171,7 @@ public class SharedPreferencesUtil {
     }
 
     public static boolean isAdminLoggedIn(Context context) {
-        return isAdmin(context) && isUserLoggedIn(context);
+        return isUserLoggedIn(context) && isAdmin(context);
     }
 
     public static void signOutAdmin(Context context) {
