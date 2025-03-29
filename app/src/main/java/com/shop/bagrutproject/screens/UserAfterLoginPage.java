@@ -102,6 +102,8 @@ public class UserAfterLoginPage extends AppCompatActivity {
             go.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(go);
             finishAffinity();
+            Toast.makeText(UserAfterLoginPage.this, "התנתקת בהצלחה!", Toast.LENGTH_SHORT).show();
+
         }
 
         return super.onOptionsItemSelected(item);
