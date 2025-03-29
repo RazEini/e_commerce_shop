@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f0f0f0"
+    android:background="@drawable/gradient_background"
     tools:context=".screens.Odot">
 
     <ScrollView
@@ -31,9 +31,8 @@
                 android:layout_marginBottom="24dp"
                 android:layout_marginTop="50dp"
                 android:text="אודות האפליקציה שלי"
-                android:textColor="@android:color/black"
-                android:textSize="26sp"
-                android:textStyle="bold" />
+                style="@style/TitleStyle"
+                />
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
@@ -98,7 +97,6 @@
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- שינוי החלק של ההמלצות מותאמות אישית לתגובות וביקורות -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -176,7 +174,8 @@
                 android:text="חזור"
                 android:textColor="@android:color/white"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:elevation="4dp"/>
 
         </LinearLayout>
     </ScrollView>

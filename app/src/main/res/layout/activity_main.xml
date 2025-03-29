@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#f0f0f0"
+    android:background="@drawable/gradient_background"
     tools:context=".screens.MainActivity">
 
     <TextView
@@ -15,9 +15,7 @@
         android:layout_marginTop="132dp"
         android:gravity="center"
         android:text="חנות מוצרי חשמל"
-        android:textColor="#333333"
-        android:textSize="30sp"
-        android:textStyle="bold"
+        style="@style/TitleStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -32,6 +30,7 @@
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView" />
@@ -46,6 +45,7 @@
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnRegister" />
@@ -60,11 +60,10 @@
         android:textColor="#FFFFFF"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnLogin" />
-
-
 
     <ImageView
         android:id="@+id/imageView2"
@@ -80,7 +79,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnOdot"
         app:layout_constraintVertical_bias="0.196"
-        app:srcCompat="@drawable/logo" />
-
+        app:srcCompat="@drawable/logo"
+        android:layout_centerInParent="true"
+        android:clipToOutline="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

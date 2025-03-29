@@ -83,7 +83,7 @@ public class ShopActivity extends AppCompatActivity {
                 Intent intent = new Intent(ShopActivity.this, CartActivity.class);
                 startActivity(intent);
             } else {
-                Toast.makeText(ShopActivity.this, "You are an Admin, you cannot access the cart", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ShopActivity.this, "אתה מנהל, אינך יכול לגשת לעגלה", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -177,7 +177,7 @@ public class ShopActivity extends AppCompatActivity {
                 }
             });
         } else {
-            Toast.makeText(ShopActivity.this, "You are an Admin, you cannot add items to the cart", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ShopActivity.this, "אתה מנהל, אינך יכול להוסיף מוצרים לעגלה", Toast.LENGTH_SHORT).show();
         }
     }
 

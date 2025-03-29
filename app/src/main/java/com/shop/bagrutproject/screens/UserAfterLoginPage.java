@@ -26,7 +26,7 @@ public class UserAfterLoginPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_user_after_login_page);
-        mAuth = FirebaseAuth.getInstance();
+        AuthenticationService.getInstance();
 
         Button btnLogout = findViewById(R.id.btnLogout);
 
@@ -54,21 +54,16 @@ public class UserAfterLoginPage extends AppCompatActivity {
     }
 
     public void logout() {
-        // ניקוי SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
 
-        // התנתקות מ-Firebase
-        mAuth.signOut();
-        Log.d("Logout", "User successfully logged out");
+        AuthenticationService.getInstance().signOut();
 
-        // מעבר לדף ההתחברות
         Intent go = new Intent(UserAfterLoginPage.this, Login.class);
         go.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(go);
-        Log.d("Logout", "Navigated to Login activity");
 
         finishAffinity();
         Toast.makeText(UserAfterLoginPage.this, "התנתקת בהצלחה!", Toast.LENGTH_SHORT).show();
