@@ -176,8 +176,6 @@ public class ShopActivity extends AppCompatActivity {
                             .show();
                 }
             });
-        } else {
-            Toast.makeText(ShopActivity.this, "אתה מנהל, אינך יכול להוסיף מוצרים לעגלה", Toast.LENGTH_SHORT).show();
         }
     }
 

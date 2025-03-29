@@ -14,8 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.shop.bagrutproject.R;
 import com.shop.bagrutproject.models.Item;
 import com.shop.bagrutproject.screens.ItemDetailActivity;
+import com.shop.bagrutproject.screens.ShopActivity;
 import com.shop.bagrutproject.services.DatabaseService;
 import com.shop.bagrutproject.utils.ImageUtil;
+import com.shop.bagrutproject.utils.SharedPreferencesUtil;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -76,6 +79,12 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
                 intent.putExtra("itemId", item.getId());
                 context.startActivity(intent);
             });
+
+            if (SharedPreferencesUtil.isAdmin(context)) {
+                addToCartButton.setVisibility(View.GONE);
+            } else {
+                addToCartButton.setVisibility(View.VISIBLE);
+            }
         }
 
         public void bindItem(final Item item) {
