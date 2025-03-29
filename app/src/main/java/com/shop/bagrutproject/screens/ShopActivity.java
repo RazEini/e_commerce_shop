@@ -55,6 +55,11 @@ public class ShopActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerViewItems);
         ImageView cartIcon = findViewById(R.id.cartButton);
+        if (SharedPreferencesUtil.isAdmin(ShopActivity.this)) {
+            cartIcon.setVisibility(View.GONE);
+        } else {
+            cartIcon.setVisibility(View.VISIBLE);
+        }
         btnBack = findViewById(R.id.btnBack2);
         totalPriceText = findViewById(R.id.cartItemsText);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -82,8 +87,6 @@ public class ShopActivity extends AppCompatActivity {
             if (!SharedPreferencesUtil.isAdmin(ShopActivity.this)) {
                 Intent intent = new Intent(ShopActivity.this, CartActivity.class);
                 startActivity(intent);
-            } else {
-                Toast.makeText(ShopActivity.this, "אתה מנהל, אינך יכול לגשת לעגלה", Toast.LENGTH_SHORT).show();
             }
         });
 
