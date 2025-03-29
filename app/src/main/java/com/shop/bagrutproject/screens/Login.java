@@ -29,8 +29,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private AuthenticationService authenticationService;
     private DatabaseService databaseService;
 
-    private static final String ADMIN_USERNAME = "admin";
-    private static final String ADMIN_PASSWORD = "2609";
+    private static final String ADMIN_Email = "admin@gmail.com";
+    private static final String ADMIN_PASSWORD = "admin2609";
 
     EditText etEmail, etPassword;
     Button btnLog;
@@ -123,7 +123,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     }
 
     private void loginUser(String email, String password) {
-        if (email.equals(ADMIN_USERNAME) && password.equals(ADMIN_PASSWORD)) {
+        if (email.equals(ADMIN_Email) && password.equals(ADMIN_PASSWORD)) {
             SharedPreferencesUtil.setIsAdmin(this, true);
 
             // דיליי של 2 שניות לפני המעבר לעמוד המנהל
