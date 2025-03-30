@@ -13,6 +13,14 @@
         tools:context=".screens.AddItem"
         android:background="#f0f0f0">
 
+        <com.shop.bagrutproject.models.CustomBackgroundView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitXY"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
         <ImageButton
             android:id="@+id/btnBack6"
             android:layout_width="50dp"

@@ -6,6 +6,12 @@
     android:layout_height="match_parent"
     android:background="#F5F5F5">
 
+    <com.shop.bagrutproject.models.CustomBackgroundView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY">
+    </com.shop.bagrutproject.models.CustomBackgroundView>
+
     <ImageButton
         android:id="@+id/btnBackToShop"
         android:layout_width="50dp"
@@ -48,6 +54,7 @@
         android:padding="16dp"
         android:text="סך הכל: ₪0.00"
         android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
