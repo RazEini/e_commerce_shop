@@ -56,7 +56,7 @@ public class ShopActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerViewItems);
         ImageView cartIcon = findViewById(R.id.cartButton);
         if (SharedPreferencesUtil.isAdmin(ShopActivity.this)) {
-            cartIcon.setVisibility(View.GONE);
+            cartIcon.setVisibility(View.INVISIBLE);
         } else {
             cartIcon.setVisibility(View.VISIBLE);
         }
