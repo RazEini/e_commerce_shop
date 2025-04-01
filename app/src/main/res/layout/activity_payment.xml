@@ -72,11 +72,12 @@
             android:id="@+id/completePaymentButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/holo_blue_dark"
             android:padding="12dp"
+            android:textStyle="bold"
+            android:backgroundTint="@color/black"
             android:text="סיים תשלום"
             android:textColor="#FFFFFF"
-            android:layout_marginTop="16dp" />
+            android:layout_marginTop="360dp" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

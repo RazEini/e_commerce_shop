@@ -20,4 +20,11 @@
         <item name="android:fontFamily">sans-serif-black</item>
     </style>
 
+    <style name="CustomSpinnerStyle">
+        <item name="android:background">@android:drawable/btn_dropdown</item>
+        <item name="android:spinnerMode">dropdown</item>
+    </style>
+
+
+
 </resources>
