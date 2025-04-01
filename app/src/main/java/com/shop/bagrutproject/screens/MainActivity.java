@@ -8,12 +8,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -116,10 +114,9 @@ public class MainActivity extends AppCompatActivity {
             calendar.add(Calendar.HOUR, 6);
 
             if (alarmManager != null) {
-                alarmManager.setRepeating(
+                alarmManager.setExactAndAllowWhileIdle(
                         AlarmManager.RTC_WAKEUP,
                         calendar.getTimeInMillis(),
-                        AlarmManager.INTERVAL_HOUR * 6,
                         pendingIntent
                 );
 
@@ -149,6 +146,8 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(context, Login.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
+        int notificationId = 1;
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_electric_plug)
                 .setContentTitle(randomTitle)
@@ -158,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
                 .setContentIntent(pendingIntent);
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
-        notificationManager.notify(random.nextInt(1000), builder.build());
+        notificationManager.notify(notificationId, builder.build());
     }
 
     @Override
