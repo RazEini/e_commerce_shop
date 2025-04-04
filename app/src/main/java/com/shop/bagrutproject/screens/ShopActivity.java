@@ -215,7 +215,7 @@ public class ShopActivity extends AppCompatActivity {
 
         if(SharedPreferencesUtil.isAdmin(this)){
             if (id == R.id.action_admin_page) {
-                startActivity(new Intent(this, ShopActivity.class));
+                startActivity(new Intent(this, AdminPage.class));
                 return true;
             }
 
