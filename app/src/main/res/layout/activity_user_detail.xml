@@ -4,81 +4,111 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#F2F5F9"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <!-- Back Button -->
+    <com.shop.bagrutproject.models.CustomBackgroundView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY">
+    </com.shop.bagrutproject.models.CustomBackgroundView>
 
+    <!-- כפתור חזרה -->
     <ImageButton
         android:id="@+id/btnBack"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:background="?android:attr/selectableItemBackgroundBorderless"
         android:contentDescription="Back"
         android:src="@android:drawable/ic_menu_revert"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp" />
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="12dp"
+    <!-- פרטי משתמש -->
+    <TextView
+        android:id="@+id/tvFName"
+        style="@style/UserInfoStyle"
+        android:text="First Name: John"
+        android:textColor="#37474F"
+        android:textSize="16sp"
+        android:background="@drawable/black_border"
         app:layout_constraintTop_toBottomOf="@id/btnBack"
         app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="32dp"
+        android:layout_marginStart="16dp" />
+
+    <TextView
+        android:id="@+id/tvLName"
+        style="@style/UserInfoStyle"
+        android:text="Last Name: Doe"
+        android:textColor="#37474F"
+        android:textSize="16sp"
+        android:background="@drawable/black_border"
+        app:layout_constraintTop_toBottomOf="@id/tvFName"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp" />
+
+    <TextView
+        android:id="@+id/tvEmail"
+        style="@style/UserInfoStyle"
+        android:text="Email: john.doe@example.com"
+        android:textColor="#37474F"
+        android:textSize="16sp"
+        android:background="@drawable/black_border"
+        app:layout_constraintTop_toBottomOf="@id/tvLName"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp" />
+
+    <TextView
+        android:id="@+id/tvPhone"
+        style="@style/UserInfoStyle"
+        android:text="Phone: +123456789"
+        android:textColor="#37474F"
+        android:textSize="16sp"
+        android:background="@drawable/black_border"
+        app:layout_constraintTop_toBottomOf="@id/tvEmail"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp" />
+
+    <!-- כפתור הצגת ההזמנות -->
+    <Button
+        android:id="@+id/showRecyclerViewBtn"
+        android:layout_width="300sp"
+        android:layout_height="wrap_content"
+        android:text="Show Orders"
+        android:backgroundTint="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/tvPhone"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:padding="24dp"
-        android:background="#FFFFFF">
+        android:layout_marginTop="32dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal">
+    <!-- RecyclerView של הזמנות -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewOrders2"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:visibility="gone"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintTop_toBottomOf="@id/showRecyclerViewBtn"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="8dp" />
 
-
-            <TextView
-                android:id="@+id/tvFName"
-                style="@style/UserInfoStyle"
-                android:text="First Name: John"
-                android:layout_marginTop="40dp"
-                android:layout_marginBottom="20sp"
-                android:textColor="#37474F"
-                android:textSize="16sp"/>
-
-            <TextView
-                android:id="@+id/tvLName"
-                style="@style/UserInfoStyle"
-                android:text="Last Name: Doe"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="20sp"
-
-                android:textColor="#37474F"
-                android:textSize="16sp"/>
-
-            <TextView
-                android:id="@+id/tvEmail"
-                style="@style/UserInfoStyle"
-                android:text="Email: john.doe@example.com"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="20sp"
-                android:textColor="#37474F"
-                android:textSize="16sp"/>
-
-            <TextView
-                android:id="@+id/tvPhone"
-                style="@style/UserInfoStyle"
-                android:text="Phone: +123456789"
-                android:layout_marginTop="8dp"
-                android:textColor="#37474F"
-                android:textSize="16sp"
-                android:layout_marginBottom="40dp"/>
-
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    <!-- כפתור סגירת ה-Recyclerview -->
+    <Button
+        android:id="@+id/closeRecyclerViewBtn"
+        android:layout_width="150sp"
+        android:layout_height="wrap_content"
+        android:text="Close"
+        android:visibility="gone"
+        android:backgroundTint="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/recyclerViewOrders2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

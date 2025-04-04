@@ -7,6 +7,12 @@
     android:layout_height="match_parent"
     tools:context=".screens.UsersActivity">
 
+    <com.shop.bagrutproject.models.CustomBackgroundView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY">
+    </com.shop.bagrutproject.models.CustomBackgroundView>
+
     <!-- שדה חיפוש -->
     <androidx.appcompat.widget.SearchView
         android:id="@+id/userSearchView"
