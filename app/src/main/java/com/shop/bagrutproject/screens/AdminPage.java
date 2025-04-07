@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.shop.bagrutproject.R;
+import com.shop.bagrutproject.models.User;
 import com.shop.bagrutproject.services.AuthenticationService;
 import com.shop.bagrutproject.utils.SharedPreferencesUtil;
 
@@ -109,7 +110,7 @@ public class AdminPage extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_admin, menu);
-        setTitle("תפריט חנות");
+        setTitle( "ברוך הבא 👋" + " המנהל");
         return true;
     }
 

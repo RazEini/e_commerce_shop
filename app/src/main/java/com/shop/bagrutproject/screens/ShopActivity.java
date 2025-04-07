@@ -23,6 +23,7 @@ import com.shop.bagrutproject.adapters.ItemsAdapter;
 import com.shop.bagrutproject.models.Cart;
 import com.shop.bagrutproject.models.Item;
 import com.google.firebase.database.DatabaseReference;
+import com.shop.bagrutproject.models.User;
 import com.shop.bagrutproject.services.AuthenticationService;
 import com.shop.bagrutproject.services.DatabaseService;
 import com.shop.bagrutproject.utils.SharedPreferencesUtil;
@@ -219,7 +220,9 @@ public class ShopActivity extends AppCompatActivity {
         else{
             getMenuInflater().inflate(R.menu.menu_shop, menu);
         }
-        setTitle("תפריט חנות");
+        User user = SharedPreferencesUtil.getUser(this);
+        String currentUserName = user.getfName() + " " + user.getlName();
+        setTitle("שלום \uD83D\uDECD\uFE0F " + currentUserName);
         return true;
     }
 

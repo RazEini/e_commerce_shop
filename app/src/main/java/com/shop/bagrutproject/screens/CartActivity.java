@@ -154,7 +154,9 @@ public class CartActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_cart, menu);
-        setTitle("תפריט חנות");
+        User user = SharedPreferencesUtil.getUser(this);
+        String currentUserName = user.getfName() + " " + user.getlName();
+        setTitle("שלום \uD83D\uDECD\uFE0F " + currentUserName);
         return true;
     }
 

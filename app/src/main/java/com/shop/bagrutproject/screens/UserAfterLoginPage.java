@@ -15,11 +15,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.shop.bagrutproject.R;
+import com.shop.bagrutproject.models.User;
 import com.shop.bagrutproject.services.AuthenticationService;
+import com.shop.bagrutproject.utils.SharedPreferencesUtil;
 
 public class UserAfterLoginPage extends AppCompatActivity {
-
-    FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,9 +72,12 @@ public class UserAfterLoginPage extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_user, menu);
-        setTitle("תפריט חנות");
+        User user = SharedPreferencesUtil.getUser(this);
+        String currentUserName = user.getfName() + " " + user.getlName();
+        setTitle("ברוך הבא \uD83D\uDC4B " + currentUserName);
         return true;
     }
+
 
 
     @Override
