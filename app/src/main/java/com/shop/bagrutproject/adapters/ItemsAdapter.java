@@ -1,5 +1,7 @@
 package com.shop.bagrutproject.adapters;
 
+import static android.content.Intent.getIntent;
+
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
@@ -7,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +28,9 @@ import java.util.List;
 
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
 
+    private DatabaseService databaseService;
+
+
     public interface ItemClickListener {
         void onClick(Item item);
     }
@@ -32,6 +39,8 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
     private List<Item> originalItemsList;
     private List<Item> filteredItemsList;
     private Context context;
+
+
     @Nullable
     private final ItemClickListener itemClickListener;
 
@@ -64,14 +73,20 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
         private ImageView previewImageView;
         private TextView previewTextView;
         private TextView previewPriceTextView;
-        private Button addToCartButton;
+        private TextView previewDescriptionTextView; // תיאור המוצר
+        private RatingBar previewRatingBar; // דירוג המוצר
+        private ImageButton addToCartButton;
+        private String itemId;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
             previewImageView = itemView.findViewById(R.id.PreviewimageView);
             previewTextView = itemView.findViewById(R.id.PreviewtextView);
             previewPriceTextView = itemView.findViewById(R.id.PreviewPriceTextView);
+            previewDescriptionTextView = itemView.findViewById(R.id.PreviewDescriptionTextView); // תיאור המוצר
+            previewRatingBar = itemView.findViewById(R.id.PreviewRatingBar); // דירוג המוצר
             addToCartButton = itemView.findViewById(R.id.addToCartButton);
+
 
             itemView.setOnClickListener(v -> {
                 Item item = filteredItemsList.get(getAdapterPosition());
@@ -91,6 +106,9 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
             previewImageView.setImageBitmap(ImageUtil.convertFrom64base(item.getPic()));
             previewTextView.setText(item.getName());
             previewPriceTextView.setText("₪" + item.getPrice());
+            previewDescriptionTextView.setText(item.getAboutItem());
+            itemId = item.getId();
+            updateAverageRating(previewRatingBar,itemId);
 
             addToCartButton.setOnClickListener(v -> {
                 if (itemClickListener != null)
@@ -98,6 +116,24 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
             });
         }
     }
+
+    private void updateAverageRating(RatingBar itemAverageRatingBar, String itemId) {
+        databaseService = DatabaseService.getInstance();
+
+        databaseService.updateAverageRating(itemId, new DatabaseService.DatabaseCallback<Double>() {
+            @Override
+            public void onCompleted(Double averageRating) {
+                itemAverageRatingBar.setRating(averageRating.floatValue());
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+
+            }
+        });
+    }
+
+
 
     public void filter(String query) {
         filteredItemsList.clear();
