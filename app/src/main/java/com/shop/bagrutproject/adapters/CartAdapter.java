@@ -25,13 +25,15 @@ public class CartAdapter extends BaseAdapter {
 
     private Context context;
     private List<Item> cartItems;
+    private boolean showCheckbox;
     @Nullable
     private OnCartClick onCartClick;
 
-    public CartAdapter(Context context, List<Item> cartItems, @Nullable OnCartClick onCartClick) {
+    public CartAdapter(Context context, List<Item> cartItems, @Nullable OnCartClick onCartClick, boolean showCheckbox) {
         this.context = context;
         this.cartItems = cartItems;
         this.onCartClick = onCartClick;
+        this.showCheckbox = showCheckbox;
     }
 
     @Override
@@ -71,14 +73,20 @@ public class CartAdapter extends BaseAdapter {
             itemImage.setImageResource(R.drawable.ic_launcher_foreground);
         }
 
-        // יש לוודא של־CheckBox אין מאזין פעיל (כדי למנוע התנגשות עם חזרה)
+        // שליטה על הנראות של CheckBox
+        if (showCheckbox) {
+            deleteCheckBox.setVisibility(View.VISIBLE);
+        } else {
+            deleteCheckBox.setVisibility(View.GONE);
+        }
+
+        // ניתוק מאזין קודם
         deleteCheckBox.setOnCheckedChangeListener(null);
 
-        // מניחים שה־CheckBox יפעל בהתאם למצב הנוכחי
-        deleteCheckBox.setChecked(false);  // או true, תלוי במצב של הפריט
+        // הגדרה מחדש
+        deleteCheckBox.setChecked(false);  // או שתעדכן לפי המצב האמיתי אם צריך
 
         deleteCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            // מבצעים את הפעולה כאשר ה־CheckBox משתנה
             if (onCartClick != null) {
                 onCartClick.onItemCheckedChanged(position, isChecked);
             }

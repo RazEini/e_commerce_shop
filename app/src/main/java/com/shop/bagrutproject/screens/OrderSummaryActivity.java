@@ -46,7 +46,7 @@ public class OrderSummaryActivity extends AppCompatActivity {
             @Override
             public void onCompleted(Order object) {
                 order = object;
-                CartAdapter adapter = new CartAdapter(OrderSummaryActivity.this, order.getItems(), null);
+                CartAdapter adapter = new CartAdapter(OrderSummaryActivity.this, order.getItems(), null, false);
                 orderListView.setAdapter(adapter);
                 updateTotalPrice();
             }

@@ -101,7 +101,7 @@ public class CartActivity extends AppCompatActivity {
                             .show();
                 }
             }
-        });
+        }, true);
 
         cartListView.setAdapter(cartAdapter);
 
