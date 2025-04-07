@@ -4,12 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F5F5">
-    
+
     <com.shop.bagrutproject.models.CustomBackgroundView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY">
-    </com.shop.bagrutproject.models.CustomBackgroundView>
+        android:scaleType="fitXY"/>
 
     <ImageButton
         android:id="@+id/btnBack2"
@@ -23,6 +22,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- אייקון העגלה -->
     <ImageView
         android:id="@+id/cartButton"
         android:layout_width="50dp"
@@ -34,31 +34,50 @@
         android:padding="8dp"
         android:src="@drawable/shopping_cart_16dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp" />
 
+    <!-- העיגול האדום עם מספר הפריטים בעגלה -->
+    <TextView
+        android:id="@+id/cartItemCount"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:background="@drawable/circle_red"
+        android:gravity="center"
+        android:text="0"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="@id/cartButton"
+        app:layout_constraintTop_toTopOf="@id/cartButton"
+        android:layout_marginEnd="0dp"
+        android:layout_marginTop="0dp" />
+
+    <!-- שדה החיפוש -->
     <SearchView
         android:id="@+id/searchView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="72dp"
         android:iconifiedByDefault="true"
         android:queryHint="חפש מוצר..."
-        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cartButton" />
+        app:layout_constraintTop_toBottomOf="@id/cartButton" />
 
+    <!-- RecyclerView להצגת פריטים -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewItems"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="60dp"
+        app:layout_constraintTop_toBottomOf="@id/searchView"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnBack2" />
+        app:layout_constraintStart_toStartOf="parent" />
 
+    <!-- סך הכל -->
     <TextView
         android:id="@+id/cartItemsText"
         android:layout_width="wrap_content"
@@ -68,10 +87,9 @@
         android:text="סך הכל: ₪0.00"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerViewItems"
+        app:layout_constraintBottom_toTopOf="@id/recyclerViewItems"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

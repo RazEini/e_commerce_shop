@@ -43,6 +43,7 @@ public class ShopActivity extends AppCompatActivity {
     private Cart cart;
     private ImageButton btnBack;
     private TextView totalPriceText;
+    private TextView cartItemCount; // TextView עבור מספר המוצרים בעגלה
     DatabaseService databaseService;
     AuthenticationService authenticationService;
 
@@ -55,6 +56,7 @@ public class ShopActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerViewItems);
         ImageView cartIcon = findViewById(R.id.cartButton);
+        cartItemCount = findViewById(R.id.cartItemCount); // מצאנו את ה-TextView של מספר המוצרים בעגלה
         if (SharedPreferencesUtil.isAdmin(ShopActivity.this)) {
             cartIcon.setVisibility(View.INVISIBLE);
         } else {
@@ -111,7 +113,6 @@ public class ShopActivity extends AppCompatActivity {
     }
 
     private void fetchItemsFromFirebase() {
-
         databaseService.getCart(AuthenticationService.getInstance().getCurrentUserId(), new DatabaseService.DatabaseCallback<Cart>() {
             @Override
             public void onCompleted(Cart cart) {
@@ -120,6 +121,7 @@ public class ShopActivity extends AppCompatActivity {
                 }
                 ShopActivity.this.cart = cart;
                 updateTotalPrice();
+                updateCartItemCount(); // עדכון מספר המוצרים בעגלה
             }
 
             @Override
@@ -168,6 +170,7 @@ public class ShopActivity extends AppCompatActivity {
                 @Override
                 public void onCompleted(Void object) {
                     updateTotalPrice();
+                    updateCartItemCount(); // עדכון מספר המוצרים בעגלה אחרי הוספת מוצר
                 }
 
                 @Override
@@ -195,15 +198,26 @@ public class ShopActivity extends AppCompatActivity {
         }
     }
 
+    // עדכון מספר המוצרים בעגלה
+    private void updateCartItemCount() {
+        if (cart != null && cart.getItems() != null) {
+            int itemCount = cart.getItems().size();
+            cartItemCount.setText(String.valueOf(itemCount)); // הצגת מספר הפריטים בעיגול
+            if (itemCount > 0) {
+                cartItemCount.setVisibility(View.VISIBLE); // הצגת העיגול אם יש פריטים בעגלה
+            } else {
+                cartItemCount.setVisibility(View.INVISIBLE); // הסתרת העיגול אם אין פריטים
+            }
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if(SharedPreferencesUtil.isAdmin(this)){
             getMenuInflater().inflate(R.menu.menu_shopadmin, menu);
-
         }
         else{
             getMenuInflater().inflate(R.menu.menu_shop, menu);
-
         }
         setTitle("תפריט חנות");
         return true;
