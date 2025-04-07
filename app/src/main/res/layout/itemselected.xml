@@ -8,10 +8,11 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="250dp"
         android:orientation="horizontal"
         android:padding="20dp"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical"
+        android:background="@drawable/black_border">
 
         <ImageButton
             android:id="@+id/addToCartButton"
@@ -37,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:text="שם המוצר"
                 android:textStyle="bold"
-                android:textSize="22sp"
+                android:textSize="24sp"
                 android:layout_gravity="right"
                 android:textColor="@android:color/black" />
 
@@ -57,7 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="₪ 0.00"
-                android:textSize="18sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_gravity="right"
                 android:textColor="@android:color/black"
