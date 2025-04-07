@@ -1,136 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
-    android:gravity="center_horizontal"
-    android:background="@color/white">
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/itemImage"
-        android:layout_width="220dp"
-        android:layout_height="220dp"
-        android:layout_gravity="center"
-        android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher_foreground" />
-
-    <TextView
-        android:id="@+id/itemName"
+    <com.shop.bagrutproject.models.CustomBackgroundView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="שם המוצר"
-        android:textStyle="bold"
-        android:textSize="22sp"
-        android:gravity="end"
-        android:layout_marginTop="16dp"
-        android:textDirection="ltr"
-        android:textColor="@color/black"/>
+        android:layout_height="match_parent"
+        android:scaleType="fitXY" />
 
-    <TextView
-        android:id="@+id/itemPrice"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="₪100"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        android:gravity="center"
-        android:layout_marginTop="8dp"
-        android:textColor="@color/black"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:gravity="center_horizontal"
+        android:background="@android:color/transparent">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/black"/>
+        <ImageView
+            android:id="@+id/itemImage"
+            android:layout_marginTop="40sp"
+            android:layout_marginBottom="20sp"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+            android:background="@drawable/image_black_border"
+            android:padding="4dp"
+            android:src="@drawable/ic_launcher_foreground" />
 
-    <TextView
-        android:id="@+id/itemInfo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="פרטי המוצר"
-        android:textSize="16sp"
-        android:gravity="end"
-        android:layout_marginTop="8dp"
-        android:textDirection="ltr"
-        android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/itemName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="שם המוצר"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            android:gravity="end"
+            android:layout_marginTop="16dp"
+            android:textDirection="ltr"
+            android:textColor="@color/black"/>
 
-    <TextView
-        android:id="@+id/itemCompany"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="חברה"
-        android:textSize="16sp"
-        android:gravity="end"
-        android:layout_marginTop="4dp"
-        android:textDirection="ltr"
-        android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/itemPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="₪100"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/black"/>
 
-    <TextView
-        android:id="@+id/itemColor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="צבע"
-        android:textSize="16sp"
-        android:gravity="end"
-        android:layout_marginTop="4dp"
-        android:textDirection="ltr"
-        android:textColor="@color/black"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/black"/>
 
-    <TextView
-        android:id="@+id/itemType"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="סוג"
-        android:textSize="16sp"
-        android:gravity="end"
-        android:layout_marginTop="4dp"
-        android:textDirection="ltr"
-        android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/itemInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="פרטי המוצר"
+            android:textSize="16sp"
+            android:gravity="end"
+            android:layout_marginTop="8dp"
+            android:textDirection="ltr"
+            android:textColor="@color/black"/>
 
-    <RatingBar
-        android:id="@+id/itemAverageRatingBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:numStars="5"
-        android:stepSize="0.1"
-        android:rating="4.5"
-        android:isIndicator="true"
-        android:layout_marginTop="12dp"
-        android:layout_gravity="center"
-        android:progressTint="@android:color/holo_orange_light"
-        android:secondaryProgressTint="@android:color/holo_orange_light"
-        android:backgroundTint="@android:color/holo_orange_light"/>
+        <TextView
+            android:id="@+id/itemCompany"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="חברה"
+            android:textSize="16sp"
+            android:gravity="end"
+            android:layout_marginTop="4dp"
+            android:textDirection="ltr"
+            android:textColor="@color/black"/>
 
+        <TextView
+            android:id="@+id/itemColor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="צבע"
+            android:textSize="16sp"
+            android:gravity="end"
+            android:layout_marginTop="4dp"
+            android:textDirection="ltr"
+            android:textColor="@color/black"/>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="12dp"
-        android:background="@color/black"/>
+        <TextView
+            android:id="@+id/itemType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="סוג"
+            android:textSize="16sp"
+            android:gravity="end"
+            android:layout_marginTop="4dp"
+            android:textDirection="ltr"
+            android:textColor="@color/black"/>
 
-    <Button
-        android:id="@+id/btnGoToShop"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:text="חזרה לחנות"
-        android:textStyle="bold"
-        android:textColor="@color/white"
-        android:backgroundTint="@color/black"
-        android:padding="12dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="24dp"/>
+        <RatingBar
+            android:id="@+id/itemAverageRatingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="5"
+            android:stepSize="0.1"
+            android:rating="4.5"
+            android:isIndicator="true"
+            android:layout_marginTop="12dp"
+            android:layout_gravity="center"
+            android:progressTint="@android:color/holo_orange_light"
+            android:secondaryProgressTint="@android:color/holo_orange_light"
+            android:backgroundTint="@android:color/holo_orange_light"/>
 
-    <Button
-        android:id="@+id/btnViewComments"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:text="צפה בתגובות"
-        android:textStyle="bold"
-        android:textColor="@color/white"
-        android:backgroundTint="@color/black"
-        android:padding="12dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="12dp"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:background="@color/black"/>
 
-</LinearLayout>
+        <Button
+            android:id="@+id/btnGoToShop"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="חזרה לחנות"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/black"
+            android:padding="12dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="24dp"/>
+
+        <Button
+            android:id="@+id/btnViewComments"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:text="צפה בתגובות"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/black"
+            android:padding="12dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="12dp"/>
+    </LinearLayout>
+</FrameLayout>
