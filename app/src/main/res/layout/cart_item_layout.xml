@@ -5,12 +5,14 @@
     android:padding="16dp"
     android:background="@drawable/black_border">
 
+    <!-- תמונת המוצר -->
     <ImageView
         android:id="@+id/itemImage"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:src="@drawable/ic_launcher_foreground" />
 
+    <!-- מידע על המוצר -->
     <LinearLayout
         android:orientation="vertical"
         android:layout_marginStart="16dp"
@@ -31,4 +33,13 @@
             android:text="₪0.00" />
 
     </LinearLayout>
+
+    <CheckBox
+        android:id="@+id/deleteCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingEnd="8dp"
+        android:text="מחק"
+        android:layout_marginEnd="16dp"
+        android:layout_gravity="center_vertical" />
 </LinearLayout>

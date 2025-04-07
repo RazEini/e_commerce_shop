@@ -5,13 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
 import com.shop.bagrutproject.R;
-import com.shop.bagrutproject.models.Cart;
 import com.shop.bagrutproject.models.Item;
 import com.shop.bagrutproject.utils.ImageUtil;
 
@@ -20,7 +20,7 @@ import java.util.List;
 public class CartAdapter extends BaseAdapter {
 
     public interface OnCartClick {
-        public void onItemLongClick(int position, Item cartItem);
+        void onItemCheckedChanged(int position, boolean isChecked);
     }
 
     private Context context;
@@ -60,6 +60,7 @@ public class CartAdapter extends BaseAdapter {
         TextView itemName = convertView.findViewById(R.id.itemName);
         TextView itemPrice = convertView.findViewById(R.id.itemPrice);
         ImageView itemImage = convertView.findViewById(R.id.itemImage);
+        CheckBox deleteCheckBox = convertView.findViewById(R.id.deleteCheckBox);
 
         itemName.setText(item.getName());
         itemPrice.setText("₪" + item.getPrice());
@@ -70,13 +71,16 @@ public class CartAdapter extends BaseAdapter {
             itemImage.setImageResource(R.drawable.ic_launcher_foreground);
         }
 
-        convertView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (onCartClick != null) {
-                    onCartClick.onItemLongClick(position, item);
-                }
-                return false;
+        // יש לוודא של־CheckBox אין מאזין פעיל (כדי למנוע התנגשות עם חזרה)
+        deleteCheckBox.setOnCheckedChangeListener(null);
+
+        // מניחים שה־CheckBox יפעל בהתאם למצב הנוכחי
+        deleteCheckBox.setChecked(false);  // או true, תלוי במצב של הפריט
+
+        deleteCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            // מבצעים את הפעולה כאשר ה־CheckBox משתנה
+            if (onCartClick != null) {
+                onCartClick.onItemCheckedChanged(position, isChecked);
             }
         });
 

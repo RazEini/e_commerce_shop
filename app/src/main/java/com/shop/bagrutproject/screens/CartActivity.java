@@ -70,33 +70,36 @@ public class CartActivity extends AppCompatActivity {
 
         cartAdapter = new CartAdapter(this, new ArrayList<>(), new CartAdapter.OnCartClick() {
             @Override
-            public void onItemLongClick(final int position, final Item cartItem) {
-                new AlertDialog.Builder(CartActivity.this)
-                        .setMessage("האם אתה בטוח שברצונך למחוק את המוצר מהעגלה?")
-                        .setPositiveButton("כן", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                cart.removeItem(position);
-                                databaseService.updateCart(cart, user.getUid(), new DatabaseService.DatabaseCallback<Void>() {
-                                    @Override
-                                    public void onCompleted(Void object) {
-                                        cartAdapter.removeItem(position);
-                                        updateTotalPrice();
+            public void onItemCheckedChanged(int position, boolean isChecked) {
+                if (isChecked) {
+                    new AlertDialog.Builder(CartActivity.this)
+                            .setMessage("האם אתה בטוח שברצונך למחוק את המוצר מהעגלה?")
+                            .setPositiveButton("כן", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    cart.removeItem(position);
+                                    databaseService.updateCart(cart, user.getUid(), new DatabaseService.DatabaseCallback<Void>() {
+                                        @Override
+                                        public void onCompleted(Void object) {
+                                            cartAdapter.removeItem(position);
+                                            updateTotalPrice();
 
-                                        new AlertDialog.Builder(CartActivity.this)
-                                                .setMessage("המוצר נמחק מהעגלה בהצלחה!")
-                                                .setPositiveButton("אוקי", null)
-                                                .show();
-                                    }
+                                            new AlertDialog.Builder(CartActivity.this)
+                                                    .setMessage("המוצר נמחק מהעגלה בהצלחה!")
+                                                    .setPositiveButton("אוקי", null)
+                                                    .show();
+                                        }
 
-                                    @Override
-                                    public void onFailed(Exception e) {
-                                    }
-                                });
-                            }
-                        })
-                        .setNegativeButton("לא", null)
-                        .show();
+                                        @Override
+                                        public void onFailed(Exception e) {
+                                            Log.e(TAG, "Failed to update cart", e);
+                                        }
+                                    });
+                                }
+                            })
+                            .setNegativeButton("לא", null)
+                            .show();
+                }
             }
         });
 
@@ -145,9 +148,7 @@ public class CartActivity extends AppCompatActivity {
                     intent.putExtra("orderId", order.getOrderId());
                     startActivity(intent);
                 })
-                .addOnFailureListener(e ->
-                        Toast.makeText(CartActivity.this, "שגיאה בשמירת ההזמנה", Toast.LENGTH_SHORT).show()
-                );
+                .addOnFailureListener(e -> Toast.makeText(CartActivity.this, "שגיאה בשמירת ההזמנה", Toast.LENGTH_SHORT).show());
     }
 
     @Override
@@ -156,7 +157,6 @@ public class CartActivity extends AppCompatActivity {
         setTitle("תפריט חנות");
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -181,10 +181,8 @@ public class CartActivity extends AppCompatActivity {
             startActivity(go);
             finishAffinity();
             Toast.makeText(CartActivity.this, "התנתקת בהצלחה!", Toast.LENGTH_SHORT).show();
-
         }
 
         return super.onOptionsItemSelected(item);
     }
-
 }
