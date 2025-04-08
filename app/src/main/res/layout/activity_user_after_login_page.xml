@@ -21,26 +21,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btnShop"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:backgroundTint="@color/black"
-        android:text="מעבר לחנות"
-        android:textColor="#FFFFFF"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:elevation="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView"
-        android:onClick="goToShop" />
-
-    <Button
         android:id="@+id/btnCart"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="100dp"
         android:backgroundTint="@color/black"
         android:text="היסטורית קניות"
         android:textColor="#FFFFFF"
@@ -49,7 +33,7 @@
         android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnShop"
+        app:layout_constraintTop_toBottomOf="@id/textView"
         android:onClick="goToPurchaseHistory" />
 
     <Button

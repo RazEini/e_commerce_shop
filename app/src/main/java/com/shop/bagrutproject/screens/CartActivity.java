@@ -56,8 +56,6 @@ public class CartActivity extends AppCompatActivity {
         btnShop = findViewById(R.id.btnBackToShop);
 
         btnShop.setOnClickListener(v -> {
-            Intent intent = new Intent(CartActivity.this, ShopActivity.class);
-            startActivity(intent);
             finish();
         });
 

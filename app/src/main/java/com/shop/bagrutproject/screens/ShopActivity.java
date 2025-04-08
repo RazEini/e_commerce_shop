@@ -40,6 +40,7 @@ public class ShopActivity extends AppCompatActivity {
     private List<Item> cartItems = new ArrayList<>();
 
     private ArrayList<Item> allItems = new ArrayList<>();
+    private ArrayList<Item> filteredItems = new ArrayList<>(); // רשימה מסוננת של מוצרים
     private DatabaseReference databaseReference;
     private Cart cart;
     private ImageButton btnBack;
@@ -47,11 +48,15 @@ public class ShopActivity extends AppCompatActivity {
     private TextView cartItemCount; // TextView עבור מספר המוצרים בעגלה
     DatabaseService databaseService;
     AuthenticationService authenticationService;
+    private String selectedCategory; // משתנה לאחסון הקטגוריה שנבחרה
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop);
+
+        // קבלת שם הקטגוריה מ-Intent
+        selectedCategory = getIntent().getStringExtra("category");
 
         databaseService = DatabaseService.getInstance();
 
@@ -67,7 +72,7 @@ public class ShopActivity extends AppCompatActivity {
         totalPriceText = findViewById(R.id.cartItemsText);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        itemsAdapter = new ItemsAdapter(allItems, this, this::addItemToCart);
+        itemsAdapter = new ItemsAdapter(filteredItems, this, this::addItemToCart);
         recyclerView.setAdapter(itemsAdapter);
 
         SearchView searchView = findViewById(R.id.searchView);
@@ -98,7 +103,7 @@ public class ShopActivity extends AppCompatActivity {
             if (SharedPreferencesUtil.isAdmin(ShopActivity.this)) {
                 intent = new Intent(ShopActivity.this, AdminPage.class);
             } else {
-                intent = new Intent(ShopActivity.this, UserAfterLoginPage.class);
+                intent = new Intent(ShopActivity.this, CategoriesActivity.class);
             }
             startActivity(intent);
             finish();
@@ -110,7 +115,7 @@ public class ShopActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        fetchItemsFromFirebase();
+        fetchItemsFromFirebase();  // טוען את המוצרים מחדש
     }
 
     private void fetchItemsFromFirebase() {
@@ -135,14 +140,17 @@ public class ShopActivity extends AppCompatActivity {
             }
         });
 
+        // טעינת המוצרים
         databaseService.getItems(new DatabaseService.DatabaseCallback<List<Item>>() {
             @Override
             public void onCompleted(List<Item> object) {
                 Log.d(TAG, "onCompleted: " + object);
                 allItems.clear();
                 allItems.addAll(object);
+                filterItemsByCategory();  // קריאה לסינון המוצרים אחרי טעינת המוצרים מחדש
                 itemsAdapter.notifyDataSetChanged();
 
+                // עדכון התצוגה על פי חיפוש
                 String query = ((SearchView) findViewById(R.id.searchView)).getQuery().toString();
                 itemsAdapter.filter(query);
             }
@@ -157,6 +165,29 @@ public class ShopActivity extends AppCompatActivity {
             }
         });
     }
+
+    private void filterItemsByCategory() {
+        filteredItems.clear();  // מחיקת המוצרים הקודמים ברשימה
+        if (selectedCategory != null && !selectedCategory.isEmpty()) {
+            if (selectedCategory.equals("כל המוצרים")) {
+                // אם בחרנו בקטגוריה "כל המוצרים", נציג את כל המוצרים
+                filteredItems.addAll(allItems);
+            } else {
+                // אם נבחרה קטגוריה מסוימת, נבצע סינון
+                for (Item item : allItems) {
+                    if (item.getType().equalsIgnoreCase(selectedCategory)) {
+                        filteredItems.add(item);
+                    }
+                }
+            }
+        } else {
+            // אם לא נבחרה קטגוריה, נציג את כל המוצרים
+            filteredItems.addAll(allItems);
+        }
+        itemsAdapter.notifyDataSetChanged();
+    }
+
+
 
     public void addItemToCart(Item item) {
         if (!SharedPreferencesUtil.isAdmin(ShopActivity.this)) {
@@ -274,7 +305,7 @@ public class ShopActivity extends AppCompatActivity {
 
                 AuthenticationService.getInstance().signOut();
 
-                Intent go = new Intent(this, Login.class);
+                Intent go = new Intent(ShopActivity.this, Login.class);
                 go.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(go);
                 finishAffinity();

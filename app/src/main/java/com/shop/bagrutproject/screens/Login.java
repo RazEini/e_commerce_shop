@@ -102,7 +102,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             if (authenticationService.isUserSignedIn()) {
                 Log.d(TAG, "User is already logged in, redirecting...");
                 SharedPreferencesUtil.setIsAdmin(this, false);
-                Intent go = new Intent(this, UserAfterLoginPage.class);
+                Intent go = new Intent(this, CategoriesActivity.class);
                 startActivity(go);
                 finish();
             }
@@ -145,7 +145,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     public void onCompleted(User user) {
                         SharedPreferencesUtil.saveUser(Login.this, user);
                         SharedPreferencesUtil.setIsAdmin(Login.this, false);
-                        Intent mainIntent = new Intent(Login.this, UserAfterLoginPage.class);
+                        Intent mainIntent = new Intent(Login.this, CategoriesActivity.class);
                         mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(mainIntent);
                         finish(); // סוגרים את הפעילות הנוכחית

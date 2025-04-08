@@ -38,11 +38,6 @@ public class UserAfterLoginPage extends AppCompatActivity {
         });
     }
 
-    public void goToShop(View view) {
-        Intent intent = new Intent(UserAfterLoginPage.this, ShopActivity.class);
-        startActivity(intent);
-    }
-
     public void goToPurchaseHistory(View view) {
          Intent intent = new Intent(UserAfterLoginPage.this, OrderHistoryActivity.class);
          startActivity(intent);
@@ -84,8 +79,8 @@ public class UserAfterLoginPage extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_shop) {
-            startActivity(new Intent(this, ShopActivity.class));
+        if (id == R.id.action_catagories) {
+            startActivity(new Intent(this, CategoriesActivity.class));
             return true;
         } else if (id == R.id.action_orders) {
             startActivity(new Intent(this, OrderHistoryActivity.class));

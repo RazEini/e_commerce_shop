@@ -1,8 +1,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_shop"
-        android:title="מעבר לחנות"
+        android:id="@+id/action_catagories"
+        android:title="מעבר לקטגוריות"
         app:showAsAction="never" />
 
     <item

@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="ItemTypeArray">
-        <item>מקרר</item>
-        <item>מאוורר</item>
-        <item>מזגן</item>
-        <item>טלוויזיה</item>
-        <item>קומקום</item>
-        <item>תנור חימום</item>
-        <item>מייבש כביסה</item>
-        <item>קוטל יתושים</item>
-        <item>מכונת כביסה</item>
-        <item>מגהץ</item>
-        <item>מדיח כלים</item>
+        <item>מאווררים</item>
+        <item>מזגנים</item>
+        <item>טלוויזיות</item>
+        <item>קומקומים</item>
+        <item>תנורים</item>
+        <item>קוטלי יתושים</item>
+        <item>מכונות כביסה</item>
+        <item>מגהצים</item>
+        <item>מקררים</item>
+        <item>מדיחי כלים</item>
+        <item>מייבשים</item>
     </string-array>
+
+
 
     <string-array name="ItemColorArray">
         <item>אדום</item>
