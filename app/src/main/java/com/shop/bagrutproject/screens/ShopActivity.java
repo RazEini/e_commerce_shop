@@ -216,13 +216,14 @@ public class ShopActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         if(SharedPreferencesUtil.isAdmin(this)){
             getMenuInflater().inflate(R.menu.menu_shopadmin, menu);
+            setTitle("שלום \uD83D\uDECD\uFE0F " + "המנהל");
         }
         else{
             getMenuInflater().inflate(R.menu.menu_shop, menu);
+            User user = SharedPreferencesUtil.getUser(this);
+            String currentUserName = user.getfName() + " " + user.getlName();
+            setTitle("שלום \uD83D\uDECD\uFE0F " + currentUserName);
         }
-        User user = SharedPreferencesUtil.getUser(this);
-        String currentUserName = user.getfName() + " " + user.getlName();
-        setTitle("שלום \uD83D\uDECD\uFE0F " + currentUserName);
         return true;
     }
 
