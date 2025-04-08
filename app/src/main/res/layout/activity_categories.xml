@@ -15,7 +15,8 @@
         android:horizontalSpacing="8dp"
         android:verticalSpacing="8dp"
         android:stretchMode="columnWidth"
-        android:padding="8dp"
-        android:clipToPadding="false"/>
+        android:gravity="center"
+        />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
