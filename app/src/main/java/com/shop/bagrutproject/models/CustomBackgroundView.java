@@ -23,22 +23,24 @@ public class CustomBackgroundView extends View {
         // צבע הרקע עם גרדיאנט עדין
         gradientPaint = new Paint();
 
-        // צבע התבנית
+        // צבע התבנית - גוון אפור בהיר יותר
         patternPaint = new Paint();
-        patternPaint.setColor(0x40BDBDBD); // אפור שקוף ומעודן
-        patternPaint.setStrokeWidth(4);
+        patternPaint.setColor(0xFFD1D1D1); // אפור בהיר ומעודן
+        patternPaint.setStrokeWidth(3); // קו עדין
         patternPaint.setStyle(Paint.Style.STROKE);
         patternPaint.setAntiAlias(true);
+        // ללא הצללה כדי שהקווים לא יהיו כהים מדי
+        // patternPaint.setShadowLayer(2, 1, 1, 0x33000000); // ניתן להשאיר את זה אם רוצים הצללה עדינה
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
-        // יצירת גרדיאנט רקע
+        // גרדיאנט עדין בגוונים בהירים יותר
         LinearGradient gradient = new LinearGradient(
                 0, 0, 0, h,
-                new int[]{0xFFF5F5F5, 0xFFE0E0E0},
+                new int[]{0x88F0F0F0, 0x88E0E0E0}, // גוונים בהירים, כמעט לבנים
                 null, Shader.TileMode.CLAMP
         );
         gradientPaint.setShader(gradient);
@@ -99,3 +101,5 @@ public class CustomBackgroundView extends View {
         canvas.drawPath(path, patternPaint);
     }
 }
+
+
