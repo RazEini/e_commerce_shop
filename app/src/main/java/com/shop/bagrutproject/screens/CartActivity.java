@@ -52,7 +52,7 @@ public class CartActivity extends AppCompatActivity {
 
         cartListView = findViewById(R.id.lvCart);
         totalPriceText = findViewById(R.id.cartItemsText);
-        ImageView cartCheckoutIcon = findViewById(R.id.cartCheckoutButton);
+        checkoutButton = findViewById(R.id.btnCheckout);
         btnShop = findViewById(R.id.btnBackToShop);
 
         btnShop.setOnClickListener(v -> {
@@ -117,7 +117,7 @@ public class CartActivity extends AppCompatActivity {
             }
         });
 
-        cartCheckoutIcon.setOnClickListener(v -> processOrder());
+        checkoutButton.setOnClickListener(v -> processOrder());
     }
 
     private void updateTotalPrice() {

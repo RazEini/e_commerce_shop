@@ -6,11 +6,13 @@
     android:layout_height="match_parent"
     android:background="#F5F5F5">
 
+    <!-- רקע מותאם אישית -->
     <com.shop.bagrutproject.models.CustomBackgroundView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY" />
 
+    <!-- כפתור חזרה לחנות -->
     <ImageButton
         android:id="@+id/btnBackToShop"
         android:layout_width="50dp"
@@ -18,25 +20,12 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
         android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:contentDescription="Back"
+        android:contentDescription="חזרה"
         android:src="@android:drawable/ic_menu_revert"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <ImageView
-        android:id="@+id/cartCheckoutButton"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="24dp"
-        android:background="?android:attr/selectableItemBackgroundBorderless"
-        android:clickable="true"
-        android:focusable="true"
-        android:padding="8dp"
-        android:src="@drawable/payment"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+    <!-- רשימת מוצרים בעגלה -->
     <ListView
         android:id="@+id/lvCart"
         android:layout_width="0dp"
@@ -45,23 +34,41 @@
         android:layout_marginEnd="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="16dp"
-        app:layout_constraintTop_toBottomOf="@id/cartCheckoutButton"
+        app:layout_constraintTop_toBottomOf="@id/btnBackToShop"
         app:layout_constraintBottom_toTopOf="@id/cartItemsText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!-- סך הכל למחיר -->
     <TextView
         android:id="@+id/cartItemsText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="72dp"
         android:gravity="center"
         android:padding="16dp"
         android:text="סך הכל: ₪0.00"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- כפתור מעבר לתשלום -->
+    <Button
+        android:id="@+id/btnCheckout"
+        android:layout_width="250sp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="16dp"
+        android:text="מעבר לתשלום"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:backgroundTint="@color/black"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
