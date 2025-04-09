@@ -99,12 +99,7 @@ public class ShopActivity extends AppCompatActivity {
         });
 
         btnBack.setOnClickListener(v -> {
-            Intent intent;
-            if (SharedPreferencesUtil.isAdmin(ShopActivity.this)) {
-                intent = new Intent(ShopActivity.this, AdminPage.class);
-            } else {
-                intent = new Intent(ShopActivity.this, CategoriesActivity.class);
-            }
+            Intent intent = new Intent(ShopActivity.this, CategoriesActivity.class);
             startActivity(intent);
             finish();
         });

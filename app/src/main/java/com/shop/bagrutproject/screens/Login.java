@@ -50,7 +50,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         authenticationService = AuthenticationService.getInstance();
         databaseService = DatabaseService.getInstance();
 
-        checkIfUserIsAlreadyLoggedIn(); // בדיקה האם משתמש או מנהל כבר מחוברים
+        checkIfUserIsAlreadyLoggedIn();
 
         initViews();
     }
@@ -92,7 +92,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         boolean isAdmin = SharedPreferencesUtil.isAdmin(this);
         if (isAdmin) {
             Log.d(TAG, "Admin is already logged in, redirecting...");
-            Intent adminIntent = new Intent(this, AdminPage.class);
+            Intent adminIntent = new Intent(this, CategoriesActivity.class);
             startActivity(adminIntent);
             finish();
             return;
@@ -126,9 +126,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         if (email.equals(ADMIN_Email) && password.equals(ADMIN_PASSWORD)) {
             SharedPreferencesUtil.setIsAdmin(this, true);
 
-            // דיליי של 2 שניות לפני המעבר לעמוד המנהל
             new Handler().postDelayed(() -> {
-                Intent adminIntent = new Intent(this, AdminPage.class);
+                Intent adminIntent = new Intent(this, CategoriesActivity.class);
                 adminIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(adminIntent);
                 finish();
@@ -148,7 +147,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         Intent mainIntent = new Intent(Login.this, CategoriesActivity.class);
                         mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                         startActivity(mainIntent);
-                        finish(); // סוגרים את הפעילות הנוכחית
+                        finish();
                     }
 
                     @Override

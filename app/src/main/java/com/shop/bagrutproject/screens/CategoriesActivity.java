@@ -70,34 +70,72 @@ public class CategoriesActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_catagorys, menu);
-        User user = SharedPreferencesUtil.getUser(this);
-        String currentUserName = user.getfName() + " " + user.getlName();
-        setTitle("שלום \uD83D\uDECD\uFE0F " + currentUserName);
+        if(SharedPreferencesUtil.isAdmin(this)){
+            getMenuInflater().inflate(R.menu.menu_catagoriesadmin, menu);
+            setTitle("שלום \uD83D\uDECD\uFE0F " + "המנהל");
+        }
+        else{
+            getMenuInflater().inflate(R.menu.menu_catagorys, menu);
+            User user = SharedPreferencesUtil.getUser(this);
+            String currentUserName = user.getfName() + " " + user.getlName();
+            setTitle("שלום \uD83D\uDECD\uFE0F " + currentUserName);
+        }
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.action_user_page) {
-            startActivity(new Intent(this, UserAfterLoginPage.class));
-            return true;
+
+        if(SharedPreferencesUtil.isAdmin(this)){
+            if (id == R.id.action_admin_page) {
+                startActivity(new Intent(this, AdminPage.class));
+                return true;
+            }
+
+            if (id == R.id.action_logout_admin) {
+                SharedPreferencesUtil.signOutAdmin(CategoriesActivity.this);
+
+                SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.apply();
+
+                AuthenticationService.getInstance().signOut();
+
+                Intent go = new Intent(CategoriesActivity.this, Login.class);
+                go.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(go);
+                finishAffinity();
+                Toast.makeText(CategoriesActivity.this, "התנתקת בהצלחה!", Toast.LENGTH_SHORT).show();
+            }
         }
 
-        if (id == R.id.action_logout) {
-            SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear();
-            editor.apply();
+        else{
+            if (id == R.id.action_user_page) {
+                startActivity(new Intent(this, UserAfterLoginPage.class));
+                return true;
+            }
 
-            AuthenticationService.getInstance().signOut();
+            if (id == R.id.action_cart) {
+                startActivity(new Intent(this, CartActivity.class));
+                return true;
+            }
 
-            Intent go = new Intent(this, Login.class);
-            go.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(go);
-            finishAffinity();
-            Toast.makeText(CategoriesActivity.this, "התנתקת בהצלחה!", Toast.LENGTH_SHORT).show();
+            if (id == R.id.action_logout) {
+                SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear();
+                editor.apply();
+
+                AuthenticationService.getInstance().signOut();
+
+                Intent go = new Intent(CategoriesActivity.this, Login.class);
+                go.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                startActivity(go);
+                finishAffinity();
+                Toast.makeText(CategoriesActivity.this, "התנתקת בהצלחה!", Toast.LENGTH_SHORT).show();
+            }
         }
 
         return super.onOptionsItemSelected(item);

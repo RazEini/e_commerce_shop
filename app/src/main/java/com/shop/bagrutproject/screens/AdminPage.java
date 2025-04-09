@@ -31,7 +31,6 @@ public class AdminPage extends AppCompatActivity {
         Button btnAddItem = findViewById(R.id.btn_add_product);
         Button btnOrderHistoryAdmin = findViewById(R.id.btn_purchase_history);
         Button btnUsersList = findViewById(R.id.btn_users);
-        Button btnShop = findViewById(R.id.btn_shop);
 
         btnLogoutAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,13 +57,6 @@ public class AdminPage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 goToUsersList(view);
-            }
-        });
-
-        btnShop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToShop(view);
             }
         });
     }
@@ -127,8 +119,8 @@ public class AdminPage extends AppCompatActivity {
         } else if (id == R.id.action_users) {
             startActivity(new Intent(this, UsersActivity.class));
             return true;
-        } else if (id == R.id.action_shop) {
-            startActivity(new Intent(this, ShopActivity.class));
+        } else if (id == R.id.action_catagories) {
+            startActivity(new Intent(this, CategoriesActivity.class));
             return true;
         }else if (id == R.id.action_logout_admin) {
             SharedPreferencesUtil.signOutAdmin(AdminPage.this);
