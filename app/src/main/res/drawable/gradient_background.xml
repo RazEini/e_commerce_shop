@@ -9,9 +9,4 @@
                 android:type="linear"/>
         </shape>
     </item>
-    <item>
-        <shape android:shape="rectangle">
-            <solid android:color="#E1ECF4"/>
-        </shape>
-    </item>
 </layer-list>
