@@ -1,43 +1,27 @@
 package com.shop.bagrutproject.screens;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.shop.bagrutproject.R;
-import com.shop.bagrutproject.models.Cart;
-import com.shop.bagrutproject.models.Item;
 import com.shop.bagrutproject.models.User;
 import com.shop.bagrutproject.services.AuthenticationService;
 import com.shop.bagrutproject.services.DatabaseService;
 import com.shop.bagrutproject.utils.SharedPreferencesUtil;
-
-import java.util.ArrayList;
-import java.util.UUID;
 
 
 public class Register extends AppCompatActivity implements View.OnClickListener{
@@ -62,6 +46,16 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_register);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.light_blue)));
+
+            // הגדרת כותרת מותאמת אישית
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayShowCustomEnabled(true);
+            getSupportActionBar().setCustomView(R.layout.action_bar_title);
+        }
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
