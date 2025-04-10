@@ -29,6 +29,7 @@ import com.shop.bagrutproject.services.DatabaseService;
 import com.shop.bagrutproject.utils.SharedPreferencesUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class ShopActivity extends AppCompatActivity {
@@ -240,16 +241,29 @@ public class ShopActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(SharedPreferencesUtil.isAdmin(this)){
-            getMenuInflater().inflate(R.menu.menu_shopadmin, menu);
-            setTitle("שלום \uD83D\uDECD\uFE0F " + "המנהל");
+        String greeting;
+
+        // קבלת השעה הנוכחית
+        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+
+        if (hour >= 5 && hour < 12) {
+            greeting = "בוקר טוב";
+        } else if (hour >= 12 && hour < 18) {
+            greeting = "צהריים טובים";
+        } else {
+            greeting = "ערב טוב";
         }
-        else{
+
+        if (SharedPreferencesUtil.isAdmin(this)) {
+            getMenuInflater().inflate(R.menu.menu_shopadmin, menu);
+            setTitle(greeting + ", \uD83D\uDECD\uFE0F המנהל");
+        } else {
             getMenuInflater().inflate(R.menu.menu_shop, menu);
             User user = SharedPreferencesUtil.getUser(this);
             String currentUserName = user.getfName() + " " + user.getlName();
-            setTitle("שלום \uD83D\uDECD\uFE0F " + currentUserName);
+            setTitle(greeting + ", \uD83D\uDECD\uFE0F " + currentUserName);
         }
+
         return true;
     }
 

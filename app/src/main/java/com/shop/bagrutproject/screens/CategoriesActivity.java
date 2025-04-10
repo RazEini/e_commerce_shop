@@ -72,13 +72,13 @@ public class CategoriesActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         if(SharedPreferencesUtil.isAdmin(this)){
             getMenuInflater().inflate(R.menu.menu_catagoriesadmin, menu);
-            setTitle("שלום \uD83D\uDECD\uFE0F " + "המנהל");
+            setTitle("ברוך הבא לחנות \uD83D\uDC4B " + "המנהל");
         }
         else{
             getMenuInflater().inflate(R.menu.menu_catagorys, menu);
             User user = SharedPreferencesUtil.getUser(this);
             String currentUserName = user.getfName() + " " + user.getlName();
-            setTitle("שלום \uD83D\uDECD\uFE0F " + currentUserName);
+            setTitle("ברוך הבא לחנות \uD83D\uDC4B " + currentUserName);
         }
         return true;
     }
