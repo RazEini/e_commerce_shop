@@ -48,6 +48,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         setContentView(R.layout.activity_register);
 
         if (getSupportActionBar() != null) {
+            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.gray_white)));
 
             // הגדרת כותרת מותאמת אישית
             getSupportActionBar().setDisplayShowTitleEnabled(false);
