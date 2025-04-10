@@ -5,8 +5,12 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_background"
     tools:context=".screens.MainActivity">
+
+    <com.shop.bagrutproject.models.CustomBackgroundView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"/>
 
     <TextView
         android:id="@+id/textView"
