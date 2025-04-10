@@ -31,6 +31,7 @@ import com.shop.bagrutproject.services.DatabaseService;
 import com.shop.bagrutproject.utils.SharedPreferencesUtil;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class CartActivity extends AppCompatActivity {
@@ -152,9 +153,23 @@ public class CartActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_cart, menu);
+
+        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+        String greeting;
+
+        if (hour >= 5 && hour < 12) {
+            greeting = "בוקר טוב";
+        } else if (hour >= 12 && hour < 18) {
+            greeting = "צהריים טובים";
+        } else {
+            greeting = "ערב טוב";
+        }
+
         User user = SharedPreferencesUtil.getUser(this);
-        String currentUserName = user.getfName() + " " + user.getlName();
-        setTitle("שלום \uD83D\uDECD\uFE0F " + currentUserName);
+        String name = user.getfName();
+
+        setTitle(greeting + "," + "🛒" + " " + name);
+
         return true;
     }
 

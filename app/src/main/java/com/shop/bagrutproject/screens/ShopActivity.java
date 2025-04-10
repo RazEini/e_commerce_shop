@@ -260,7 +260,7 @@ public class ShopActivity extends AppCompatActivity {
         } else {
             getMenuInflater().inflate(R.menu.menu_shop, menu);
             User user = SharedPreferencesUtil.getUser(this);
-            String currentUserName = user.getfName() + " " + user.getlName();
+            String currentUserName = user.getfName();
             setTitle(greeting + ", \uD83D\uDECD\uFE0F " + currentUserName);
         }
 
