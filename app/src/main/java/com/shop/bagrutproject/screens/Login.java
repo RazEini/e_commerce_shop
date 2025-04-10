@@ -44,7 +44,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         setContentView(R.layout.activity_login);
 
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.gray_white)));
 
             // הגדרת כותרת מותאמת אישית
             getSupportActionBar().setDisplayShowTitleEnabled(false);

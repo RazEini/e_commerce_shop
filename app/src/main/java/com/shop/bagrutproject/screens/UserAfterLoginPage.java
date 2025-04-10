@@ -43,6 +43,11 @@ public class UserAfterLoginPage extends AppCompatActivity {
          startActivity(intent);
     }
 
+    public void goToDeals(View view) {
+        Intent intent = new Intent(UserAfterLoginPage.this, DealsActivity.class);
+        startActivity(intent);
+    }
+
     public void goToPersonalArea(View view) {
         Intent intent = new Intent(UserAfterLoginPage.this, UpdateUserDetailsActivity.class);
         startActivity(intent);
@@ -81,6 +86,9 @@ public class UserAfterLoginPage extends AppCompatActivity {
 
         if (id == R.id.action_catagories) {
             startActivity(new Intent(this, CategoriesActivity.class));
+            return true;
+        } else if (id == R.id.action_deals) {
+            startActivity(new Intent(this, DealsActivity.class));
             return true;
         } else if (id == R.id.action_orders) {
             startActivity(new Intent(this, OrderHistoryActivity.class));

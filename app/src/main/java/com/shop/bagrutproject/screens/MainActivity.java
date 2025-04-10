@@ -43,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         if (getSupportActionBar() != null) {
-            getSupportActionBar().setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.gray_white)));
 
             // הגדרת כותרת מותאמת אישית
             getSupportActionBar().setDisplayShowTitleEnabled(false);
