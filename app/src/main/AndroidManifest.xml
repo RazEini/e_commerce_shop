@@ -20,7 +20,7 @@
             android:exported="false" />
         <activity
             android:name=".screens.CategoriesActivity"
-            android:exported="false" /> <!-- פעילויות קיימות שלך -->
+            android:exported="false" />
         <activity
             android:name=".screens.AdminOrderHistoryActivity"
             android:exported="false" />
@@ -62,7 +62,7 @@
             android:exported="false" />
         <activity
             android:name=".screens.Odot"
-            android:exported="false" /> <!-- MainActivity - עמוד ראשי -->
+            android:exported="false" />
         <activity
             android:name=".screens.MainActivity"
             android:exported="true">
