@@ -11,6 +11,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.shop.bagrutproject.models.Cart;
 import com.shop.bagrutproject.models.Comment;
+import com.shop.bagrutproject.models.Deal;
 import com.shop.bagrutproject.models.Item;
 import com.shop.bagrutproject.models.Order;
 import com.shop.bagrutproject.models.User;
@@ -380,6 +381,65 @@ public class DatabaseService {
             }
         });
     }
+
+    // הוספת מבצע חדש
+    public void addDeal(Deal deal, @NotNull DatabaseCallback<Void> callback) {
+        // יצירת מפתח אוטומטי על ידי Firebase (ללא ID שנקבע מראש)
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("deals").push();
+        deal.setId(ref.getKey()); // אם אתה לא רוצה לשמור ID, אפשר להוריד את השורה הזאת
+        ref.setValue(deal)
+                .addOnSuccessListener(unused -> callback.onCompleted(null))
+                .addOnFailureListener(callback::onFailed);
+    }
+
+    // שליפת כל המבצעים
+    public void getAllDeals(@NotNull DatabaseCallback<List<Deal>> callback) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("deals");
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Deal> deals = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Deal deal = snapshot.getValue(Deal.class);
+                    if (deal != null) {
+                        deals.add(deal);
+                    }
+                }
+                callback.onCompleted(deals);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onFailed(databaseError.toException());
+            }
+        });
+    }
+
+    // שליפת מבצעים לפי itemId (אם כן צריך, אחרת אפשר להשאיר ככה)
+    public void getDealsByItemId(@NotNull String itemId, @NotNull DatabaseCallback<List<Deal>> callback) {
+        // אם אינך רוצה לסנן לפי itemId, פשוט אפשר להוריד את השיטה הזו
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("deals");
+        ref.orderByChild("itemId").equalTo(itemId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<Deal> deals = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Deal deal = snapshot.getValue(Deal.class);
+                    if (deal != null) {
+                        deals.add(deal);
+                    }
+                }
+                callback.onCompleted(deals);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                callback.onFailed(databaseError.toException());
+            }
+        });
+    }
+
+
 }
 
 

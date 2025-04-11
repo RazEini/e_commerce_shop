@@ -31,6 +31,7 @@ public class AdminPage extends AppCompatActivity {
         Button btnAddItem = findViewById(R.id.btn_add_product);
         Button btnOrderHistoryAdmin = findViewById(R.id.btn_purchase_history);
         Button btnUsersList = findViewById(R.id.btn_users);
+        Button btnDeals = findViewById(R.id.btn_add_deal);
 
         btnLogoutAdmin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,6 +60,13 @@ public class AdminPage extends AppCompatActivity {
                 goToUsersList(view);
             }
         });
+
+        btnDeals.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToDeals(view);
+            }
+        });
     }
 
     public void goToAddItem(View view) {
@@ -76,8 +84,8 @@ public class AdminPage extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void goToShop(View view) {
-        Intent intent = new Intent(AdminPage.this, ShopActivity.class);
+    public void goToDeals(View view) {
+        Intent intent = new Intent(AdminPage.this, AdminDealsActivity.class);
         startActivity(intent);
     }
 
@@ -118,6 +126,9 @@ public class AdminPage extends AppCompatActivity {
             return true;
         } else if (id == R.id.action_users) {
             startActivity(new Intent(this, UsersActivity.class));
+            return true;
+        } else if (id == R.id.action_admindeals) {
+            startActivity(new Intent(this, AdminDealsActivity.class));
             return true;
         } else if (id == R.id.action_catagories) {
             startActivity(new Intent(this, CategoriesActivity.class));

@@ -16,6 +16,9 @@
         android:theme="@style/Theme.BagrutProject"
         tools:targetApi="31">
         <activity
+            android:name=".screens.AdminDealsActivity"
+            android:exported="false" />
+        <activity
             android:name=".screens.DealsActivity"
             android:exported="false" />
         <activity

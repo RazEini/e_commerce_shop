@@ -4,42 +4,55 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import androidx.annotation.NonNull;
+
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.shop.bagrutproject.R;
+import com.shop.bagrutproject.models.Deal;
+
 import java.util.List;
 
 public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealViewHolder> {
 
-    private List<String> deals;
+    private List<Deal> dealsList;
 
-    public DealsAdapter(List<String> deals) {
-        this.deals = deals;
+    public DealsAdapter(List<Deal> dealsList) {
+        this.dealsList = dealsList;
     }
 
-    @NonNull
     @Override
-    public DealViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public DealViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_deal, parent, false);
         return new DealViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DealViewHolder holder, int position) {
-        holder.txtDeal.setText(deals.get(position));
+    public void onBindViewHolder(DealViewHolder holder, int position) {
+        Deal deal = dealsList.get(position);
+        holder.titleTextView.setText(deal.getTitle());
+        holder.descriptionTextView.setText(deal.getDescription());
+        holder.discountTextView.setText("הנחה: " + deal.getDiscountPercentage() + "%");
+        holder.validUntilTextView.setText("תוקף עד: " + deal.getValidUntil());
     }
 
     @Override
     public int getItemCount() {
-        return deals.size();
+        return dealsList.size();
     }
 
     public static class DealViewHolder extends RecyclerView.ViewHolder {
-        TextView txtDeal;
 
-        public DealViewHolder(@NonNull View itemView) {
+        TextView titleTextView;
+        TextView descriptionTextView;
+        TextView discountTextView;
+        TextView validUntilTextView;
+
+        public DealViewHolder(View itemView) {
             super(itemView);
-            txtDeal = itemView.findViewById(R.id.txtDeal);
+            titleTextView = itemView.findViewById(R.id.dealTitle);
+            descriptionTextView = itemView.findViewById(R.id.dealDescription);
+            discountTextView = itemView.findViewById(R.id.dealDiscount);
+            validUntilTextView = itemView.findViewById(R.id.dealValidUntil);
         }
     }
 }
