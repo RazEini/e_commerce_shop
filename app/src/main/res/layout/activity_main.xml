@@ -7,10 +7,10 @@
     android:layout_height="match_parent"
     tools:context=".screens.MainActivity">
 
-    <com.shop.bagrutproject.models.CustomBackgroundView
+    <com.shop.bagrutproject.models.CustomBackgroundView2
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY"/>
+        android:layout_height="match_parent" />
+
 
     <TextView
         android:id="@+id/textView"
