@@ -4,13 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
-
-    <!-- רקע מותאם אישית -->
-    <com.shop.bagrutproject.models.CustomBackgroundView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="fitXY" />
+    android:background="@drawable/back_image_shop3">
 
     <!-- כפתור חזרה לחנות -->
     <ImageButton
