@@ -35,7 +35,7 @@ public class CustomBackgroundView2 extends View {
 
         // גל ראשון - דרום-מערב
         Shader shader = new LinearGradient(0, 0, w, h,
-                0x15FFA8C7, 0x15FF8A00, Shader.TileMode.CLAMP);  // שקיפות בינונית
+                0x20FFA8C7, 0x20FF8A00, Shader.TileMode.CLAMP);  // שקיפות נמוכה יותר (20%)
         paint.setShader(shader);
         Path wavePath = new Path();
         wavePath.moveTo(0, h);
@@ -47,7 +47,7 @@ public class CustomBackgroundView2 extends View {
 
         // גל שני - צפון-מזרח - עדין יותר
         shader = new LinearGradient(0, 0, w, h,
-                0x15A8C7FF, 0x155D55F5, Shader.TileMode.CLAMP);  // תכלת-סגול עם שקיפות בינונית יותר
+                0x20A8C7FF, 0x205D55F5, Shader.TileMode.CLAMP);  // תכלת-סגול עם שקיפות נמוכה יותר
         paint.setShader(shader);
         wavePath.reset();
         wavePath.moveTo(w, 0);
@@ -59,7 +59,7 @@ public class CustomBackgroundView2 extends View {
 
         // גל שלישי - דרום-מערב
         shader = new LinearGradient(0, 0, w, h,
-                0x1590EE90, 0x1500C896, Shader.TileMode.CLAMP);  // שקיפות בינונית יותר
+                0x2090EE90, 0x2000C896, Shader.TileMode.CLAMP);  // שקיפות נמוכה יותר
         paint.setShader(shader);
         wavePath.reset();
         wavePath.moveTo(0, h);
@@ -72,7 +72,7 @@ public class CustomBackgroundView2 extends View {
 
         // גל רביעי - יותר טבעי
         shader = new LinearGradient(0, 0, w, h,
-                0x1074C8FF, 0x10B88CFE, Shader.TileMode.CLAMP);  // כחול יותר מעודן עם שקיפות בינונית
+                0x1074C8FF, 0x10B88CFE, Shader.TileMode.CLAMP);  // כחול יותר מעודן עם שקיפות נמוכה
         paint.setShader(shader);
         wavePath.reset();
         wavePath.moveTo(w, 0);
@@ -97,7 +97,7 @@ public class CustomBackgroundView2 extends View {
 
         // גל חדש - סימטרי למעלה, בלי גבעות חזקות
         shader = new LinearGradient(0, 0, w, h,
-                0x15A8C7FF, 0x15B88CFE, Shader.TileMode.CLAMP);  // צבעים עדינים עם שקיפות בינונית יותר
+                0x20A8C7FF, 0x20B88CFE, Shader.TileMode.CLAMP);  // צבעים עדינים עם שקיפות נמוכה יותר
         paint.setShader(shader);
         wavePath.reset();
         wavePath.moveTo(0, 0);
@@ -108,4 +108,6 @@ public class CustomBackgroundView2 extends View {
         wavePath.close();
         canvas.drawPath(wavePath, paint);
     }
+
+
 }
