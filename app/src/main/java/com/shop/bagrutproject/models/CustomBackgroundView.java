@@ -20,27 +20,25 @@ public class CustomBackgroundView extends View {
     }
 
     private void init() {
-        // צבע הרקע עם גרדיאנט עדין
+        // צבע הרקע עם גרדיאנט עדין יותר שמזכיר לבן עם נגיעה של ירוק-כחול
         gradientPaint = new Paint();
 
-        // צבע התבנית - גוון אפור בהיר יותר
+        // צבע התבנית - ירוק-כחול בהיר מאוד עם נגיעה של לבן
         patternPaint = new Paint();
-        patternPaint.setColor(0xFFD1D1D1); // אפור בהיר ומעודן
+        patternPaint.setColor(0x99A1C9C6); // צבע ירוק-כחול בהיר עם נגיעות של לבן
         patternPaint.setStrokeWidth(3); // קו עדין
         patternPaint.setStyle(Paint.Style.STROKE);
         patternPaint.setAntiAlias(true);
-        // ללא הצללה כדי שהקווים לא יהיו כהים מדי
-        // patternPaint.setShadowLayer(2, 1, 1, 0x33000000); // ניתן להשאיר את זה אם רוצים הצללה עדינה
     }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
 
-        // גרדיאנט עדין בגוונים בהירים יותר
+        // גרדיאנט בהיר מאוד שמזכיר לבן עם טון של ירוק-כחול
         LinearGradient gradient = new LinearGradient(
                 0, 0, 0, h,
-                new int[]{0x88F0F0F0, 0x88E0E0E0}, // גוונים בהירים, כמעט לבנים
+                new int[]{0x99F4F9F7, 0x99E0F2F0}, // גוונים מאוד בהירים של ירוק-כחול
                 null, Shader.TileMode.CLAMP
         );
         gradientPaint.setShader(gradient);
@@ -70,7 +68,7 @@ public class CustomBackgroundView extends View {
         int centerX = x + tileSize / 2;
         int centerY = y + tileSize / 2;
 
-        // ציור יהלום
+        // ציור יהלום מודגש יותר
         path.moveTo(centerX, y);
         path.lineTo(x + tileSize, centerY);
         path.lineTo(centerX, y + tileSize);
@@ -78,7 +76,7 @@ public class CustomBackgroundView extends View {
         path.close();
         canvas.drawPath(path, patternPaint);
 
-        // ציור כוכב באמצע במקום העיגול
+        // ציור כוכב מודגש באמצע
         drawStar(canvas, centerX, centerY, tileSize / 5, tileSize / 2.8f);
     }
 
