@@ -10,96 +10,83 @@ import android.util.AttributeSet;
 import android.view.View;
 
 public class CustomBackgroundView extends View {
-    private Paint gradientPaint;
-    private Paint patternPaint;
-    private int tileSize = 200; // גודל המרצפות
-
     public CustomBackgroundView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        init();
-    }
-
-    private void init() {
-        // צבע הרקע עם גרדיאנט עדין
-        gradientPaint = new Paint();
-
-        // צבע התבנית - גוון אפור בהיר יותר
-        patternPaint = new Paint();
-        patternPaint.setColor(0xFFD1D1D1); // אפור בהיר ומעודן
-        patternPaint.setStrokeWidth(3); // קו עדין
-        patternPaint.setStyle(Paint.Style.STROKE);
-        patternPaint.setAntiAlias(true);
-        // ללא הצללה כדי שהקווים לא יהיו כהים מדי
-        // patternPaint.setShadowLayer(2, 1, 1, 0x33000000); // ניתן להשאיר את זה אם רוצים הצללה עדינה
-    }
-
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-
-        // גרדיאנט עדין בגוונים בהירים יותר
-        LinearGradient gradient = new LinearGradient(
-                0, 0, 0, h,
-                new int[]{0x88F0F0F0, 0x88E0E0E0}, // גוונים בהירים, כמעט לבנים
-                null, Shader.TileMode.CLAMP
-        );
-        gradientPaint.setShader(gradient);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        int width = getWidth();
-        int height = getHeight();
+        int w = getWidth();
+        int h = getHeight();
 
-        // ציור הרקע
-        canvas.drawRect(0, 0, width, height, gradientPaint);
+        // שרטוט הגלים בחלק העליון
+        drawUpperWaves(canvas, w, h);
 
-        // ציור דפוסי המרצפות על כל הרקע
-        for (int x = 0; x < width; x += tileSize) {
-            for (int y = 0; y < height; y += tileSize) {
-                drawTilePattern(canvas, x, y);
-            }
-        }
+        // שרטוט הגלים בחלק התחתון
+        drawLowerWaves(canvas, w, h);
     }
 
-    // יצירת "מרצפת" עם דפוסים גיאומטריים יוקרתיים
-    private void drawTilePattern(Canvas canvas, int x, int y) {
+    private void drawUpperWaves(Canvas canvas, int w, int h) {
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.FILL);
+        paint.setAntiAlias(true);
         Path path = new Path();
-        int centerX = x + tileSize / 2;
-        int centerY = y + tileSize / 2;
 
-        // ציור יהלום
-        path.moveTo(centerX, y);
-        path.lineTo(x + tileSize, centerY);
-        path.lineTo(centerX, y + tileSize);
-        path.lineTo(x, centerY);
+        // גל 1 - צבעים בגוון טורקיז בהיר עם ירוק
+        paint.setShader(new LinearGradient(0, 0, w, h * 0.5f,
+                0x60A8E6A5, 0x60A2F3E7, Shader.TileMode.CLAMP)); // שקיפות גבוהה יותר (60% לא שקוף)
+        path.moveTo(0, h * 0.2f);  // התחלה נמוכה יותר
+        path.cubicTo(w * 0.2f, h * 0.05f, w * 0.4f, h * 0.15f, w * 0.5f, h * 0.2f); // קשת חלקה שמתחילה נמוך
+        path.cubicTo(w * 0.6f, h * 0.25f, w * 0.8f, h * 0.35f, w, h * 0.3f); // קשת רחבה ומרשימה
+        path.lineTo(w, 0);  // עד הקצה העליון
+        path.lineTo(0, 0);
         path.close();
-        canvas.drawPath(path, patternPaint);
+        canvas.drawPath(path, paint);
 
-        // ציור כוכב באמצע במקום העיגול
-        drawStar(canvas, centerX, centerY, tileSize / 5, tileSize / 2.8f);
+        // גל 2 - צבעים בגוון כחול בהיר
+        path.reset();
+        paint.setShader(new LinearGradient(w, 0, 0, h * 0.5f,
+                0x60A2DFF7, 0x60A8C6E4, Shader.TileMode.CLAMP)); // צבעי כחול בהיר עם שקיפות גבוהה יותר
+        path.moveTo(w, 0);
+        path.cubicTo(w * 0.85f, h * 0.15f, w * 0.7f, h * 0.25f, w * 0.5f, h * 0.2f); // קשת גדולה
+        path.cubicTo(w * 0.3f, h * 0.25f, w * 0.1f, h * 0.2f, 0, h * 0.25f); // קשת הפוכה
+        path.lineTo(0, 0);
+        path.lineTo(w, 0);
+        path.close();
+        canvas.drawPath(path, paint);
     }
 
-    // פונקציה שמציירת כוכב עם 8 קודקודים
-    private void drawStar(Canvas canvas, float cx, float cy, float innerRadius, float outerRadius) {
+    private void drawLowerWaves(Canvas canvas, int w, int h) {
+        Paint paint = new Paint();
+        paint.setStyle(Paint.Style.FILL);
+        paint.setAntiAlias(true);
         Path path = new Path();
-        double angle = Math.PI / 4; // 8 קודקודים (45 מעלות הפרש)
 
-        for (int i = 0; i < 8; i++) {
-            float r = (i % 2 == 0) ? outerRadius : innerRadius;
-            float x = (float) (cx + r * Math.cos(i * angle));
-            float y = (float) (cy + r * Math.sin(i * angle));
-            if (i == 0) {
-                path.moveTo(x, y);
-            } else {
-                path.lineTo(x, y);
-            }
-        }
+        // גל 1 - צבע ירוק בהיר עם גוון טורקיז
+        paint.setShader(new LinearGradient(0, h * 0.5f, w, h,
+                0x60A2F3E7, 0x60A8D7A6, Shader.TileMode.CLAMP)); // ירוק בהיר עם גוון טורקיז ושקיפות גבוהה
+        path.moveTo(0, h * 0.75f);  // התחלה בחלק התחתון
+        path.cubicTo(w * 0.1f, h * 0.8f, w * 0.3f, h * 0.85f, w * 0.5f, h * 0.85f); // קשת חלקה
+        path.cubicTo(w * 0.7f, h * 0.85f, w * 0.9f, h * 0.8f, w, h * 0.75f); // קשת נוספת
+        path.lineTo(w, h); // המשך עד לחלק התחתון
+        path.lineTo(0, h); // המשך עד לחלק התחתון
         path.close();
-        canvas.drawPath(path, patternPaint);
+        canvas.drawPath(path, paint);
+
+        // גל 2 - צבע סגול עדין עם שקיפות גבוהה
+        path.reset();
+        paint.setShader(new LinearGradient(0, h * 0.6f, w, h,
+                0x60BDA1F2, 0x60A4C9D6, Shader.TileMode.CLAMP)); // גוון סגול עדין עם שקיפות גבוהה
+        path.moveTo(0, h * 0.9f);  // התחלה בתחתית
+        path.cubicTo(w * 0.3f, h * 1.0f, w * 0.6f, h * 1.05f, w * 0.8f, h * 1.0f); // קשת מורחבת
+        path.cubicTo(w * 0.9f, h * 0.95f, w, h * 0.85f, w, h * 0.9f); // קשת לסיום
+        path.lineTo(w, h);
+        path.lineTo(0, h);
+        path.close();
+        canvas.drawPath(path, paint);
     }
+
+
 }
-
-
