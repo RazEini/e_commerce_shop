@@ -16,7 +16,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="132dp"
+        android:layout_marginTop="200dp"
         android:gravity="center"
         android:text="חנות מוצרי חשמל"
         style="@style/TitleStyle"

@@ -16,7 +16,7 @@
         android:id="@+id/tv_manager_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="152dp"
+        android:layout_marginTop="200dp"
         android:gravity="center"
         android:text="דף מנהל"
         style="@style/TitleStyle"
