@@ -11,8 +11,7 @@ import android.view.View;
 
 public class CustomBackgroundView extends View {
     private Paint gradientPaint;
-    private Paint patternPaint;
-    private int tileSize = 200; // גודל המרצפות
+    private Paint wavePaint;
 
     public CustomBackgroundView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -20,28 +19,10 @@ public class CustomBackgroundView extends View {
     }
 
     private void init() {
-        // צבע הרקע עם גרדיאנט עדין יותר שמזכיר לבן עם נגיעה של ירוק-כחול
         gradientPaint = new Paint();
-
-        // צבע התבנית - ירוק-כחול בהיר מאוד עם נגיעה של לבן
-        patternPaint = new Paint();
-        patternPaint.setColor(0x99A1C9C6); // צבע ירוק-כחול בהיר עם נגיעות של לבן
-        patternPaint.setStrokeWidth(3); // קו עדין
-        patternPaint.setStyle(Paint.Style.STROKE);
-        patternPaint.setAntiAlias(true);
-    }
-
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-
-        // גרדיאנט בהיר מאוד שמזכיר לבן עם טון של ירוק-כחול
-        LinearGradient gradient = new LinearGradient(
-                0, 0, 0, h,
-                new int[]{0x99F4F9F7, 0x99E0F2F0}, // גוונים מאוד בהירים של ירוק-כחול
-                null, Shader.TileMode.CLAMP
-        );
-        gradientPaint.setShader(gradient);
+        wavePaint = new Paint();
+        wavePaint.setStyle(Paint.Style.FILL);
+        wavePaint.setAntiAlias(true);
     }
 
     @Override
@@ -51,51 +32,63 @@ public class CustomBackgroundView extends View {
         int width = getWidth();
         int height = getHeight();
 
-        // ציור הרקע
         canvas.drawRect(0, 0, width, height, gradientPaint);
 
-        // ציור דפוסי המרצפות על כל הרקע
-        for (int x = 0; x < width; x += tileSize) {
-            for (int y = 0; y < height; y += tileSize) {
-                drawTilePattern(canvas, x, y);
-            }
-        }
+        drawSubtleWaves(canvas, width, height);
     }
 
-    // יצירת "מרצפת" עם דפוסים גיאומטריים יוקרתיים
-    private void drawTilePattern(Canvas canvas, int x, int y) {
-        Path path = new Path();
-        int centerX = x + tileSize / 2;
-        int centerY = y + tileSize / 2;
-
-        // ציור יהלום מודגש יותר
-        path.moveTo(centerX, y);
-        path.lineTo(x + tileSize, centerY);
-        path.lineTo(centerX, y + tileSize);
-        path.lineTo(x, centerY);
-        path.close();
-        canvas.drawPath(path, patternPaint);
-
-        // ציור כוכב מודגש באמצע
-        drawStar(canvas, centerX, centerY, tileSize / 5, tileSize / 2.8f);
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+        // רקע עדין – אפרפר בהיר מאוד עם גוון שמנת
+        LinearGradient gradient = new LinearGradient(
+                0, 0, w, h,
+                new int[]{0xFFEFEFEF, 0xFFF9F8F3}, // פחות לבן, יותר רך
+                null, Shader.TileMode.CLAMP
+        );
+        gradientPaint.setShader(gradient);
     }
 
-    // פונקציה שמציירת כוכב עם 8 קודקודים
-    private void drawStar(Canvas canvas, float cx, float cy, float innerRadius, float outerRadius) {
-        Path path = new Path();
-        double angle = Math.PI / 4; // 8 קודקודים (45 מעלות הפרש)
+    private void drawSubtleWaves(Canvas canvas, int w, int h) {
+        // גל ראשון – אפור-כחלחל יוקרתי
+        Shader shader1 = new LinearGradient(0, 0, w, h,
+                0x70D0D3D4, 0x70E0E3E4, Shader.TileMode.CLAMP); // שקיפות פחותה (70)
+        wavePaint.setShader(shader1);
+        Path wave1 = new Path();
+        wave1.moveTo(0, h * 0.76f);
+        wave1.quadTo(w * 0.3f, h * 0.73f, w * 0.6f, h * 0.78f);
+        wave1.quadTo(w * 0.9f, h * 0.80f, w, h * 0.76f);
+        wave1.lineTo(w, h);
+        wave1.lineTo(0, h);
+        wave1.close();
+        canvas.drawPath(wave1, wavePaint);
 
-        for (int i = 0; i < 8; i++) {
-            float r = (i % 2 == 0) ? outerRadius : innerRadius;
-            float x = (float) (cx + r * Math.cos(i * angle));
-            float y = (float) (cy + r * Math.sin(i * angle));
-            if (i == 0) {
-                path.moveTo(x, y);
-            } else {
-                path.lineTo(x, y);
-            }
-        }
-        path.close();
-        canvas.drawPath(path, patternPaint);
+        // גל שני – פנינה אפרפר
+        Shader shader2 = new LinearGradient(0, 0, w, h,
+                0x60F0F0F0, 0x60FFFFFF, Shader.TileMode.CLAMP); // פחות שקוף
+        wavePaint.setShader(shader2);
+        Path wave2 = new Path();
+        wave2.moveTo(0, h * 0.81f);
+        wave2.quadTo(w * 0.3f, h * 0.78f, w * 0.7f, h * 0.83f);
+        wave2.quadTo(w * 0.9f, h * 0.86f, w, h * 0.82f);
+        wave2.lineTo(w, h);
+        wave2.lineTo(0, h);
+        wave2.close();
+        canvas.drawPath(wave2, wavePaint);
+
+        // גל שלישי – גוון שמנת רכה
+        Shader shader3 = new LinearGradient(0, 0, w, h,
+                0x50FFFDF4, 0x50FFF8E1, Shader.TileMode.CLAMP); // גם כאן פחות שקוף
+        wavePaint.setShader(shader3);
+        Path wave3 = new Path();
+        wave3.moveTo(0, h * 0.86f);
+        wave3.quadTo(w * 0.4f, h * 0.87f, w, h * 0.86f);
+        wave3.lineTo(w, h);
+        wave3.lineTo(0, h);
+        wave3.close();
+        canvas.drawPath(wave3, wavePaint);
     }
+
+
+
 }

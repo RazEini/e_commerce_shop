@@ -21,91 +21,53 @@ public class CustomBackgroundView2 extends View {
         int w = getWidth();
         int h = getHeight();
 
-        // רקע לבן דומיננטי במרכז (לשמור על רקע לבן)
-        canvas.drawColor(0xFFFFFFFF);
+        // רקע עדין עם גרדיאנט שקוף
+        Paint gradientPaint = new Paint();
+        LinearGradient gradient = new LinearGradient(0, 0, w, h,
+                0x80D4E0F6, 0x80F2F6FC, Shader.TileMode.CLAMP);
+        gradientPaint.setShader(gradient);
+        canvas.drawRect(0, 0, w, h, gradientPaint);
 
-        // גלים יותר מעניינים עם צורות לא סימטריות במיקומים חיצוניים
-        drawCreativeWaves(canvas, w, h);
+        // ציור גלים רכים
+        drawSoftWaves(canvas, w, h);
     }
 
-    private void drawCreativeWaves(Canvas canvas, int w, int h) {
+    private void drawSoftWaves(Canvas canvas, int w, int h) {
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setAntiAlias(true);
 
-        // גל ראשון - דרום-מערב
-        Shader shader = new LinearGradient(0, 0, w, h,
-                0x15FFA8C7, 0x15FF8A00, Shader.TileMode.CLAMP);  // שקיפות בינונית
-        paint.setShader(shader);
-        Path wavePath = new Path();
-        wavePath.moveTo(0, h);
-        wavePath.quadTo(w * 0.2f, h * 0.7f, w * 0.4f, h * 0.5f);  // שינוי בפיתול למתינות
-        wavePath.cubicTo(w * 0.55f, h * 0.4f, w * 0.75f, h * 0.3f, w, h * 0.4f);  // שיפוע יותר חלק
-        wavePath.lineTo(w, h);
-        wavePath.close();
-        canvas.drawPath(wavePath, paint);
+        // גל ראשון – תכלת
+        paint.setShader(new LinearGradient(0, 0, w, h, 0x80B9D6FF, 0x80D7E8FF, Shader.TileMode.CLAMP));
+        Path wavePath1 = new Path();
+        wavePath1.moveTo(0, h * 0.82f);  // היה 0.75
+        wavePath1.quadTo(w * 0.3f, h * 0.78f, w * 0.5f, h * 0.80f);
+        wavePath1.cubicTo(w * 0.7f, h * 0.85f, w * 0.9f, h * 0.79f, w, h * 0.76f);
+        wavePath1.lineTo(w, h);
+        wavePath1.lineTo(0, h);
+        wavePath1.close();
+        canvas.drawPath(wavePath1, paint);
 
-        // גל שני - צפון-מזרח - עדין יותר
-        shader = new LinearGradient(0, 0, w, h,
-                0x15A8C7FF, 0x155D55F5, Shader.TileMode.CLAMP);  // תכלת-סגול עם שקיפות בינונית יותר
-        paint.setShader(shader);
-        wavePath.reset();
-        wavePath.moveTo(w, 0);
-        wavePath.quadTo(w * 0.85f, h * 0.1f, w * 0.7f, h * 0.25f);  // שינוי בכיוון הגל
-        wavePath.cubicTo(w * 0.5f, h * 0.4f, w * 0.3f, h * 0.55f, 0, h * 0.45f);  // גל חלק וזורם
-        wavePath.lineTo(0, 0);
-        wavePath.close();
-        canvas.drawPath(wavePath, paint);
+        // גל שני – כחול בהיר יותר
+        paint.setShader(new LinearGradient(0, 0, w, h, 0x80B4E6FF, 0x80C8F1FF, Shader.TileMode.CLAMP));
+        Path wavePath2 = new Path();
+        wavePath2.moveTo(0, h * 0.85f);  // היה 0.78
+        wavePath2.quadTo(w * 0.4f, h * 0.81f, w * 0.6f, h * 0.83f);
+        wavePath2.cubicTo(w * 0.75f, h * 0.85f, w * 0.85f, h * 0.78f, w, h * 0.76f);
+        wavePath2.lineTo(w, h);
+        wavePath2.lineTo(0, h);
+        wavePath2.close();
+        canvas.drawPath(wavePath2, paint);
 
-        // גל שלישי - דרום-מערב
-        shader = new LinearGradient(0, 0, w, h,
-                0x1590EE90, 0x1500C896, Shader.TileMode.CLAMP);  // שקיפות בינונית יותר
-        paint.setShader(shader);
-        wavePath.reset();
-        wavePath.moveTo(0, h);
-        wavePath.quadTo(w * 0.2f, h * 0.8f, w * 0.4f, h * 0.65f);  // שינוי במיקום הנקודות
-        wavePath.cubicTo(w * 0.6f, h * 0.55f, w * 0.8f, h * 0.7f, w, h * 0.6f);  // גל עגלגל וזורם
-        wavePath.lineTo(w, h);
-        wavePath.lineTo(0, h);
-        wavePath.close();
-        canvas.drawPath(wavePath, paint);
-
-        // גל רביעי - יותר טבעי
-        shader = new LinearGradient(0, 0, w, h,
-                0x1074C8FF, 0x10B88CFE, Shader.TileMode.CLAMP);  // כחול יותר מעודן עם שקיפות בינונית
-        paint.setShader(shader);
-        wavePath.reset();
-        wavePath.moveTo(w, 0);
-        wavePath.quadTo(w * 0.7f, h * 0.05f, w * 0.5f, h * 0.3f);  // שינוי במיקום הנקודות
-        wavePath.cubicTo(w * 0.4f, h * 0.5f, w * 0.3f, h * 0.6f, 0, h * 0.5f);  // גל חלק וזורם
-        wavePath.lineTo(0, 0);
-        wavePath.close();
-        canvas.drawPath(wavePath, paint);
-
-        // גל חמישי - ירוק עדין יותר
-        shader = new LinearGradient(0, 0, w, h,
-                0x20D4E9A9, 0x2074C5A5, Shader.TileMode.CLAMP);  // שקיפות בינונית יותר
-        paint.setShader(shader);
-        wavePath.reset();
-        wavePath.moveTo(0, h * 0.9f);
-        wavePath.quadTo(w * 0.25f, h * 0.75f, w * 0.5f, h * 0.8f);  // עלייה ושקע חלקים יותר
-        wavePath.cubicTo(w * 0.7f, h * 0.85f, w * 0.85f, h * 0.7f, w, h * 0.75f);  // גל חלק
-        wavePath.lineTo(w, h);
-        wavePath.lineTo(0, h);
-        wavePath.close();
-        canvas.drawPath(wavePath, paint);
-
-        // גל חדש - סימטרי למעלה, בלי גבעות חזקות
-        shader = new LinearGradient(0, 0, w, h,
-                0x15A8C7FF, 0x15B88CFE, Shader.TileMode.CLAMP);  // צבעים עדינים עם שקיפות בינונית יותר
-        paint.setShader(shader);
-        wavePath.reset();
-        wavePath.moveTo(0, 0);
-        wavePath.quadTo(w * 0.05f, h * 0.1f, w * 0.2f, h * 0.2f);  // עלייה מתונה יותר קרוב לצד השמאלי
-        wavePath.cubicTo(w * 0.35f, h * 0.3f, w * 0.65f, h * 0.35f, w, h * 0.3f);  // ירידה רכה לקצה הימני
-        wavePath.lineTo(w, 0);  // עד הקצה הימני
-        wavePath.lineTo(0, 0);  // סגירה מחדש
-        wavePath.close();
-        canvas.drawPath(wavePath, paint);
+        // גל שלישי – שמנת בהירה
+        paint.setShader(new LinearGradient(0, 0, w, h, 0x60FFF5C1, 0x60FFE8B5, Shader.TileMode.CLAMP));
+        Path wavePath3 = new Path();
+        wavePath3.moveTo(0, h * 0.89f);  // היה 0.83
+        wavePath3.quadTo(w * 0.2f, h * 0.87f, w * 0.4f, h * 0.88f);
+        wavePath3.cubicTo(w * 0.6f, h * 0.89f, w * 0.8f, h * 0.87f, w, h * 0.85f);
+        wavePath3.lineTo(w, h);
+        wavePath3.lineTo(0, h);
+        wavePath3.close();
+        canvas.drawPath(wavePath3, paint);
     }
 }
