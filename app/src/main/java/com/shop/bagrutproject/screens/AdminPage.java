@@ -4,16 +4,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.shop.bagrutproject.R;
 import com.shop.bagrutproject.models.User;
@@ -36,6 +39,35 @@ public class AdminPage extends AppCompatActivity {
             getSupportActionBar().setCustomView(R.layout.action_bar_shop);
             TextView titlebar = findViewById(R.id.action_bar_text);
             titlebar.setText( "ברוך הבא 👋" + " המנהל");
+
+            ImageView shopIcon = findViewById(R.id.shop_intro);
+
+            shopIcon.setOnClickListener(v -> {
+                // אנימציית קפיצה
+                v.animate()
+                        .scaleX(1.1f)
+                        .scaleY(1.1f)
+                        .setDuration(100)
+                        .withEndAction(() -> v.animate()
+                                .scaleX(1f)
+                                .scaleY(1f)
+                                .setDuration(100))
+                        .start();
+
+                // יצירת BottomSheet
+                View sheetView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_shop, null);
+                BottomSheetDialog dialog = new BottomSheetDialog(this);
+                dialog.setContentView(sheetView);
+                dialog.show();
+
+                // לחיצה על כפתור
+                Button learnMoreBtn = sheetView.findViewById(R.id.btn_learn_more);
+                learnMoreBtn.setOnClickListener(btn -> {
+                    Intent Intent = new Intent(this, Odot.class);
+                    startActivity(Intent);
+                    finish();
+                });
+            });
         }
 
         Button btnLogoutAdmin = findViewById(R.id.btnLogoutAdmin);

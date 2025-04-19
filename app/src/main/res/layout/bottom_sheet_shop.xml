@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/rounded_top_background"
+    android:padding="24dp">
+
+    <TextView
+        android:id="@+id/shop_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ברוכים הבאים לחנות שלנו!"
+        android:textSize="18sp"
+        android:layout_gravity="right"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"/>
+
+    <TextView
+        android:id="@+id/shop_desc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="אנחנו כאן כדי לשדרג לכם את חוויית הקנייה."
+        android:textSize="14sp"
+        android:layout_gravity="right"
+        android:layout_marginTop="8dp"
+        android:textColor="#555555" />
+
+    <Button
+        android:id="@+id/btn_learn_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="קרא עוד"
+        android:textStyle="bold"
+        android:layout_gravity="right"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#000000"
+        android:textColor="#FFFFFF"/>
+</LinearLayout>

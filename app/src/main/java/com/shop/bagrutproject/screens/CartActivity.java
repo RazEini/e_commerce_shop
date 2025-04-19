@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.shop.bagrutproject.R;
@@ -75,6 +77,35 @@ public class CartActivity extends AppCompatActivity {
             String name = user.getfName();
 
             titlebar.setText(greeting + " " + name);
+
+            ImageView shopIcon = findViewById(R.id.shop_intro);
+
+            shopIcon.setOnClickListener(v -> {
+                // אנימציית קפיצה
+                v.animate()
+                        .scaleX(1.1f)
+                        .scaleY(1.1f)
+                        .setDuration(100)
+                        .withEndAction(() -> v.animate()
+                                .scaleX(1f)
+                                .scaleY(1f)
+                                .setDuration(100))
+                        .start();
+
+                // יצירת BottomSheet
+                View sheetView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_shop, null);
+                BottomSheetDialog dialog = new BottomSheetDialog(this);
+                dialog.setContentView(sheetView);
+                dialog.show();
+
+                // לחיצה על כפתור
+                Button learnMoreBtn = sheetView.findViewById(R.id.btn_learn_more);
+                learnMoreBtn.setOnClickListener(btn -> {
+                    Intent Intent = new Intent(this, Odot.class);
+                    startActivity(Intent);
+                    finish();
+                });
+            });
 
         }
 
