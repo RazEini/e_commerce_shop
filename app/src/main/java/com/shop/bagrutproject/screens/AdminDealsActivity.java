@@ -1,7 +1,9 @@
 package com.shop.bagrutproject.screens;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,7 +21,9 @@ import com.shop.bagrutproject.models.Deal;
 import com.shop.bagrutproject.services.DatabaseService;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class AdminDealsActivity extends AppCompatActivity {
 
@@ -38,6 +42,32 @@ public class AdminDealsActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+
+        editValidUntil = findViewById(R.id.editValidUntil);
+        if (editValidUntil != null) {
+            editValidUntil.setOnClickListener(v -> {
+                final Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH);
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        AdminDealsActivity.this,
+                        (view, selectedYear, selectedMonth, selectedDay) -> {
+                            // פורמט: יום/חודש/שנה
+                            String formattedDate = String.format(Locale.getDefault(), "%02d/%02d/%d", selectedDay, selectedMonth + 1, selectedYear);
+                            editValidUntil.setText(formattedDate);
+                        },
+                        year, month, day
+                );
+
+                datePickerDialog.show();
+            });
+        } else {
+            Log.e("AdminDealsActivity", "editValidUntil is null");
+        }
+
+
 
         // אתחול השדות
         editTitle = findViewById(R.id.editTitle);
