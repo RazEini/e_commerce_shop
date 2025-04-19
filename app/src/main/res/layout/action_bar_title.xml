@@ -1,31 +1,49 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="end|center_vertical"
-    android:paddingEnd="16dp">
+    android:layout_height="?attr/actionBarSize"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
 
-    <ImageButton
+    <ImageView
+        android:id="@+id/shop_intro"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:background="@drawable/round_icon_border"
+        android:contentDescription="סמל חנות"
+        android:padding="8dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_shopping_bag"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+    <TextView
+        android:id="@+id/subtitle_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_shopping_bag"
-        android:contentDescription="פריט שמאלי"
-        android:layout_marginStart="8dp"
-        android:background="?android:attr/selectableItemBackground" />
+        android:layout_marginStart="12dp"
+        android:fontFamily="sans-serif"
+        android:text="נעים מאוד!"
+        android:textColor="#777777"
+        android:textSize="14sp"
+        app:layout_constraintStart_toEndOf="@id/shop_intro"
+        app:layout_constraintTop_toTopOf="@id/shop_intro" />
 
     <TextView
         android:id="@+id/action_bar_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="תפריט חנות"
-        android:textSize="19sp"
+        android:layout_marginTop="2dp"
+        android:fontFamily="sans-serif-medium"
+        android:letterSpacing="0.03"
+        android:text="ברוכים הבאים לחנות"
         android:textColor="@android:color/black"
+        android:textSize="20sp"
         android:textStyle="bold"
-        android:fontFamily="sans-serif-condensed"
-        android:layout_marginStart="16dp"
-        android:shadowColor="#AAAAAA"
-        android:shadowDx="1"
-        android:shadowDy="1" />
-
-</LinearLayout>
+        app:layout_constraintStart_toStartOf="@id/subtitle_text"
+        app:layout_constraintTop_toBottomOf="@id/subtitle_text"
+        app:layout_constraintBottom_toBottomOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
