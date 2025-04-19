@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -26,6 +27,19 @@ public class UserAfterLoginPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_user_after_login_page);
+
+        if (getSupportActionBar() != null) {
+
+            // הגדרת כותרת מותאמת אישית
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayShowCustomEnabled(true);
+            getSupportActionBar().setCustomView(R.layout.action_bar_shop);
+            TextView titlebar = findViewById(R.id.action_bar_text);
+            User user = SharedPreferencesUtil.getUser(this);
+            String currentUserName = user.getfName() + " " + user.getlName();
+            titlebar.setText("ברוך הבא \uD83D\uDC4B " + currentUserName);
+        }
+
         AuthenticationService.getInstance();
 
         Button btnLogout = findViewById(R.id.btnLogout);
@@ -72,9 +86,6 @@ public class UserAfterLoginPage extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_user, menu);
-        User user = SharedPreferencesUtil.getUser(this);
-        String currentUserName = user.getfName() + " " + user.getlName();
-        setTitle("ברוך הבא \uD83D\uDC4B " + currentUserName);
         return true;
     }
 

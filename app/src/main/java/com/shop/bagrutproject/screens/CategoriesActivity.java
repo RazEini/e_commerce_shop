@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +33,22 @@ public class CategoriesActivity extends AppCompatActivity {
 
         gridView = findViewById(R.id.gridView);
         categoryList = new ArrayList<>();
+
+        if (getSupportActionBar() != null) {
+
+            // הגדרת כותרת מותאמת אישית
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayShowCustomEnabled(true);
+            getSupportActionBar().setCustomView(R.layout.action_bar_shop);
+            TextView titlebar = findViewById(R.id.action_bar_text);
+            if (SharedPreferencesUtil.isAdmin(this)) {
+                titlebar.setText("ברוך הבא לחנות \uD83D\uDC4B " + "המנהל");
+            } else {
+                User user = SharedPreferencesUtil.getUser(this);
+                String currentUserName = user.getfName() + " " + user.getlName();
+                titlebar.setText("ברוך הבא לחנות \uD83D\uDC4B " + currentUserName);
+            }
+        }
 
         // הוספת קטגוריה של כל המוצרים
         categoryList.add(new Category("כל המוצרים", R.drawable.all_items_catagory));
@@ -72,13 +89,9 @@ public class CategoriesActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         if(SharedPreferencesUtil.isAdmin(this)){
             getMenuInflater().inflate(R.menu.menu_catagoriesadmin, menu);
-            setTitle("ברוך הבא לחנות \uD83D\uDC4B " + "המנהל");
         }
         else{
             getMenuInflater().inflate(R.menu.menu_catagorys, menu);
-            User user = SharedPreferencesUtil.getUser(this);
-            String currentUserName = user.getfName() + " " + user.getlName();
-            setTitle("ברוך הבא לחנות \uD83D\uDC4B " + currentUserName);
         }
         return true;
     }

@@ -56,6 +56,35 @@ public class ShopActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shop);
 
+        if (getSupportActionBar() != null) {
+
+            // הגדרת כותרת מותאמת אישית
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayShowCustomEnabled(true);
+            getSupportActionBar().setCustomView(R.layout.action_bar_shop);
+            TextView titlebar = findViewById(R.id.action_bar_text);
+            String greeting;
+
+            // קבלת השעה הנוכחית
+            int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+
+            if (hour >= 5 && hour < 12) {
+                greeting = "בוקר טוב";
+            } else if (hour >= 12 && hour < 18) {
+                greeting = "צהריים טובים";
+            } else {
+                greeting = "ערב טוב";
+            }
+
+            if (SharedPreferencesUtil.isAdmin(this)) {
+                titlebar.setText(greeting + " " + "המנהל");
+            } else {
+                User user = SharedPreferencesUtil.getUser(this);
+                String currentUserName = user.getfName();
+                titlebar.setText(greeting + " " + currentUserName);
+            }
+        }
+
         // קבלת שם הקטגוריה מ-Intent
         selectedCategory = getIntent().getStringExtra("category");
 
@@ -241,27 +270,10 @@ public class ShopActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        String greeting;
-
-        // קבלת השעה הנוכחית
-        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-
-        if (hour >= 5 && hour < 12) {
-            greeting = "בוקר טוב";
-        } else if (hour >= 12 && hour < 18) {
-            greeting = "צהריים טובים";
-        } else {
-            greeting = "ערב טוב";
-        }
-
         if (SharedPreferencesUtil.isAdmin(this)) {
             getMenuInflater().inflate(R.menu.menu_shopadmin, menu);
-            setTitle(greeting + ", \uD83D\uDECD\uFE0F המנהל");
         } else {
             getMenuInflater().inflate(R.menu.menu_shop, menu);
-            User user = SharedPreferencesUtil.getUser(this);
-            String currentUserName = user.getfName();
-            setTitle(greeting + ", \uD83D\uDECD\uFE0F " + currentUserName);
         }
 
         return true;

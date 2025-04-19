@@ -51,6 +51,33 @@ public class CartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
 
+        if (getSupportActionBar() != null) {
+
+            // הגדרת כותרת מותאמת אישית
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayShowCustomEnabled(true);
+            getSupportActionBar().setCustomView(R.layout.action_bar_shop);
+            TextView titlebar = findViewById(R.id.action_bar_text);
+            String greeting;
+
+            // קבלת השעה הנוכחית
+            int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
+
+            if (hour >= 5 && hour < 12) {
+                greeting = "בוקר טוב";
+            } else if (hour >= 12 && hour < 18) {
+                greeting = "צהריים טובים";
+            } else {
+                greeting = "ערב טוב";
+            }
+
+            User user = SharedPreferencesUtil.getUser(this);
+            String name = user.getfName();
+
+            titlebar.setText(greeting + " " + name);
+
+        }
+
         cartListView = findViewById(R.id.lvCart);
         totalPriceText = findViewById(R.id.cartItemsText);
         checkoutButton = findViewById(R.id.btnCheckout);
@@ -153,23 +180,6 @@ public class CartActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_cart, menu);
-
-        int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-        String greeting;
-
-        if (hour >= 5 && hour < 12) {
-            greeting = "בוקר טוב";
-        } else if (hour >= 12 && hour < 18) {
-            greeting = "צהריים טובים";
-        } else {
-            greeting = "ערב טוב";
-        }
-
-        User user = SharedPreferencesUtil.getUser(this);
-        String name = user.getfName();
-
-        setTitle(greeting + "," + "🛒" + " " + name);
-
         return true;
     }
 

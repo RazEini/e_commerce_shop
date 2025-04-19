@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -26,6 +27,16 @@ public class AdminPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_admin_page);
+
+        if (getSupportActionBar() != null) {
+
+            // הגדרת כותרת מותאמת אישית
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
+            getSupportActionBar().setDisplayShowCustomEnabled(true);
+            getSupportActionBar().setCustomView(R.layout.action_bar_shop);
+            TextView titlebar = findViewById(R.id.action_bar_text);
+            titlebar.setText( "ברוך הבא 👋" + " המנהל");
+        }
 
         Button btnLogoutAdmin = findViewById(R.id.btnLogoutAdmin);
         Button btnAddItem = findViewById(R.id.btn_add_product);
@@ -110,7 +121,6 @@ public class AdminPage extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_admin, menu);
-        setTitle( "ברוך הבא 👋" + " המנהל");
         return true;
     }
 
