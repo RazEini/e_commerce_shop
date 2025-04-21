@@ -17,16 +17,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.shop.bagrutproject.R;
-import com.shop.bagrutproject.adapters.OrderAdapter;
+import com.shop.bagrutproject.adapters.AdminOrderAdapter;
 import com.shop.bagrutproject.models.Order;
-import com.shop.bagrutproject.utils.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class AdminOrderHistoryActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
-    private OrderAdapter orderAdapter;
+    private AdminOrderAdapter adminOrderAdapter; // השתמש ב-AdminOrderAdapter
     private List<Order> orders;
     private static final String TAG = "AdminOrderHistory";
 
@@ -43,8 +42,9 @@ public class AdminOrderHistoryActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         orders = new ArrayList<>();
-        orderAdapter = new OrderAdapter(orders);
-        recyclerView.setAdapter(orderAdapter);
+        adminOrderAdapter = new AdminOrderAdapter(orders); // השתמש ב-AdminOrderAdapter
+        recyclerView.setAdapter(adminOrderAdapter);
+
         Button backButton = findViewById(R.id.backToAdminPageButton);
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,7 +69,7 @@ public class AdminOrderHistoryActivity extends AppCompatActivity {
                         orders.add(order);
                     }
                 }
-                orderAdapter.notifyDataSetChanged();
+                adminOrderAdapter.notifyDataSetChanged(); // עדכון לאדפטר החדש
             }
 
             @Override

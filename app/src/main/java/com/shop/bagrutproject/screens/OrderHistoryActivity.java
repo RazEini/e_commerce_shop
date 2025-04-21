@@ -63,14 +63,6 @@ public class OrderHistoryActivity extends AppCompatActivity {
             fetchOrders(user.getUid());
         }
 
-        Button btnDeleteOldOrders = findViewById(R.id.btnDeleteOldOrders);
-        btnDeleteOldOrders.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                deleteOldOrders();
-            }
-        });
-
         btnBack.setOnClickListener(v -> {
             Intent intent = new Intent(OrderHistoryActivity.this, UserAfterLoginPage.class);
             startActivity(intent);
@@ -78,17 +70,18 @@ public class OrderHistoryActivity extends AppCompatActivity {
         });
     }
 
+    // בתוך fetchOrders
     private void fetchOrders(String userId) {
         databaseService.getOrders(new DatabaseService.DatabaseCallback<List<Order>>() {
             @Override
             public void onCompleted(List<Order> ordersList) {
+                // אם אין הזמנות
+                if (ordersList == null || ordersList.isEmpty()) {
+                    Toast.makeText(OrderHistoryActivity.this, "לא נמצאו הזמנות", Toast.LENGTH_SHORT).show();
+                }
 
-                ordersList.removeIf(new Predicate<Order>() {
-                    @Override
-                    public boolean test(Order order) {
-                        return !Objects.equals(order.getUserId(), userId);
-                    }
-                });
+                // סינון הזמנות של המשתמש הנוכחי
+                ordersList.removeIf(order -> !Objects.equals(order.getUserId(), userId));
 
                 orders.clear();
                 orders.addAll(ordersList);
@@ -99,33 +92,8 @@ public class OrderHistoryActivity extends AppCompatActivity {
             @Override
             public void onFailed(Exception e) {
                 Log.e("OrderHistoryActivity", "Error fetching orders", e);
+                Toast.makeText(OrderHistoryActivity.this, "שגיאה בטעינת הזמנות", Toast.LENGTH_SHORT).show();
             }
         });
     }
-
-    private void deleteOldOrders() {
-        DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("orders");
-        long thirtyDaysInMillis = 30L * 24 * 60 * 60 * 1000; // 30 ימים ב-milliseconds
-        long currentTime = System.currentTimeMillis();
-
-        ordersRef.orderByChild("timestamp").endAt(currentTime - thirtyDaysInMillis)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                            snapshot.getRef().removeValue(); // מחיקת ההזמנה הישנה
-                        }
-                        Toast.makeText(OrderHistoryActivity.this, "הזמנות ישנות נמחקו", Toast.LENGTH_SHORT).show();
-                        // רענון ה-RecyclerView אחרי מחיקת ההזמנות
-                        fetchOrders(user.getUid());
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Toast.makeText(OrderHistoryActivity.this, "שגיאה: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
-
 }

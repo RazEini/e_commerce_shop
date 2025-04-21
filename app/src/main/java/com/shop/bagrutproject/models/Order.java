@@ -78,6 +78,11 @@ public class Order implements Serializable {
         return sdf.format(new Date(this.timestamp));
     }
 
+    public String getFormattedDate() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+        return sdf.format(new Date(this.timestamp));
+    }
+
     @Override
     public String toString() {
         return "Order{" +
