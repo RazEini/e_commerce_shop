@@ -122,7 +122,7 @@ public class AdminOrderAdapter extends RecyclerView.Adapter<AdminOrderAdapter.Ad
                                             if (adapterPosition != RecyclerView.NO_POSITION) {
                                                 // מחיקת הפריט מהרשימה המקומית
                                                 orders.remove(adapterPosition);
-                                                notifyDataSetChanged();
+                                                notifyItemRemoved(adapterPosition);
                                             }
                                         } else {
                                             Toast.makeText(holder.itemView.getContext(), "שגיאה במחיקה", Toast.LENGTH_SHORT).show();

@@ -59,7 +59,7 @@ public class AdminOrderHistoryActivity extends AppCompatActivity {
     private void fetchAllOrders() {
         DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("orders");
 
-        ordersRef.addValueEventListener(new ValueEventListener() {
+        ordersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 orders.clear();
@@ -74,8 +74,7 @@ public class AdminOrderHistoryActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "Error fetching orders", error.toException());
-                Toast.makeText(AdminOrderHistoryActivity.this, "שגיאה בטעינת ההזמנות", Toast.LENGTH_SHORT).show();
+
             }
         });
     }
