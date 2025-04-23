@@ -1,5 +1,6 @@
 package com.shop.bagrutproject.screens;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -38,6 +39,15 @@ public class AdminOrderHistoryActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
 
+        Button archiveButton = findViewById(R.id.buttonGoToArchivedOrders);
+        archiveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(AdminOrderHistoryActivity.this, ArchivedOrdersActivity.class);
+                startActivity(intent);
+            }
+        });
+
         recyclerView = findViewById(R.id.recyclerViewOrders);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -55,6 +65,13 @@ public class AdminOrderHistoryActivity extends AppCompatActivity {
 
         fetchAllOrders();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        fetchAllOrders();
+    }
+
 
     private void fetchAllOrders() {
         DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("orders");

@@ -72,27 +72,55 @@ public class OrderHistoryActivity extends AppCompatActivity {
 
     // בתוך fetchOrders
     private void fetchOrders(String userId) {
-        databaseService.getOrders(new DatabaseService.DatabaseCallback<List<Order>>() {
+        List<Order> combinedOrders = new ArrayList<>();
+
+        // שליפה ראשונה - מה-orders הרגיל
+        DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("orders");
+        ordersRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onCompleted(List<Order> ordersList) {
-                // אם אין הזמנות
-                if (ordersList == null || ordersList.isEmpty()) {
-                    Toast.makeText(OrderHistoryActivity.this, "לא נמצאו הזמנות", Toast.LENGTH_SHORT).show();
+            public void onDataChange(DataSnapshot snapshot) {
+                for (DataSnapshot orderSnap : snapshot.getChildren()) {
+                    Order order = orderSnap.getValue(Order.class);
+                    if (order != null && order.getUserId().equals(userId)) {
+                        combinedOrders.add(order);
+                    }
                 }
 
-                // סינון הזמנות של המשתמש הנוכחי
-                ordersList.removeIf(order -> !Objects.equals(order.getUserId(), userId));
+                // שליפה שנייה - מה-archivedOrders
+                DatabaseReference archivedRef = FirebaseDatabase.getInstance().getReference("archivedOrders");
+                archivedRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        for (DataSnapshot archivedSnap : snapshot.getChildren()) {
+                            Order order = archivedSnap.getValue(Order.class);
+                            if (order != null && order.getUserId().equals(userId)) {
+                                combinedOrders.add(order);
+                            }
+                        }
 
-                orders.clear();
-                orders.addAll(ordersList);
-                orderAdapter = new OrderAdapter(orders);
-                recyclerView.setAdapter(orderAdapter);
+                        // עדכון הרשימה הסופית
+                        if (combinedOrders.isEmpty()) {
+                            Toast.makeText(OrderHistoryActivity.this, "לא נמצאו הזמנות", Toast.LENGTH_SHORT).show();
+                        }
+
+                        orders.clear();
+                        orders.addAll(combinedOrders);
+                        orderAdapter = new OrderAdapter(orders);
+                        recyclerView.setAdapter(orderAdapter);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        Toast.makeText(OrderHistoryActivity.this, "שגיאה בטעינת ארכיון ההזמנות", Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "Error loading archived orders", error.toException());
+                    }
+                });
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Log.e("OrderHistoryActivity", "Error fetching orders", e);
-                Toast.makeText(OrderHistoryActivity.this, "שגיאה בטעינת הזמנות", Toast.LENGTH_SHORT).show();
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(OrderHistoryActivity.this, "שגיאה בטעינת ההזמנות", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "Error loading orders", error.toException());
             }
         });
     }
