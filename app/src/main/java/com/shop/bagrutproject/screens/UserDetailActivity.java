@@ -7,11 +7,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.shop.bagrutproject.R;
 import com.shop.bagrutproject.adapters.OrderAdapter;
 import com.shop.bagrutproject.models.Order;
@@ -98,26 +104,55 @@ public class UserDetailActivity extends AppCompatActivity {
     }
 
     private void fetchOrders(String userId) {
-        databaseService.getOrders(new DatabaseService.DatabaseCallback<List<Order>>() {
-            @Override
-            public void onCompleted(List<Order> ordersList) {
+        List<Order> combinedOrders = new ArrayList<>();
 
-                ordersList.removeIf(new Predicate<Order>() {
+        // שליפה ראשונה - מה-orders הרגיל
+        DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("orders");
+        ordersRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                for (DataSnapshot orderSnap : snapshot.getChildren()) {
+                    Order order = orderSnap.getValue(Order.class);
+                    if (order != null && order.getUserId().equals(userId)) {
+                        combinedOrders.add(order);
+                    }
+                }
+
+                // שליפה שנייה - מה-archivedOrders
+                DatabaseReference archivedRef = FirebaseDatabase.getInstance().getReference("archivedOrders");
+                archivedRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public boolean test(Order order) {
-                        return !Objects.equals(order.getUserId(), userId);
+                    public void onDataChange(DataSnapshot snapshot) {
+                        for (DataSnapshot archivedSnap : snapshot.getChildren()) {
+                            Order order = archivedSnap.getValue(Order.class);
+                            if (order != null && order.getUserId().equals(userId)) {
+                                combinedOrders.add(order);
+                            }
+                        }
+
+                        // עדכון הרשימה הסופית
+                        if (combinedOrders.isEmpty()) {
+                            Toast.makeText(UserDetailActivity.this, "לא נמצאו הזמנות", Toast.LENGTH_SHORT).show();
+                        }
+
+                        orders.clear();
+                        orders.addAll(combinedOrders);
+                        orderAdapter = new OrderAdapter(orders);
+                        recyclerView.setAdapter(orderAdapter);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError error) {
+                        Toast.makeText(UserDetailActivity.this, "שגיאה בטעינת ארכיון ההזמנות", Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "Error loading archived orders", error.toException());
                     }
                 });
-
-                orders.clear();
-                orders.addAll(ordersList);
-                orderAdapter = new OrderAdapter(orders);
-                recyclerView.setAdapter(orderAdapter);
             }
 
             @Override
-            public void onFailed(Exception e) {
-                Log.e("UserDetailActivity", "Error fetching orders", e);
+            public void onCancelled(DatabaseError error) {
+                Toast.makeText(UserDetailActivity.this, "שגיאה בטעינת ההזמנות", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "Error loading orders", error.toException());
             }
         });
     }

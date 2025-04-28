@@ -16,6 +16,22 @@
         android:layout_height="match_parent"
         android:padding="16dp">
 
+        <TextView
+            android:id="@+id/pageTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="פרטי המשתמש"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="#37474F"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
         <!-- כפתור חזרה -->
         <ImageButton
             android:id="@+id/btnBack"

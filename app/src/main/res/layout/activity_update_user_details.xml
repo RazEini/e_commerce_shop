@@ -8,21 +8,23 @@
     android:background="#f0f0f0"
     tools:context=".screens.UpdateUserDetailsActivity">
 
+    <!-- רקע מותאם אישית -->
     <com.shop.bagrutproject.models.CustomBackgroundView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="fitXY">
-    </com.shop.bagrutproject.models.CustomBackgroundView>
+        android:scaleType="fitXY" />
 
+    <!-- תוכן -->
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:padding="16dp"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="50dp">
 
         <TextView
@@ -38,40 +40,41 @@
 
         <EditText
             android:id="@+id/editTextFirstName"
-            android:layout_width="350sp"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
             android:hint="שם פרטי"
             android:inputType="textPersonName"
             android:padding="12dp"
             android:textStyle="bold"
-            android:background="@drawable/edit_text_background"/>
+            android:background="@drawable/edit_text_background" />
 
         <EditText
             android:id="@+id/editTextLastName"
-            android:layout_width="350sp"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
             android:hint="שם משפחה"
             android:inputType="textPersonName"
             android:padding="12dp"
             android:textStyle="bold"
-            android:background="@drawable/edit_text_background"/>
+            android:background="@drawable/edit_text_background" />
 
         <EditText
             android:id="@+id/editTextPhone"
-            android:layout_width="350sp"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
             android:hint="מספר טלפון"
+            android:gravity="right"
             android:inputType="phone"
             android:padding="12dp"
             android:textStyle="bold"
-            android:background="@drawable/edit_text_background"/>
+            android:background="@drawable/edit_text_background" />
 
         <EditText
             android:id="@+id/editTextEmail"
-            android:layout_width="350sp"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="30dp"
             android:hint="אימייל"
@@ -79,20 +82,20 @@
             android:padding="12dp"
             android:textStyle="bold"
             android:enabled="false"
-            android:background="@drawable/edit_text_background"/>
+            android:background="@drawable/edit_text_background" />
 
         <EditText
             android:id="@+id/editTextPassword"
-            android:layout_width="350sp"
+            android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="50dp"
             android:hint="סיסמה"
+            android:gravity="right"
             android:inputType="textPassword|textNoSuggestions"
             android:padding="12dp"
             android:textStyle="bold"
             android:enabled="false"
-            android:background="@drawable/edit_text_background"/>
-
+            android:background="@drawable/edit_text_background" />
 
         <Button
             android:id="@+id/buttonUpdate"
@@ -118,12 +121,8 @@
             android:textStyle="bold"
             android:backgroundTint="@color/black"
             android:elevation="4dp"
-            app:layout_constraintTop_toBottomOf="@id/btnSubmit"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:onClick="btnBack4"/>
+            android:onClick="btnBack4" />
 
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
-

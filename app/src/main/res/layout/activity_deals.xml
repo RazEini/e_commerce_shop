@@ -24,12 +24,24 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_gravity="end"
-            android:layout_marginBottom="20sp"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:contentDescription="Back"
             android:src="@android:drawable/ic_menu_revert"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp" />
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- כותרת -->
+        <TextView
+            android:id="@+id/tvDealsTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="מבצעים"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="16dp" />
 
         <!-- RecyclerView של מבצעים -->
         <androidx.recyclerview.widget.RecyclerView

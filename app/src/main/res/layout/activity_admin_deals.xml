@@ -1,14 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- רקע מותאם אישית בשכבה התחתונה -->
+    <!-- רקע מותאם אישית -->
     <com.shop.bagrutproject.models.CustomBackgroundView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY" />
 
-    <!-- שכבת תוכן מעל הרקע -->
+    <!-- תוכן עיקרי -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -16,96 +17,113 @@
 
         <LinearLayout
             android:orientation="vertical"
-            android:padding="16dp"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:padding="16dp">
 
+            <!-- כפתור חזור -->
             <ImageButton
                 android:id="@+id/btnBack9"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="end"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
-                android:contentDescription="Back"
                 android:src="@android:drawable/ic_menu_revert"
+                android:contentDescription="חזור"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp" />
 
+            <!-- כותרת -->
+            <TextView
+                android:id="@+id/dealTitleText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="הוספת מבצע חדש"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:textColor="@android:color/black"
+                android:layout_marginTop="16dp"
+                android:layout_gravity="center" />
+
+            <!-- שדות קלט -->
             <EditText
                 android:id="@+id/editTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="הכנס שם מבצע"
                 android:background="@drawable/edit_text_background"
-                android:layout_marginTop="20sp"
-                android:layout_marginBottom="20sp"
                 android:padding="12dp"
-                android:hint="הכנס שם מבצע" />
+                android:layout_marginTop="24dp" />
 
             <EditText
                 android:id="@+id/editDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="הכנס תיאור מבצע"
                 android:background="@drawable/edit_text_background"
-                android:layout_marginBottom="20sp"
                 android:padding="12dp"
-                android:hint="הכנס תיאור מבצע" />
+                android:layout_marginTop="16dp" />
 
             <EditText
                 android:id="@+id/editDiscount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="הכנס אחוז הנחה"
                 android:background="@drawable/edit_text_background"
-                android:layout_marginBottom="20sp"
                 android:padding="12dp"
-                android:hint="הכנס אחוז הנחה" />
+                android:layout_marginTop="16dp"
+                android:inputType="numberDecimal" />
 
             <EditText
                 android:id="@+id/editValidUntil"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/edit_text_background"
-                android:layout_marginBottom="20sp"
-                android:padding="12dp"
                 android:hint="בחר תאריך תפוגה"
+                android:background="@drawable/edit_text_background"
+                android:padding="12dp"
                 android:focusable="false"
-                android:clickable="true" />
+                android:clickable="true"
+                android:layout_marginTop="16dp" />
 
+            <!-- כפתורים -->
             <Button
                 android:id="@+id/btnAddDeal"
-                android:layout_gravity="right"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="הוסף מבצע"
-                android:backgroundTint="@color/black"
                 android:textStyle="bold"
-                android:layout_marginTop="10dp"/>
+                android:backgroundTint="@color/black"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="24dp" />
 
             <Button
                 android:id="@+id/btnViewDeals"
-                android:layout_gravity="right"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="הצג מבצעים"
-                android:backgroundTint="@color/black"
                 android:textStyle="bold"
-                android:layout_marginTop="10dp"/>
+                android:backgroundTint="@color/black"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="12dp" />
 
             <Button
                 android:id="@+id/btnHideDeals"
-                android:layout_gravity="right"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="הסתר מבצעים"
-                android:backgroundTint="@color/black"
                 android:textStyle="bold"
-                android:layout_marginTop="10dp"
+                android:backgroundTint="@color/black"
+                android:textColor="@android:color/white"
+                android:layout_marginTop="12dp"
                 android:visibility="gone" />
 
+            <!-- רשימת מבצעים -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewDeals"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="24dp" />
+
         </LinearLayout>
     </ScrollView>
 </FrameLayout>

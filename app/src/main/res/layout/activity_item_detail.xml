@@ -24,6 +24,19 @@
             android:gravity="center_horizontal"
             android:background="@android:color/transparent">
 
+            <TextView
+                android:id="@+id/pageTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="פרטי המוצר"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:layout_marginTop="24dp"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal" />
+
+
             <ImageView
                 android:id="@+id/itemImage"
                 android:layout_width="240dp"
