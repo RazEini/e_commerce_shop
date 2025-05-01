@@ -24,6 +24,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.shop.bagrutproject.R;
 import com.shop.bagrutproject.adapters.ItemsAdapter;
 import com.shop.bagrutproject.models.Cart;
+import com.shop.bagrutproject.models.Deal;
 import com.shop.bagrutproject.models.Item;
 import com.google.firebase.database.DatabaseReference;
 import com.shop.bagrutproject.models.User;
@@ -34,6 +35,7 @@ import com.shop.bagrutproject.utils.SharedPreferencesUtil;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class ShopActivity extends AppCompatActivity {
 
@@ -278,14 +280,44 @@ public class ShopActivity extends AppCompatActivity {
         if (SharedPreferencesUtil.isAdmin(ShopActivity.this)) {
             totalPriceText.setVisibility(View.GONE);
         } else {
-            double totalPrice = 0;
-            for (Item item : this.cart.getItems()) {
-                totalPrice += item.getPrice();
-            }
-            totalPriceText.setText("סך הכל: ₪" + totalPrice);
-            totalPriceText.setVisibility(View.VISIBLE);
+            // השתמשנו ב-AtomicReference לאחסון המחיר הכולל בצורה בטוחה בתוך קריאה אסינכרונית
+            final AtomicReference<Double> totalPriceRef = new AtomicReference<>(0.0);
+
+            // קריאה למבצעי הנחה מהפיירבייס
+            databaseService.getAllDeals(new DatabaseService.DatabaseCallback<List<Deal>>() {
+                @Override
+                public void onCompleted(List<Deal> deals) {
+                    // חישוב המחיר הכולל
+                    for (Item item : cart.getItems()) {
+                        double itemPrice = item.getPrice();
+                        double finalPrice = itemPrice;
+
+                        // חיפוש אחר מבצע תקף לכל פריט
+                        for (Deal deal : deals) {
+                            if (deal.isValid() && deal.getItemType().equals(item.getType())) {
+                                double discount = deal.getDiscountPercentage();
+                                finalPrice = itemPrice * (1 - discount / 100);
+                                break; // מצאנו הנחה עבור הפריט, נצא מהלולאה
+                            }
+                        }
+
+                        // עדכון המחיר הכולל
+                        totalPriceRef.set(totalPriceRef.get() + finalPrice);
+                    }
+
+                    // עדכון התצוגה של המחיר הכולל
+                    totalPriceText.setText("סך הכל: ₪" + totalPriceRef.get());
+                    totalPriceText.setVisibility(View.VISIBLE);
+                }
+
+                @Override
+                public void onFailed(Exception e) {
+                    // טיפול בשגיאה אם קרתה
+                }
+            });
         }
     }
+
 
     // עדכון מספר המוצרים בעגלה
     private void updateCartItemCount() {
