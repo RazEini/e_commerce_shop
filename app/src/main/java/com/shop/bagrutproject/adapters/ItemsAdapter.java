@@ -4,6 +4,12 @@ import static android.content.Intent.getIntent;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StrikethroughSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +22,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 import com.shop.bagrutproject.R;
+import com.shop.bagrutproject.models.Deal;
 import com.shop.bagrutproject.models.Item;
 import com.shop.bagrutproject.screens.ItemDetailActivity;
 import com.shop.bagrutproject.screens.ShopActivity;
@@ -28,28 +35,25 @@ import java.util.List;
 
 public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHolder> {
 
+    private static final String TAG = "ItemsAdapter";
+    private List<Item> originalItemsList;
+    private List<Item> filteredItemsList;
+    private Context context;
     private DatabaseService databaseService;
-
 
     public interface ItemClickListener {
         void onClick(Item item);
     }
 
-    private static final String TAG = "ItemsAdapter";
-    private List<Item> originalItemsList;
-    private List<Item> filteredItemsList;
-    private Context context;
-
-
     @Nullable
     private final ItemClickListener itemClickListener;
 
-    public ItemsAdapter(List<Item> itemsList, Context context, @Nullable final ItemClickListener itemClickListener) {
+    public ItemsAdapter(List<Item> itemsList, Context context, @Nullable ItemClickListener itemClickListener) {
         this.originalItemsList = itemsList;
         this.filteredItemsList = new ArrayList<>(itemsList);
         this.context = context;
         this.itemClickListener = itemClickListener;
-        filter("");
+        this.databaseService = DatabaseService.getInstance();
     }
 
     @Override
@@ -71,22 +75,22 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
 
     public class ItemViewHolder extends RecyclerView.ViewHolder {
         private ImageView previewImageView;
-        private TextView previewTextView;
-        private TextView previewPriceTextView;
-        private TextView previewDescriptionTextView; // תיאור המוצר
-        private RatingBar previewRatingBar; // דירוג המוצר
+        private TextView previewTextView, previewPriceTextView, previewDescriptionTextView, oldPriceTextView;
+        private RatingBar previewRatingBar;
         private ImageButton addToCartButton;
         private String itemId;
+        private TextView dealtag;
 
         public ItemViewHolder(View itemView) {
             super(itemView);
             previewImageView = itemView.findViewById(R.id.PreviewimageView);
             previewTextView = itemView.findViewById(R.id.PreviewtextView);
             previewPriceTextView = itemView.findViewById(R.id.PreviewPriceTextView);
-            previewDescriptionTextView = itemView.findViewById(R.id.PreviewDescriptionTextView); // תיאור המוצר
-            previewRatingBar = itemView.findViewById(R.id.PreviewRatingBar); // דירוג המוצר
+            previewDescriptionTextView = itemView.findViewById(R.id.PreviewDescriptionTextView);
+            previewRatingBar = itemView.findViewById(R.id.PreviewRatingBar);
             addToCartButton = itemView.findViewById(R.id.addToCartButton);
-
+            oldPriceTextView = itemView.findViewById(R.id.oldPriceTextView); // הוספת טקסט למחיר ישן עם קו חוצה
+            dealtag = itemView.findViewById(R.id.saleTag);
 
             itemView.setOnClickListener(v -> {
                 Item item = filteredItemsList.get(getAdapterPosition());
@@ -95,6 +99,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
                 context.startActivity(intent);
             });
 
+            // הצגת כפתור הוספה לעגלה רק אם לא מדובר במנהל
             if (SharedPreferencesUtil.isAdmin(context)) {
                 addToCartButton.setVisibility(View.GONE);
             } else {
@@ -105,35 +110,81 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
         public void bindItem(final Item item) {
             previewImageView.setImageBitmap(ImageUtil.convertFrom64base(item.getPic()));
             previewTextView.setText(item.getName());
-            previewPriceTextView.setText("₪" + item.getPrice());
             previewDescriptionTextView.setText(item.getAboutItem());
+
+            // הצגת המחיר לאחר הנחה
+            updatePriceWithDeal(item);
+
             itemId = item.getId();
-            updateAverageRating(previewRatingBar,itemId);
+            updateAverageRating(previewRatingBar, itemId);
 
             addToCartButton.setOnClickListener(v -> {
                 if (itemClickListener != null)
                     itemClickListener.onClick(item);
             });
         }
+
+        private void updatePriceWithDeal(Item item) {
+            databaseService.getAllDeals(new DatabaseService.DatabaseCallback<List<Deal>>() {
+                @Override
+                public void onCompleted(List<Deal> deals) {
+                    double finalPrice = item.getPrice();
+                    double originalPrice = item.getPrice(); // נשמור את המחיר המקורי
+                    boolean hasDiscount = false;
+
+                    for (Deal deal : deals) {
+                        if (deal.isValid() && deal.getItemType().equals(item.getType())) {
+                            double discount = deal.getDiscountPercentage();
+                            finalPrice = item.getPrice() * (1 - discount / 100);
+                            hasDiscount = true;
+                            break;
+                        }
+                    }
+
+                    // הצגת המחיר המעודכן
+                    previewPriceTextView.setText("₪" + finalPrice);
+
+                    // אם יש הנחה, נציג את המחיר המקורי עם קו חוצה
+                    if (hasDiscount) {
+                        oldPriceTextView.setVisibility(View.VISIBLE); // הראה את המחיר המקורי
+                        SpannableString spannableString = new SpannableString("₪" + originalPrice);
+
+                        // הוסף קו חוצה
+                        spannableString.setSpan(new StrikethroughSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                        // הוסף קו אדום
+                        spannableString.setSpan(new ForegroundColorSpan(Color.RED), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                        oldPriceTextView.setText(spannableString); // הצגת המחיר הישן עם קו אדום
+                        dealtag.setVisibility(View.VISIBLE);
+                    } else {
+                        oldPriceTextView.setVisibility(View.GONE); // הסתר אם אין הנחה
+                    }
+
+                }
+
+                @Override
+                public void onFailed(Exception e) {
+                    Log.e(TAG, "Failed to fetch deals", e);
+                }
+            });
+        }
+
+
+        private void updateAverageRating(RatingBar itemAverageRatingBar, String itemId) {
+            databaseService.updateAverageRating(itemId, new DatabaseService.DatabaseCallback<Double>() {
+                @Override
+                public void onCompleted(Double averageRating) {
+                    itemAverageRatingBar.setRating(averageRating.floatValue());
+                }
+
+                @Override
+                public void onFailed(Exception e) {
+                    Log.e(TAG, "Failed to fetch average rating", e);
+                }
+            });
+        }
     }
-
-    private void updateAverageRating(RatingBar itemAverageRatingBar, String itemId) {
-        databaseService = DatabaseService.getInstance();
-
-        databaseService.updateAverageRating(itemId, new DatabaseService.DatabaseCallback<Double>() {
-            @Override
-            public void onCompleted(Double averageRating) {
-                itemAverageRatingBar.setRating(averageRating.floatValue());
-            }
-
-            @Override
-            public void onFailed(Exception e) {
-
-            }
-        });
-    }
-
-
 
     public void filter(String query) {
         filteredItemsList.clear();
@@ -143,7 +194,6 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
             String lowerCaseQuery = query.toLowerCase();
             try {
                 double queryPrice = Double.parseDouble(query);
-
                 for (Item item : originalItemsList) {
                     if (item.getPrice() == queryPrice) {
                         filteredItemsList.add(item);

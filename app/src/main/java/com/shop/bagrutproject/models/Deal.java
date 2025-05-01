@@ -1,5 +1,11 @@
 package com.shop.bagrutproject.models;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Date;
+
 public class Deal {
     private String id;
     private String title;
@@ -65,5 +71,21 @@ public class Deal {
 
     public void setItemType(String itemType) {
         this.itemType = itemType;
+    }
+
+    public boolean isValid() {
+        String validUntilString = this.validUntil; // התאריך "31/05/2025"
+
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date validUntilDate = sdf.parse(validUntilString);
+
+            // אם אתה רוצה להשוות לתאריך נוכחי:
+            Date currentDate = new Date();
+            return !validUntilDate.before(currentDate);
+        } catch (Exception e) {
+            // טיפול בשגיאות (אם הפורמט לא תואם)
+            return false;
+        }
     }
 }

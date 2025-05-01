@@ -32,6 +32,14 @@
             android:layout_height="wrap_content"
             android:text="₪0.00" />
 
+        <TextView
+            android:id="@+id/oldPriceTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/holo_red_dark"
+            android:visibility="gone" />
+
+
     </LinearLayout>
 
     <CheckBox
