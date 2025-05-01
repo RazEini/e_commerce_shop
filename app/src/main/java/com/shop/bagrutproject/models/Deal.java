@@ -6,15 +6,17 @@ public class Deal {
     private String description;
     private double discountPercentage;
     private String validUntil;
+    private String itemType;
 
     public Deal() {}
 
-    public Deal(String id, String title, String description, double discountPercentage, String validUntil) {
+    public Deal(String id, String title, String description, double discountPercentage, String validUntil, String itemType) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.discountPercentage = discountPercentage;
         this.validUntil = validUntil;
+        this.itemType = itemType;
     }
 
     public String getId() {
@@ -55,5 +57,13 @@ public class Deal {
 
     public void setValidUntil(String validUntil) {
         this.validUntil = validUntil;
+    }
+
+    public String getItemType() {
+        return itemType;
+    }
+
+    public void setItemType(String itemType) {
+        this.itemType = itemType;
     }
 }

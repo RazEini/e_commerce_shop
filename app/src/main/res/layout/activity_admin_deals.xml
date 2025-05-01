@@ -85,6 +85,31 @@
                 android:clickable="true"
                 android:layout_marginTop="16dp" />
 
+            <TextView
+                android:id="@+id/tvItemType"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15sp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="סוג המוצרים במבצע"
+                android:layout_gravity="center_horizontal"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="#333333"/>
+
+            <Spinner
+                android:id="@+id/spTypeDeals"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
+                android:entries="@array/ItemTypeArray"
+                android:layout_gravity="center_horizontal"
+                android:padding="12dp"
+                android:textDirection="ltr"
+                android:layout_marginTop="24sp"
+                style="@style/CustomSpinnerStyle"/>
+
             <!-- כפתורים -->
             <Button
                 android:id="@+id/btnAddDeal"

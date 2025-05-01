@@ -59,4 +59,17 @@
         android:paddingStart="8dp"
         android:paddingEnd="8dp"
         android:paddingTop="4dp"/>
+
+    <!-- סוג המבצע -->
+    <TextView
+        android:id="@+id/dealType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="סוג המוצרים במבצע: מקררים"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingTop="4dp" />
+
 </LinearLayout>

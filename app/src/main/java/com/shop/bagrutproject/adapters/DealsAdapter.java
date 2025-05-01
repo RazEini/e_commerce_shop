@@ -33,6 +33,7 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealViewHold
         holder.descriptionTextView.setText(deal.getDescription());
         holder.discountTextView.setText("הנחה: " + deal.getDiscountPercentage() + "%");
         holder.validUntilTextView.setText("תוקף עד: " + deal.getValidUntil());
+        holder.typeTextView.setText("סוג: " + deal.getItemType());
     }
 
     @Override
@@ -46,6 +47,7 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealViewHold
         TextView descriptionTextView;
         TextView discountTextView;
         TextView validUntilTextView;
+        TextView typeTextView;
 
         public DealViewHolder(View itemView) {
             super(itemView);
@@ -53,6 +55,7 @@ public class DealsAdapter extends RecyclerView.Adapter<DealsAdapter.DealViewHold
             descriptionTextView = itemView.findViewById(R.id.dealDescription);
             discountTextView = itemView.findViewById(R.id.dealDiscount);
             validUntilTextView = itemView.findViewById(R.id.dealValidUntil);
+            typeTextView = itemView.findViewById(R.id.dealType);
         }
     }
 }

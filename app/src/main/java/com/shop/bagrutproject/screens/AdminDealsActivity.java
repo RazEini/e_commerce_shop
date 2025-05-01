@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -33,6 +34,7 @@ public class AdminDealsActivity extends AppCompatActivity {
     private DealsAdapter dealsAdapter;
     private DatabaseService dealsDatabase;
     private ImageButton btnBack;
+    private Spinner spTypeDeals;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,6 +79,7 @@ public class AdminDealsActivity extends AppCompatActivity {
         btnAddDeal = findViewById(R.id.btnAddDeal);
         btnViewDeals = findViewById(R.id.btnViewDeals);
         recyclerViewDeals = findViewById(R.id.recyclerViewDeals);
+        spTypeDeals = findViewById(R.id.spTypeDeals);
 
         dealsDatabase = DatabaseService.getInstance();
 
@@ -94,8 +97,8 @@ public class AdminDealsActivity extends AppCompatActivity {
         });
 
         btnHideDeals.setOnClickListener(v -> {
-            recyclerViewDeals.setVisibility(View.GONE); // הסתרת הרשימה
-            btnHideDeals.setVisibility(View.GONE); // הסתרת הכפתור עצמו
+            recyclerViewDeals.setVisibility(View.GONE);
+            btnHideDeals.setVisibility(View.GONE);
         });
 
         // הוספת מבצע
@@ -104,6 +107,7 @@ public class AdminDealsActivity extends AppCompatActivity {
             String description = editDescription.getText().toString().trim();
             String discountText = editDiscount.getText().toString().trim();
             String validUntil = editValidUntil.getText().toString().trim();
+            String type = spTypeDeals.getSelectedItem().toString();
 
             if (!title.isEmpty() && !description.isEmpty() && !discountText.isEmpty() && !validUntil.isEmpty()) {
                 try {
@@ -115,6 +119,7 @@ public class AdminDealsActivity extends AppCompatActivity {
                     deal.setDescription(description);
                     deal.setDiscountPercentage(discountPercentage);
                     deal.setValidUntil(validUntil);
+                    deal.setItemType(type);
 
                     dealsDatabase.addDeal(deal, new DatabaseService.DatabaseCallback<Void>() {
                         @Override
