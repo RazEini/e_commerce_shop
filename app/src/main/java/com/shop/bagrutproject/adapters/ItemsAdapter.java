@@ -159,6 +159,7 @@ public class ItemsAdapter extends RecyclerView.Adapter<ItemsAdapter.ItemViewHold
                         dealtag.setVisibility(View.VISIBLE);
                     } else {
                         oldPriceTextView.setVisibility(View.GONE); // הסתר אם אין הנחה
+                        dealtag.setVisibility(View.GONE);
                     }
 
                 }
