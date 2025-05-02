@@ -243,18 +243,42 @@ public class CartActivity extends AppCompatActivity {
 
         Order order = new Order(user.getUid(), cart.getItems());
         order.setTimestamp(System.currentTimeMillis());
-        DatabaseReference ordersRef = FirebaseDatabase.getInstance().getReference("orders");
-        ordersRef.child(order.getOrderId()).setValue(order)
-                .addOnSuccessListener(aVoid -> {
-                    Toast.makeText(CartActivity.this, "הזמנה נשמרה!", Toast.LENGTH_SHORT).show();
 
-                    // מעבר לעמוד סיכום ההזמנה
-                    Intent intent = new Intent(CartActivity.this, OrderSummaryActivity.class);
-                    intent.putExtra("orderId", order.getOrderId());
-                    startActivity(intent);
-                })
-                .addOnFailureListener(e -> Toast.makeText(CartActivity.this, "שגיאה בשמירת ההזמנה", Toast.LENGTH_SHORT).show());
+        databaseService.getAllDeals(new DatabaseService.DatabaseCallback<List<Deal>>() {
+            @Override
+            public void onCompleted(List<Deal> deals) {
+                double total = 0.0;
+                for (Item item : cart.getItems()) {
+                    double itemPrice = item.getPrice();
+                    for (Deal deal : deals) {
+                        if (deal.isValid() && deal.getItemType().equals(item.getType())) {
+                            itemPrice = itemPrice * (1 - deal.getDiscountPercentage() / 100);
+                            break;
+                        }
+                    }
+                    total += itemPrice;
+                }
+
+                order.setTotalPrice(total);
+
+                FirebaseDatabase.getInstance().getReference("orders")
+                        .child(order.getOrderId()).setValue(order)
+                        .addOnSuccessListener(aVoid -> {
+                            Toast.makeText(CartActivity.this, "הזמנה נשמרה!", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(CartActivity.this, OrderSummaryActivity.class);
+                            intent.putExtra("orderId", order.getOrderId());
+                            startActivity(intent);
+                        })
+                        .addOnFailureListener(e -> Toast.makeText(CartActivity.this, "שגיאה בשמירת ההזמנה", Toast.LENGTH_SHORT).show());
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                Toast.makeText(CartActivity.this, "שגיאה בקריאת מבצעים", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

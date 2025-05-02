@@ -11,8 +11,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.shop.bagrutproject.R;
 import com.shop.bagrutproject.adapters.CartAdapter;
+import com.shop.bagrutproject.models.Deal;
+import com.shop.bagrutproject.models.Item;
 import com.shop.bagrutproject.models.Order;
 import com.shop.bagrutproject.services.DatabaseService;
+
+import java.util.List;
 
 public class OrderSummaryActivity extends AppCompatActivity {
     private ListView orderListView;
@@ -46,9 +50,33 @@ public class OrderSummaryActivity extends AppCompatActivity {
             @Override
             public void onCompleted(Order object) {
                 order = object;
-                CartAdapter adapter = new CartAdapter(OrderSummaryActivity.this, order.getItems(), null, false);
-                orderListView.setAdapter(adapter);
-                updateTotalPrice();
+
+                // שלוף את כל המבצעים לפני יצירת האדפטר
+                DatabaseService.getInstance().getAllDeals(new DatabaseService.DatabaseCallback<List<Deal>>() {
+                    @Override
+                    public void onCompleted(List<Deal> deals) {
+                        for (Item item : order.getItems()) {
+                            double originalPrice = item.getPrice();
+                            for (Deal deal : deals) {
+                                if (deal.isValid() && deal.getItemType().equals(item.getType())) {
+                                    double discount = deal.getDiscountPercentage();
+                                    double discountedPrice = originalPrice * (1 - discount / 100);
+                                    item.setPrice(discountedPrice);
+                                    break;
+                                }
+                            }
+                        }
+
+                        CartAdapter adapter = new CartAdapter(OrderSummaryActivity.this, order.getItems(), null, false);
+                        orderListView.setAdapter(adapter);
+                        updateTotalPrice(); // עכשיו totalPrice מתבסס על מחירים מעודכנים
+                    }
+
+                    @Override
+                    public void onFailed(Exception e) {
+                        Toast.makeText(OrderSummaryActivity.this, "שגיאה בטעינת מבצעים", Toast.LENGTH_SHORT).show();
+                    }
+                });
             }
 
             @Override
@@ -67,9 +95,11 @@ public class OrderSummaryActivity extends AppCompatActivity {
 
     private void updateTotalPrice() {
         double totalPrice = 0;
-        for (int i = 0; i < order.getItems().size(); i++) {
-            totalPrice += order.getItems().get(i).getPrice();
+
+        for (Item item : order.getItems()) {
+            totalPrice += item.getPrice(); // המחיר כבר כולל הנחה אם הייתה
         }
-        totalPriceText.setText("סה\"כ לתשלום: ₪" + totalPrice);
+
+        totalPriceText.setText("סה\"כ לתשלום: ₪" + String.format("%.2f", totalPrice));
     }
 }

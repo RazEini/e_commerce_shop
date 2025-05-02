@@ -11,8 +11,12 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.shop.bagrutproject.R;
+import com.shop.bagrutproject.models.Deal;
+import com.shop.bagrutproject.models.Item;
 import com.shop.bagrutproject.models.Order;
 import com.shop.bagrutproject.services.DatabaseService;
+
+import java.util.List;
 
 public class PaymentActivity extends AppCompatActivity {
 
@@ -78,6 +82,7 @@ public class PaymentActivity extends AppCompatActivity {
         RadioButton selectedPaymentMethod = findViewById(selectedId);
         String paymentMethod = selectedPaymentMethod.getText().toString();
 
+        // קוד מתאים לפי שיטת התשלום שנבחרה
         switch (paymentMethod) {
             case "Google Pay":
                 handleGooglePay();
@@ -88,32 +93,70 @@ public class PaymentActivity extends AppCompatActivity {
             case "כרטיס אשראי":
                 handleCreditCard();
                 break;
+            default:
+                Toast.makeText(this, "שיטת תשלום לא נתמכת", Toast.LENGTH_SHORT).show();
+                break;
         }
     }
 
     private void handleGooglePay() {
+        // שלב 1: אינטגרציה עם Google Pay (צריך להוסיף את ה-API של Google Pay כאן)
         Toast.makeText(this, "מעבר לתשלום דרך Google Pay...", Toast.LENGTH_SHORT).show();
-        // כאן יהיה קוד האינטגרציה עם Google Pay
+        // אפשר להוסיף קוד אינטגרציה עם Google Pay כאן
     }
 
     private void handlePayPal() {
+        // שלב 2: אינטגרציה עם PayPal (צריך להוסיף את ה-API של PayPal כאן)
         Toast.makeText(this, "מעבר לתשלום דרך PayPal...", Toast.LENGTH_SHORT).show();
-        // כאן יהיה קוד האינטגרציה עם PayPal
+        // אפשר להוסיף קוד אינטגרציה עם PayPal כאן
     }
 
     private void handleCreditCard() {
+        // שלב 3: אינטגרציה עם כרטיסי אשראי (צריך להוסיף את ה-API של כרטיסי אשראי כאן)
         Toast.makeText(this, "מעבר לתשלום בכרטיס אשראי...", Toast.LENGTH_SHORT).show();
-        // כאן יהיה קוד לעמוד תשלום בכרטיס אשראי
+        // אפשר להוסיף קוד אינטגרציה עם מערכת תשלום בכרטיסי אשראי כאן
     }
 
+    // פונקציה לחישוב המחיר המוזל של פריט לפי המבצע
+    private double calculateDiscountedPrice(Item item, List<Deal> allDeals) {
+        double discount = 0;
+        // עובר על כל המבצעים ומחפש אם יש מבצע שמתאים לקטגוריה של המוצר
+        for (Deal deal : allDeals) {
+            if (deal.isValid() && item.getType().equals(deal.getItemType())) {
+                discount = deal.getDiscountPercentage();
+                break;  // מצאנו מבצע מתאים, אפשר להפסיק לחפש
+            }
+        }
+        return item.getPrice() * (1 - discount / 100);  // מחשב את המחיר אחרי הנחה
+    }
+
+    // עדכון סיכום ההזמנה לאחר חישוב הנחות
     private void updateOrderSummary() {
         StringBuilder summary = new StringBuilder();
-        for (int i = 0; i < order.getItems().size(); i++) {
-            summary.append(order.getItems().get(i).getName())
-                    .append(" - ₪")
-                    .append(order.getItems().get(i).getPrice())
-                    .append("\n");
-        }
-        orderSummaryText.setText(summary.toString());
+        final double[] discountedTotal = {0};  // יצירת מערך כדי לשמור את הערך ולהיות פנוי לשימוש בפונקציה פנימית
+
+        // שליפת כל המבצעים מתוך המאגר
+        DatabaseService.getInstance().getAllDeals(new DatabaseService.DatabaseCallback<List<Deal>>() {
+            @Override
+            public void onCompleted(List<Deal> deals) {
+                // עכשיו אנחנו מקבלים את כל המבצעים, אז אנחנו יכולים לחשב את המחיר המוזל לכל פריט
+                for (Item item : order.getItems()) {
+                    double discountedPrice = calculateDiscountedPrice(item, deals);
+                    summary.append(item.getName())
+                            .append(" - ₪")
+                            .append(discountedPrice)
+                            .append("\n");
+                    discountedTotal[0] += discountedPrice;  // עדכון הערך במערך
+                }
+
+                summary.append("סה\"כ: ₪").append(discountedTotal[0]);  // הצגת המחיר הסופי אחרי הנחות
+                orderSummaryText.setText(summary.toString());
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                Toast.makeText(PaymentActivity.this, "שגיאה בטעינת המבצעים", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

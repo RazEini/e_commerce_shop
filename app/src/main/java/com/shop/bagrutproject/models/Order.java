@@ -73,14 +73,13 @@ public class Order implements Serializable {
         return userId;
     }
 
-    public String getFormattedTimestamp() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault());
-        return sdf.format(new Date(this.timestamp));
-    }
-
     public String getFormattedDate() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         return sdf.format(new Date(this.timestamp));
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
     @Override

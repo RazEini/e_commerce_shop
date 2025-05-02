@@ -7,12 +7,17 @@
     android:layout_height="match_parent"
     tools:context=".screens.PaymentActivity">
 
+    <com.shop.bagrutproject.models.CustomBackgroundView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY" />
+
     <LinearLayout
         android:id="@+id/linearLayout4"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp"
+        android:padding="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,7 +29,9 @@
             android:layout_height="wrap_content"
             android:paddingBottom="16dp"
             android:text="סיכום הזמנה"
-            android:textSize="18sp" />
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#333333" />
 
         <EditText
             android:id="@+id/addressEditText"
@@ -33,7 +40,9 @@
             android:layout_marginBottom="16dp"
             android:hint="הזן כתובת למשלוח"
             android:inputType="textPostalAddress"
-            android:padding="12dp" />
+            android:padding="12dp"
+            android:background="@drawable/edit_text_background"
+            android:layout_marginTop="8dp"/>
 
         <!-- בחירת שיטת תשלום -->
         <TextView
@@ -41,6 +50,8 @@
             android:layout_height="wrap_content"
             android:text="בחר שיטת תשלום"
             android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
             android:layout_marginBottom="8dp"/>
 
         <RadioGroup
@@ -53,31 +64,41 @@
                 android:id="@+id/googlePayOption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Google Pay" />
+                android:text="Google Pay"
+                android:textSize="16sp"
+                android:textColor="#333333" />
 
             <RadioButton
                 android:id="@+id/payPalOption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="PayPal" />
+                android:text="PayPal"
+                android:textSize="16sp"
+                android:textColor="#333333" />
 
             <RadioButton
                 android:id="@+id/creditCardOption"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="כרטיס אשראי" />
+                android:text="כרטיס אשראי"
+                android:textSize="16sp"
+                android:textColor="#333333" />
         </RadioGroup>
 
         <Button
             android:id="@+id/completePaymentButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp"
+            android:padding="16dp"
             android:textStyle="bold"
-            android:backgroundTint="@color/black"
+            android:backgroundTint="#000000"
             android:text="סיים תשלום"
             android:textColor="#FFFFFF"
-            android:layout_marginTop="360dp" />
+            android:textSize="18sp"
+            android:layout_marginTop="144dp"
+            android:layout_marginBottom="16dp"
+            android:elevation="4dp"/>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
