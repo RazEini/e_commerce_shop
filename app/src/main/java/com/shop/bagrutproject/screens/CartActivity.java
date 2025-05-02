@@ -178,6 +178,18 @@ public class CartActivity extends AppCompatActivity {
             }
         });
 
+        databaseService.getAllDeals(new DatabaseService.DatabaseCallback<List<Deal>>() {
+            @Override
+            public void onCompleted(List<Deal> deals) {
+                cartAdapter.setDeals(deals);
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+
+            }
+        });
+
         checkoutButton.setOnClickListener(v -> processOrder());
     }
 
