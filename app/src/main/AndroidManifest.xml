@@ -40,9 +40,6 @@
             android:name=".screens.PaymentActivity"
             android:exported="false" />
         <activity
-            android:name=".screens.OrderSummaryActivity"
-            android:exported="false" />
-        <activity
             android:name=".screens.UpdateUserDetailsActivity"
             android:exported="false" />
         <activity

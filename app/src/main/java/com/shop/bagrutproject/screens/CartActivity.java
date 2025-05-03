@@ -261,15 +261,10 @@ public class CartActivity extends AppCompatActivity {
 
                 order.setTotalPrice(total);
 
-                FirebaseDatabase.getInstance().getReference("orders")
-                        .child(order.getOrderId()).setValue(order)
-                        .addOnSuccessListener(aVoid -> {
-                            Toast.makeText(CartActivity.this, "הזמנה נשמרה!", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(CartActivity.this, OrderSummaryActivity.class);
-                            intent.putExtra("orderId", order.getOrderId());
-                            startActivity(intent);
-                        })
-                        .addOnFailureListener(e -> Toast.makeText(CartActivity.this, "שגיאה בשמירת ההזמנה", Toast.LENGTH_SHORT).show());
+                // כאן אנחנו לא שומרים את ההזמנה ב-Firebase, אלא מעבירים את המידע לעמוד התשלום
+                Intent intent = new Intent(CartActivity.this, PaymentActivity.class);
+                intent.putExtra("order", order); // שולחים את ההזמנה כמידע לעמוד התשלום
+                startActivity(intent);
             }
 
             @Override
@@ -278,7 +273,6 @@ public class CartActivity extends AppCompatActivity {
             }
         });
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

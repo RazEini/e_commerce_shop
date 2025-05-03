@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.shop.bagrutproject.R;
 import com.shop.bagrutproject.adapters.PaymentAdapter;
 import com.shop.bagrutproject.models.Deal;
@@ -50,27 +52,16 @@ public class PaymentActivity extends AppCompatActivity {
         totalPriceText = findViewById(R.id.totalPriceText);
         itemsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        String orderId = getIntent().getStringExtra("orderId");
+        // קבלת פרטי ההזמנה
+        order = (Order) getIntent().getSerializableExtra("order");
 
-        if (orderId == null) {
+        if (order == null) {
             Toast.makeText(this, "שגיאה בהזמנה", Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
 
-        DatabaseService.getInstance().getOrder(orderId, new DatabaseService.DatabaseCallback<Order>() {
-            @Override
-            public void onCompleted(Order object) {
-                order = object;
-                updateOrderSummary();
-            }
-
-            @Override
-            public void onFailed(Exception e) {
-                Toast.makeText(PaymentActivity.this, "שגיאה בטעינת ההזמנה", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        });
+        updateOrderSummary();
 
         completePaymentButton.setOnClickListener(v -> completePayment());
     }
@@ -91,32 +82,47 @@ public class PaymentActivity extends AppCompatActivity {
         RadioButton selectedPaymentMethod = findViewById(selectedId);
         String paymentMethod = selectedPaymentMethod.getText().toString();
 
-        switch (paymentMethod) {
-            case "Google Pay":
-                handleGooglePay();
-                break;
-            case "PayPal":
-                handlePayPal();
-                break;
-            case "כרטיס אשראי":
-                handleCreditCard();
-                break;
-            default:
-                Toast.makeText(this, "שיטת תשלום לא נתמכת", Toast.LENGTH_SHORT).show();
-                break;
-        }
+        Toast.makeText(this, "מעבד תשלום: " + paymentMethod, Toast.LENGTH_SHORT).show();
+
+        // סימולציה של תשלום
+        order.setAddress(address);
+        order.setPaymentMethod(paymentMethod);
+        order.setStatus("Processing");
+
+        // חישוב המחיר הכולל עם המבצעים
+        DatabaseService.getInstance().getAllDeals(new DatabaseService.DatabaseCallback<List<Deal>>() {
+            @Override
+            public void onCompleted(List<Deal> deals) {
+                double total = 0;
+                for (Item item : order.getItems()) {
+                    total += calculateDiscountedPrice(item, deals);
+                }
+                order.setTotalPrice(total);
+
+                // שמירה לפיירבייס
+                saveOrderToFirebase();
+            }
+
+            @Override
+            public void onFailed(Exception e) {
+                Toast.makeText(PaymentActivity.this, "שגיאה בטעינת המבצעים", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
-    private void handleGooglePay() {
-        Toast.makeText(this, "מעבר לתשלום דרך Google Pay...", Toast.LENGTH_SHORT).show();
-    }
+    private void saveOrderToFirebase() {
+        DatabaseService.getInstance().saveOrder(order, new DatabaseService.DatabaseCallback<Void>() {
+            @Override
+            public void onCompleted(Void unused) {
+                Toast.makeText(PaymentActivity.this, "ההזמנה נשמרה בהצלחה!", Toast.LENGTH_LONG).show();
+                finish(); // או מעבר למסך תודה
+            }
 
-    private void handlePayPal() {
-        Toast.makeText(this, "מעבר לתשלום דרך PayPal...", Toast.LENGTH_SHORT).show();
-    }
-
-    private void handleCreditCard() {
-        Toast.makeText(this, "מעבר לתשלום בכרטיס אשראי...", Toast.LENGTH_SHORT).show();
+            @Override
+            public void onFailed(Exception e) {
+                Toast.makeText(PaymentActivity.this, "שגיאה בשמירת ההזמנה", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private double calculateDiscountedPrice(Item item, List<Deal> allDeals) {

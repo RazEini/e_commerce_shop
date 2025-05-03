@@ -322,6 +322,16 @@ public class DatabaseService {
         });
     }
 
+    public void saveOrder(Order order, DatabaseCallback<Void> callback) {
+        DatabaseReference ref = FirebaseDatabase.getInstance()
+                .getReference("orders")
+                .child(order.getOrderId());
+
+        ref.setValue(order)
+                .addOnSuccessListener(aVoid -> callback.onCompleted(null))
+                .addOnFailureListener(callback::onFailed);
+    }
+
     public void getOrder(String orderId, DatabaseCallback<Order> callback) {
         getData("orders/"+orderId, Order.class, callback);
     }

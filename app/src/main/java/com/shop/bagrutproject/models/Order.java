@@ -15,6 +15,8 @@ public class Order implements Serializable {
     private String status;
     private long timestamp;
     private String userId;
+    private String address;
+    private String paymentMethod;
 
     public Order(String userId, List<Item> items) {
         this.orderId = UUID.randomUUID().toString();
@@ -82,6 +84,22 @@ public class Order implements Serializable {
         this.totalPrice = totalPrice;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getPaymentMethod() {
+        return paymentMethod;
+    }
+
+    public void setPaymentMethod(String paymentMethod) {
+        this.paymentMethod = paymentMethod;
+    }
+
     @Override
     public String toString() {
         return "Order{" +
@@ -90,6 +108,8 @@ public class Order implements Serializable {
                 ", totalPrice=" + totalPrice +
                 ", status='" + status + '\'' +
                 ", timestamp=" + timestamp +
+                ", address='" + address + '\'' +
+                ", paymentMethod='" + paymentMethod + '\'' +
                 ", items=" + items +
                 '}';
     }
