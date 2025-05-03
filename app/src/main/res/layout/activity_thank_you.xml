@@ -1,41 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:padding="20dp"
     tools:context=".screens.ThankYouActivity">
 
-    <!-- הודעת תודה מעוצבת -->
-    <TextView
-        android:id="@+id/tvThankYouMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="50dp"
-        android:gravity="center"
-        android:text="תודה על ההזמנה!"
-        android:textColor="@color/black"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    <!-- רקע מותאם אישית -->
+    <com.shop.bagrutproject.models.CustomBackgroundView2
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
-    <!-- כפתור חזרה לחנות עם אפקטים מעוגלים ועיצוב מתקדם -->
-    <Button
-        android:id="@+id/btnBackToShop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:layout_marginBottom="50dp"
-        android:backgroundTint="@color/black"
-        android:text="חזור לחנות"
-        android:textColor="#FFFFFF"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tvThankYouMessage" />
+    <!-- תוכן עמוד -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="24dp"
+        android:background="@android:color/transparent">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <!-- אייקון הצלחה -->
+        <ImageView
+            android:id="@+id/imgSuccess"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="150dp"
+            android:src="@drawable/ic_success"
+            app:tint="@color/black"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- טקסט תודה -->
+        <TextView
+            android:id="@+id/tvThankYouMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="תודה על ההזמנה!"
+            android:textColor="@color/black"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/imgSuccess"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- טקסט הסבר -->
+        <TextView
+            android:id="@+id/tvMessageDetails"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="58dp"
+            android:text="ההזמנה שלך התקבלה ותישלח אליך בהקדם."
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:gravity="center"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/tvThankYouMessage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- כפתור חזרה לחנות -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnBackToShop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="132dp"
+            android:text="חזור לחנות"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            app:cornerRadius="30dp"
+            app:backgroundTint="@color/black"
+            app:icon="@drawable/ic_arrow_back"
+            app:iconPadding="8dp"
+            app:iconTint="@android:color/white"
+            app:layout_constraintTop_toBottomOf="@id/tvMessageDetails"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
