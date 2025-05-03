@@ -5,7 +5,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.database.FirebaseDatabase;
 import com.shop.bagrutproject.R;
+import com.shop.bagrutproject.models.User;
+import com.shop.bagrutproject.utils.SharedPreferencesUtil;
 
 public class ThankYouActivity extends AppCompatActivity {
 
@@ -16,17 +20,40 @@ public class ThankYouActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thank_you);
 
-        btnBackToShop = findViewById(R.id.btnBackToShop);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
 
-        // לחיצה על כפתור חזרה לחנות
+        btnBackToShop = findViewById(R.id.btnBackToShop);
+        User user = SharedPreferencesUtil.getUser(this);
+
+        if (user != null) {
+            clearUserCart(user.getUid()); // ניקוי העגלה
+        }
+
         btnBackToShop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // חזרה למסך החנות
                 Intent intent = new Intent(ThankYouActivity.this, ShopActivity.class);
                 startActivity(intent);
-                finish(); // סוגר את העמוד הזה כך שלא יישאר בהיסטוריית הניווט
+                finish();
             }
         });
     }
+
+    private void clearUserCart(String userId) {
+        FirebaseDatabase.getInstance().getReference("Users")
+                .child(userId)
+                .child("cart")
+                .removeValue()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // הצלחה - העגלה אופסה
+                    } else {
+                        // שגיאה - ניתן להציג טוסט או לוג
+                    }
+                });
+    }
+
+
 }

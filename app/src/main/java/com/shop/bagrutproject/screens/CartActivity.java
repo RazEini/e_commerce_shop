@@ -20,8 +20,6 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.shop.bagrutproject.R;
 import com.shop.bagrutproject.adapters.CartAdapter;
 import com.shop.bagrutproject.models.Cart;
@@ -56,17 +54,13 @@ public class CartActivity extends AppCompatActivity {
         setContentView(R.layout.activity_cart);
 
         if (getSupportActionBar() != null) {
-
-            // הגדרת כותרת מותאמת אישית
             getSupportActionBar().setDisplayShowTitleEnabled(false);
             getSupportActionBar().setDisplayShowCustomEnabled(true);
             getSupportActionBar().setCustomView(R.layout.action_bar_shop);
             TextView titlebar = findViewById(R.id.action_bar_text);
             String greeting;
 
-            // קבלת השעה הנוכחית
             int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
-
             if (hour >= 5 && hour < 12) {
                 greeting = "בוקר טוב";
             } else if (hour >= 12 && hour < 18) {
@@ -77,13 +71,10 @@ public class CartActivity extends AppCompatActivity {
 
             User user = SharedPreferencesUtil.getUser(this);
             String name = user.getfName();
-
             titlebar.setText(greeting + " " + name);
 
             ImageView shopIcon = findViewById(R.id.shop_intro);
-
             shopIcon.setOnClickListener(v -> {
-                // אנימציית קפיצה
                 v.animate()
                         .scaleX(1.1f)
                         .scaleY(1.1f)
@@ -94,21 +85,18 @@ public class CartActivity extends AppCompatActivity {
                                 .setDuration(100))
                         .start();
 
-                // יצירת BottomSheet
                 View sheetView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_shop, null);
                 BottomSheetDialog dialog = new BottomSheetDialog(this);
                 dialog.setContentView(sheetView);
                 dialog.show();
 
-                // לחיצה על כפתור
                 Button learnMoreBtn = sheetView.findViewById(R.id.btn_learn_more);
                 learnMoreBtn.setOnClickListener(btn -> {
-                    Intent Intent = new Intent(this, Odot.class);
-                    startActivity(Intent);
+                    Intent intent = new Intent(this, Odot.class);
+                    startActivity(intent);
                     finish();
                 });
             });
-
         }
 
         cartListView = findViewById(R.id.lvCart);
@@ -116,16 +104,12 @@ public class CartActivity extends AppCompatActivity {
         checkoutButton = findViewById(R.id.btnCheckout);
         btnShop = findViewById(R.id.btnBackToShop);
 
-        btnShop.setOnClickListener(v -> {
-            finish();
-        });
+        btnShop.setOnClickListener(v -> finish());
 
         databaseService = DatabaseService.getInstance();
         user = SharedPreferencesUtil.getUser(this);
 
-        if (user == null) {
-            return;
-        }
+        if (user == null) return;
 
         cartAdapter = new CartAdapter(this, new ArrayList<>(), new CartAdapter.OnCartClick() {
             @Override
@@ -168,8 +152,10 @@ public class CartActivity extends AppCompatActivity {
             @Override
             public void onCompleted(Cart object) {
                 cart = object;
-                cartAdapter.setItems(cart.getItems());
-                updateTotalPrice();
+                if (cart != null && cart.getItems() != null) {
+                    cartAdapter.setItems(cart.getItems());
+                    updateTotalPrice();
+                }
             }
 
             @Override
@@ -185,9 +171,7 @@ public class CartActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailed(Exception e) {
-
-            }
+            public void onFailed(Exception e) {}
         });
 
         checkoutButton.setOnClickListener(v -> processOrder());
@@ -197,46 +181,42 @@ public class CartActivity extends AppCompatActivity {
         if (SharedPreferencesUtil.isAdmin(CartActivity.this)) {
             totalPriceText.setVisibility(View.GONE);
         } else {
-            // השתמשנו ב-AtomicReference לאחסון המחיר הכולל בצורה בטוחה בתוך קריאה אסינכרונית
             final AtomicReference<Double> totalPriceRef = new AtomicReference<>(0.0);
 
-            // קריאה למבצעי הנחה מהפיירבייס
+            if (cart == null || cart.getItems() == null) return;
+
             databaseService.getAllDeals(new DatabaseService.DatabaseCallback<List<Deal>>() {
                 @Override
                 public void onCompleted(List<Deal> deals) {
-                    // חישוב המחיר הכולל
                     for (Item item : cart.getItems()) {
                         double itemPrice = item.getPrice();
                         double finalPrice = itemPrice;
 
-                        // חיפוש אחר מבצע תקף לכל פריט
                         for (Deal deal : deals) {
                             if (deal.isValid() && deal.getItemType().equals(item.getType())) {
                                 double discount = deal.getDiscountPercentage();
                                 finalPrice = itemPrice * (1 - discount / 100);
-                                break; // מצאנו הנחה עבור הפריט, נצא מהלולאה
+                                break;
                             }
                         }
 
-                        // עדכון המחיר הכולל
                         totalPriceRef.set(totalPriceRef.get() + finalPrice);
                     }
 
-                    // עדכון התצוגה של המחיר הכולל
                     totalPriceText.setText("סך הכל: ₪" + totalPriceRef.get());
                     totalPriceText.setVisibility(View.VISIBLE);
                 }
 
                 @Override
                 public void onFailed(Exception e) {
-                    // טיפול בשגיאה אם קרתה
+                    Log.e(TAG, "Failed to get deals for total price", e);
                 }
             });
         }
     }
 
     private void processOrder() {
-        if (cart == null || cart.getItems().isEmpty()) {
+        if (cart == null || cart.getItems() == null || cart.getItems().isEmpty()) {
             Toast.makeText(this, "העגלה ריקה!", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -260,10 +240,8 @@ public class CartActivity extends AppCompatActivity {
                 }
 
                 order.setTotalPrice(total);
-
-                // כאן אנחנו לא שומרים את ההזמנה ב-Firebase, אלא מעבירים את המידע לעמוד התשלום
                 Intent intent = new Intent(CartActivity.this, PaymentActivity.class);
-                intent.putExtra("order", order); // שולחים את ההזמנה כמידע לעמוד התשלום
+                intent.putExtra("order", order);
                 startActivity(intent);
             }
 
