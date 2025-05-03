@@ -1,5 +1,6 @@
 package com.shop.bagrutproject.screens;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
@@ -87,7 +88,7 @@ public class PaymentActivity extends AppCompatActivity {
         // סימולציה של תשלום
         order.setAddress(address);
         order.setPaymentMethod(paymentMethod);
-        order.setStatus("Processing");
+        order.setStatus("pending");
 
         // חישוב המחיר הכולל עם המבצעים
         DatabaseService.getInstance().getAllDeals(new DatabaseService.DatabaseCallback<List<Deal>>() {
@@ -115,7 +116,11 @@ public class PaymentActivity extends AppCompatActivity {
             @Override
             public void onCompleted(Void unused) {
                 Toast.makeText(PaymentActivity.this, "ההזמנה נשמרה בהצלחה!", Toast.LENGTH_LONG).show();
-                finish(); // או מעבר למסך תודה
+
+                // מעבר לעמוד תודה
+                Intent intent = new Intent(PaymentActivity.this, ThankYouActivity.class);
+                startActivity(intent);
+                finish(); // סוגר את העמוד הנוכחי (PaymentActivity)
             }
 
             @Override
@@ -124,6 +129,7 @@ public class PaymentActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private double calculateDiscountedPrice(Item item, List<Deal> allDeals) {
         double discount = 0;
