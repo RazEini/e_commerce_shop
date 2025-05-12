@@ -3,6 +3,9 @@ package com.shop.bagrutproject.screens;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.speech.RecognitionListener;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -55,6 +58,11 @@ public class ShopActivity extends AppCompatActivity {
     DatabaseService databaseService;
     AuthenticationService authenticationService;
     private String selectedCategory; // משתנה לאחסון הקטגוריה שנבחרה
+
+    private SearchView searchView;
+    private static final int REQUEST_CODE_SPEECH_INPUT = 100;
+    private ImageButton voiceSearchButton;
+    private SpeechRecognizer speechRecognizer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,7 +147,7 @@ public class ShopActivity extends AppCompatActivity {
         itemsAdapter = new ItemsAdapter(filteredItems, this, this::addItemToCart);
         recyclerView.setAdapter(itemsAdapter);
 
-        SearchView searchView = findViewById(R.id.searchView);
+        searchView = findViewById(R.id.searchView);
         searchView.setVisibility(View.VISIBLE);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -169,6 +177,74 @@ public class ShopActivity extends AppCompatActivity {
         });
 
         fetchItemsFromFirebase();
+
+        voiceSearchButton = findViewById(R.id.voiceSearchButton);
+
+        // הגדרת SpeechRecognizer
+        speechRecognizer = SpeechRecognizer.createSpeechRecognizer(this);
+        speechRecognizer.setRecognitionListener(new RecognitionListener() {
+            @Override
+            public void onReadyForSpeech(Bundle params) {
+            }
+
+            @Override
+            public void onBeginningOfSpeech() {
+            }
+
+            @Override
+            public void onRmsChanged(float rmsdB) {
+            }
+
+            @Override
+            public void onBufferReceived(byte[] buffer) {
+            }
+
+            @Override
+            public void onEndOfSpeech() {
+            }
+
+            @Override
+            public void onError(int error) {
+            }
+
+            @Override
+            public void onResults(Bundle results) {
+                ArrayList<String> matches = results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
+                if (matches != null && !matches.isEmpty()) {
+                    String spokenText = matches.get(0); // טקסט שנאמר
+                    searchView.setQuery(spokenText, false); // מבצע חיפוש עם הטקסט
+                }
+            }
+
+            @Override
+            public void onPartialResults(Bundle partialResults) {
+            }
+
+            @Override
+            public void onEvent(int eventType, Bundle params) {
+            }
+        });
+
+        voiceSearchButton.setOnClickListener(v -> startVoiceSearch());
+    }
+
+    private void startVoiceSearch() {
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, "הגידו את מילת החיפוש");  // הנחיה לקול
+        startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_SPEECH_INPUT && resultCode == RESULT_OK) {
+            ArrayList<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            if (results != null && !results.isEmpty()) {
+                String query = results.get(0);
+                searchView.setQuery(query, false); // חיפוש עם הטקסט שנאמר
+            }
+        }
     }
 
     @Override

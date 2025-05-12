@@ -54,17 +54,33 @@
         android:layout_marginTop="0dp" />
 
     <!-- שדה החיפוש -->
+    <!-- כפתור מיקרופון לחיפוש קולי -->
+    <ImageButton
+        android:id="@+id/voiceSearchButton"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="72dp"
+        android:layout_marginEnd="8dp"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:contentDescription="Voice Search"
+        android:src="@android:drawable/ic_btn_speak_now"
+        app:layout_constraintTop_toBottomOf="@id/cartButton"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- שדה החיפוש -->
     <SearchView
         android:id="@+id/searchView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
         android:layout_marginTop="72dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="64dp"
         android:iconifiedByDefault="true"
         android:queryHint="חפש מוצר..."
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/cartButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/cartButton" />
+        app:layout_constraintEnd_toStartOf="@id/voiceSearchButton" />
+
 
     <!-- RecyclerView להצגת פריטים -->
     <androidx.recyclerview.widget.RecyclerView
