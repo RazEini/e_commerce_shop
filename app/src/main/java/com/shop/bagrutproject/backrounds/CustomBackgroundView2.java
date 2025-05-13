@@ -1,4 +1,4 @@
-package com.shop.bagrutproject.models;
+package com.shop.bagrutproject.backrounds;
 
 import android.content.Context;
 import android.graphics.Canvas;

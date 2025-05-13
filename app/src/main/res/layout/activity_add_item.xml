@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         tools:context=".screens.AddItem">
 
-        <com.shop.bagrutproject.models.CustomBackgroundView
+        <com.shop.bagrutproject.backrounds.CustomBackgroundView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"

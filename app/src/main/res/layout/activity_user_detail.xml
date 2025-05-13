@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <!-- רקע מותאם אישית -->
-    <com.shop.bagrutproject.models.CustomBackgroundView
+    <com.shop.bagrutproject.backrounds.CustomBackgroundView
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
