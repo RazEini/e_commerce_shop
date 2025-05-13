@@ -8,6 +8,8 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.media.AudioAttributes;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -42,6 +44,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+            if (alarmManager != null && !alarmManager.canScheduleExactAlarms()) {
+                Intent intent = new Intent(android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM);
+                startActivity(intent);
+            } else {
+                scheduleNotificationAlarm();
+            }
+        } else {
+            scheduleNotificationAlarm();
+        }
+
 
         if (getSupportActionBar() != null) {
 
@@ -130,8 +145,17 @@ public class MainActivity extends AppCompatActivity {
             CharSequence name = "Shop Notifications";
             String description = "התראות על מבצעים ומוצרים";
             int importance = NotificationManager.IMPORTANCE_HIGH;
+
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
+
+            // 🔊 הגדרת סאונד מותאם אישית
+            Uri soundUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.soft_notification);
+            AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION)
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .build();
+            channel.setSound(soundUri, audioAttributes);
 
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             if (notificationManager != null) {
@@ -139,6 +163,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
+
 
     private void scheduleNotificationAlarm() {
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
