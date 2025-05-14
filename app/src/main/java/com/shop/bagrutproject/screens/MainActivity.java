@@ -45,6 +45,11 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
+        createNotificationChannel(); // קודם כל ליצור ערוץ התראות
+        requestNotificationPermission(); // ואז לבקש הרשאה מהמשתמש אם צריך
+        DealNotificationFetcher.fetchAndSendDealNotification(getApplicationContext()); // שליחת התראה אם יש מבצע
+
+        // קביעת Alarm לתזמון ההתראות
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
             if (alarmManager != null && !alarmManager.canScheduleExactAlarms()) {
@@ -57,15 +62,14 @@ public class MainActivity extends AppCompatActivity {
             scheduleNotificationAlarm();
         }
 
-
+        // עיצוב ActionBar מותאם אישית
         if (getSupportActionBar() != null) {
-
-            // הגדרת כותרת מותאמת אישית
             getSupportActionBar().setDisplayShowTitleEnabled(false);
             getSupportActionBar().setDisplayShowCustomEnabled(true);
             getSupportActionBar().setCustomView(R.layout.action_bar_title);
 
-            ImageView shopIcon = findViewById(R.id.shop_intro);
+            View customView = getSupportActionBar().getCustomView();
+            ImageView shopIcon = customView.findViewById(R.id.shop_intro);
 
             shopIcon.setOnClickListener(v -> {
                 // אנימציית קפיצה
@@ -79,36 +83,27 @@ public class MainActivity extends AppCompatActivity {
                                 .setDuration(100))
                         .start();
 
-                // יצירת BottomSheet
+                // פתיחת BottomSheet
                 View sheetView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_shop, null);
                 BottomSheetDialog dialog = new BottomSheetDialog(this);
                 dialog.setContentView(sheetView);
                 dialog.show();
 
-                // לחיצה על כפתור
                 Button learnMoreBtn = sheetView.findViewById(R.id.btn_learn_more);
                 learnMoreBtn.setOnClickListener(btn -> {
-                    Intent Intent = new Intent(this, Odot.class);
-                    startActivity(Intent);
-                    finish();
+                    startActivity(new Intent(this, Odot.class));
                 });
             });
-
         }
 
+        // הגדרת שוליים בטוחים למסך
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        createNotificationChannel();
-        requestNotificationPermission();
-        DealNotificationFetcher.fetchAndSendDealNotification(getApplicationContext());
-
-        scheduleNotificationAlarm();
-
-        initViews();
+        initViews(); // קישור כפתורים
     }
 
     private void initViews() {
@@ -123,16 +118,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void requestNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            boolean isFirstTime = getSharedPreferences("AppPrefs", MODE_PRIVATE)
-                    .getBoolean("isFirstTime", true);
+            SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
+            boolean isFirstTime = prefs.getBoolean("isFirstTime", true);
 
             if (isFirstTime) {
-                getSharedPreferences("AppPrefs", MODE_PRIVATE)
-                        .edit()
-                        .putBoolean("isFirstTime", false)
-                        .apply();
+                prefs.edit().putBoolean("isFirstTime", false).apply();
 
-                if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS)
+                        != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this, "נדרשת הרשאה לשליחת התראות על מבצעים", Toast.LENGTH_LONG).show();
                     ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, 102);
                 }
@@ -149,7 +142,6 @@ public class MainActivity extends AppCompatActivity {
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
 
-            // 🔊 הגדרת סאונד מותאם אישית
             Uri soundUri = Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.soft_notification);
             AudioAttributes audioAttributes = new AudioAttributes.Builder()
                     .setUsage(AudioAttributes.USAGE_NOTIFICATION)
@@ -164,7 +156,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     private void scheduleNotificationAlarm() {
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         Intent intent = new Intent(this, NotificationReceiver.class);
@@ -173,20 +164,18 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences("AppPrefs", MODE_PRIVATE);
         boolean isAlarmSet = prefs.getBoolean("isAlarmSet", false);
 
-        if (!isAlarmSet) {
+        if (!isAlarmSet && alarmManager != null) {
             Calendar calendar = Calendar.getInstance();
             calendar.setTimeInMillis(System.currentTimeMillis());
             calendar.add(Calendar.HOUR, 6);
 
-            if (alarmManager != null) {
-                alarmManager.setExactAndAllowWhileIdle(
-                        AlarmManager.RTC_WAKEUP,
-                        calendar.getTimeInMillis(),
-                        pendingIntent
-                );
+            alarmManager.setExactAndAllowWhileIdle(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(),
+                    pendingIntent
+            );
 
-                prefs.edit().putBoolean("isAlarmSet", true).apply();
-            }
+            prefs.edit().putBoolean("isAlarmSet", true).apply();
         }
     }
 
