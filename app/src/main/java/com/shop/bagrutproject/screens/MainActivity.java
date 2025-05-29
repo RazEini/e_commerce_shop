@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity {
 
         checkIfUserIsAlreadyLoggedIn();
 
-        createNotificationChannel(); // קודם כל ליצור ערוץ התראות
-        requestNotificationPermission(); // ואז לבקש הרשאה מהמשתמש אם צריך
+        createNotificationChannel();
+        requestNotificationPermission(); 
         DealNotificationFetcher.fetchAndSendDealNotification(getApplicationContext()); // שליחת התראה אם יש מבצע
 
         // קביעת Alarm לתזמון ההתראות
