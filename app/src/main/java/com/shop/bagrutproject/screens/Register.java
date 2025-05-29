@@ -52,7 +52,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
 
         if (getSupportActionBar() != null) {
 
-            // הגדרת כותרת מותאמת אישית
             getSupportActionBar().setDisplayShowTitleEnabled(false);
             getSupportActionBar().setDisplayShowCustomEnabled(true);
             getSupportActionBar().setCustomView(R.layout.action_bar_title);
@@ -60,7 +59,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
             ImageView shopIcon = findViewById(R.id.shop_intro);
 
             shopIcon.setOnClickListener(v -> {
-                // אנימציית קפיצה
                 v.animate()
                         .scaleX(1.1f)
                         .scaleY(1.1f)
@@ -71,13 +69,11 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                                 .setDuration(100))
                         .start();
 
-                // יצירת BottomSheet
                 View sheetView = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_shop, null);
                 BottomSheetDialog dialog = new BottomSheetDialog(this);
                 dialog.setContentView(sheetView);
                 dialog.show();
 
-                // לחיצה על כפתור
                 Button learnMoreBtn = sheetView.findViewById(R.id.btn_learn_more);
                 learnMoreBtn.setOnClickListener(btn -> {
                     Intent Intent = new Intent(this, Odot.class);
