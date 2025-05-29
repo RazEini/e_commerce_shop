@@ -92,8 +92,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         authenticationService = AuthenticationService.getInstance();
         databaseService = DatabaseService.getInstance();
 
-        checkIfUserIsAlreadyLoggedIn();
-
         initViews();
     }
 
@@ -127,28 +125,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         }
 
         loginUser(email, pass);
-    }
-
-
-    private void checkIfUserIsAlreadyLoggedIn() {
-        boolean isAdmin = SharedPreferencesUtil.isAdmin(this);
-        if (isAdmin) {
-            Log.d(TAG, "Admin is already logged in, redirecting...");
-            Intent adminIntent = new Intent(this, CategoriesActivity.class);
-            startActivity(adminIntent);
-            finish();
-            return;
-        }
-
-        new Handler().postDelayed(() -> {
-            if (authenticationService.isUserSignedIn()) {
-                Log.d(TAG, "User is already logged in, redirecting...");
-                SharedPreferencesUtil.setIsAdmin(this, false);
-                Intent go = new Intent(this, CategoriesActivity.class);
-                startActivity(go);
-                finish();
-            }
-        }, 1000);
     }
 
     public void logout() {

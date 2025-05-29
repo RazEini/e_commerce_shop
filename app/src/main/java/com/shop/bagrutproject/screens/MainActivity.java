@@ -12,6 +12,8 @@ import android.media.AudioAttributes;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,8 +31,11 @@ import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.shop.bagrutproject.R;
+import com.shop.bagrutproject.services.AuthenticationService;
+import com.shop.bagrutproject.services.DatabaseService;
 import com.shop.bagrutproject.utils.DealNotificationFetcher;
 import com.shop.bagrutproject.utils.NotificationReceiver;
+import com.shop.bagrutproject.utils.SharedPreferencesUtil;
 
 import java.util.Calendar;
 
@@ -38,12 +43,18 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String CHANNEL_ID = "shop_notifications";
     Button btnReg, btnLog, btnOd;
+    private AuthenticationService authenticationService;
+    private static final String TAG = "MainActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
+        authenticationService = AuthenticationService.getInstance();
+
+        checkIfUserIsAlreadyLoggedIn();
 
         createNotificationChannel(); // קודם כל ליצור ערוץ התראות
         requestNotificationPermission(); // ואז לבקש הרשאה מהמשתמש אם צריך
@@ -178,7 +189,24 @@ public class MainActivity extends AppCompatActivity {
             prefs.edit().putBoolean("isAlarmSet", true).apply();
         }
     }
+    private void checkIfUserIsAlreadyLoggedIn() {
+        boolean isAdmin = SharedPreferencesUtil.isAdmin(this);
+        if (isAdmin) {
+            Log.d(TAG, "Admin is already logged in, redirecting...");
+            Intent adminIntent = new Intent(this, CategoriesActivity.class);
+            startActivity(adminIntent);
+            finish();
+            return;
+        }
 
+        if (authenticationService.isUserSignedIn()) {
+            Log.d(TAG, "User is already logged in, redirecting...");
+            SharedPreferencesUtil.setIsAdmin(this, false);
+            Intent go = new Intent(this, CategoriesActivity.class);
+            startActivity(go);
+            finish();
+        }
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
