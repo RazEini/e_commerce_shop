@@ -118,37 +118,32 @@ public class CartAdapter extends BaseAdapter {
 
     private void updatePriceWithDeal(Item item, View convertView) {
         TextView oldPriceTextView = convertView.findViewById(R.id.oldPriceTextView);
+        TextView itemPrice = convertView.findViewById(R.id.itemPrice);
 
         Deal deal = this.deals.get(item.getType());
-        if (deal == null) {
-            oldPriceTextView.setVisibility(View.GONE); // הסתר אם אין הנחה
+
+        if (deal == null || !deal.isValid()) {
+            // אין מבצע או שהמבצע אינו בתוקף – מציגים מחיר רגיל בלבד
+            itemPrice.setText("₪" + item.getPrice());
+            oldPriceTextView.setVisibility(View.GONE);
             return;
         }
 
-        TextView itemPrice = convertView.findViewById(R.id.itemPrice);
-
-
+        // אם יש מבצע בתוקף
         double discount = deal.getDiscountPercentage();
-        double finalPrice = item.getPrice() * (1 - discount / 100);
-        double originalPrice = item.getPrice(); // נשמור את המחיר המקורי
+        double originalPrice = item.getPrice();
+        double finalPrice = originalPrice * (1 - discount / 100);
 
         // הצגת המחיר לאחר הנחה
         itemPrice.setText("₪" + finalPrice);
 
-        // אם יש הנחה, נציג את המחיר המקורי עם קו חוצה
-        oldPriceTextView.setVisibility(View.VISIBLE); // הראה את המחיר המקורי
+        // הצגת המחיר המקורי עם קו חוצה בצבע אדום
+        oldPriceTextView.setVisibility(View.VISIBLE);
         SpannableString spannableString = new SpannableString("₪" + originalPrice);
-
-        // הוסף קו חוצה
         spannableString.setSpan(new StrikethroughSpan(), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        // הוסף קו אדום
         spannableString.setSpan(new ForegroundColorSpan(Color.RED), 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-        oldPriceTextView.setText(spannableString); // הצגת המחיר הישן עם קו אדום
-
+        oldPriceTextView.setText(spannableString);
     }
-
 
     public void setItems(List<Item> items) {
         this.cartItems.clear();

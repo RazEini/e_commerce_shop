@@ -408,14 +408,18 @@ public class DatabaseService {
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Deal> deals = new ArrayList<>();
+                List<Deal> validDeals = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Deal deal = snapshot.getValue(Deal.class);
                     if (deal != null) {
-                        deals.add(deal);
+                        if (deal.isValid()) {
+                            validDeals.add(deal);
+                        } else {
+                            snapshot.getRef().removeValue();
+                        }
                     }
                 }
-                callback.onCompleted(deals);
+                callback.onCompleted(validDeals);
             }
 
             @Override

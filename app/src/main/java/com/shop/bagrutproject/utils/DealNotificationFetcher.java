@@ -33,19 +33,20 @@ public class DealNotificationFetcher {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot snapshot) {
-                        List<Deal> deals = new ArrayList<>();
+                        List<Deal> validDeals = new ArrayList<>();
                         for (DataSnapshot data : snapshot.getChildren()) {
                             Deal deal = data.getValue(Deal.class);
-                            if (deal != null) {
-                                deals.add(deal);
+                            if (deal != null && deal.isValid()) {  // בדיקה אם המבצע תקף
+                                validDeals.add(deal);
                             }
                         }
 
-                        if (!deals.isEmpty()) {
-                            Deal randomDeal = deals.get(new Random().nextInt(deals.size()));
+                        if (!validDeals.isEmpty()) {
+                            Deal randomDeal = validDeals.get(new Random().nextInt(validDeals.size()));
                             sendNotification(context, randomDeal.getTitle(), randomDeal.getDescription());
                         }
                     }
+
 
                     @Override
                     public void onCancelled(DatabaseError error) {
