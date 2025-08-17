@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String CHANNEL_ID = "shop_notifications";
     Button btnReg, btnLog, btnOd;
     private AuthenticationService authenticationService;
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "MainActivity"; // דף ראשי
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
