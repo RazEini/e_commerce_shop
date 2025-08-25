@@ -59,13 +59,12 @@
 - אפיון מלא (Use Cases, ERD, תרשימי זרימה)  
 - הסברים על עיצוב המערכת והבחירות הטכנולוגיות  
 - בדיקות ותסריטי שימוש  
-- סיכום ותובנות  
+- סיכום ותובנות
+- 
 
 📥 [לחוברת הפרויקט המלאה (PDF)](./docs/Raz_Eini_25.pdf)
-.pdf)
 
 ---
-
 ## 🧩 מה מייחד את הפרויקט?
 - שילוב **Client + User Panel + Admin Panel** באפליקציה אחת  
 - אינטגרציה מלאה עם **Firebase Authentication & Realtime Database**  
