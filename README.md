@@ -62,7 +62,7 @@
 - סיכום ותובנות
 - 
 
-📥 [לחוברת הפרויקט המלאה (PDF)](./docs/Raz_Eini_25.pdf)
+📥 [לחוברת הפרויקט המלאה (PDF)](./docs/Raz%Eini%25.pdf)
 
 ---
 ## 🧩 מה מייחד את הפרויקט?
