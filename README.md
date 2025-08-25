@@ -61,7 +61,7 @@
 - בדיקות ותסריטי שימוש  
 - סיכום ותובנות  
 
-📥 [לחוברת הפרויקט המלאה (PDF)](./Raz_Eini_25.pdf)
+📥 [לחוברת הפרויקט המלאה (PDF)](./docs/Raz_Eini_25.pdf)
 .pdf)
 
 ---
