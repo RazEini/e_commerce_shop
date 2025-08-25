@@ -1,23 +1,78 @@
-🛒 Electronics Store App
+# 🛒 E-Commerce Shop (Android)
 
-Mobile app (Bagrut project) – electronics store simulation.
+אפליקציית חנות מקוונת לאנדרואיד עם **ניהול משתמשים, סל קניות חי, חיפוש חכם, חיפוש קולי ופאנל ניהול למנהלים**.  
+הפרויקט מדגים פיתוח אפליקציה מלאה הכוללת **צד לקוח וצד אדמין** עם אינטגרציה ל־Firebase.
 
-🚀 Features
+---
 
-Browse & search products
+## ✨ תכונות (Client)
+- 🔐 **Authentication Services** – הרשמה/כניסה מאובטחת (Firebase Auth)  
+- 💾 **SharedPreferences** – שמירת נתוני משתמש מקומית (למשל התחברות אוטומטית)  
+- 🔄 **Firebase Realtime Database** – סנכרון בזמן אמת של מוצרים והזמנות  
+- 🔍 **Smart Search** – חיפוש מוצרים עם אלגוריתם חכם לסינון מיידי  
+- 🎤 **Speech Recognizer** – חיפוש מוצרים באמצעות קול  
+- 🔔 **Notifications** – קבלת מבצעים ועדכוני הזמנה  
+- 🛍️ **Shopping Cart** – סל קניות דינמי שמתעדכן בזמן אמת  
+- 💳 **Demo Checkout** – תהליך רכישה לדמו עם חישוב כולל  
 
-Product details
+---
 
-Shopping cart & checkout
+## 🛠️ תכונות (Admin Panel)
+- ➕ **הוספת מוצר חדש** לקטלוג  
+- 👥 **ניהול משתמשים** – צפייה בפרטי משתמשים רשומים  
+- 📜 **ניהול היסטוריית רכישות** – צפייה בהזמנות שבוצעו  
+- 🎉 **ניהול מבצעים** – הוספת מבצעים חדשים הנשלחים כהתראות ללקוחות  
 
-SharedPreferences storage
+---
 
-Firebase Realtime Database
+## 📊 מבנה המערכת
 
-Firebase Authentication
+| רכיב | תיאור |
+|------|--------|
+| **Client App** | משתמש קצה – חיפוש מוצרים, סל קניות, תשלום |
+| **Admin Panel** | ניהול מוצרים, משתמשים והזמנות |
+| **Authentication** | Firebase Authentication |
+| **Database** | Firebase Realtime Database (מוצרים, הזמנות, משתמשים, מבצעים) |
+| **Local Storage** | SharedPreferences לשמירת session |
+| **UI/UX** | Java + XML, RecyclerView, Notifications, Speech Recognizer |
 
-🛠️ Tech Stack
+---
 
-Java • Android Studio • XML (Material Design) • Firebase
+## 🖥️ ממשק המשתמש
+- 📋 **קטלוג מוצרים** – תצוגת רשימה עם תמונות, מחירים ותיאורים  
+- 🛒 **סל קניות** – הוספה/הסרה בזמן אמת  
+- 🔐 **Login/Register** – אימות משתמשים עם Firebase  
+- 🔎 **Smart Search** – חיפוש חכם (טקסט + קול)  
+- 💳 **Checkout** – מסך תשלום לדמו  
+- 🛠️ **Admin Panel** – ניהול מלא של חנות אונליין  
 
-👨‍💻 Raz Eini (2025)
+---
+
+## 📸 תמונות מסך
+*(הוסף כאן 3–5 תמונות או GIFs: מסך לקוח + מסך אדמין)*
+
+---
+
+## 🎥 דמו
+[▶️ לחץ כאן לצפייה בסרטון דמו](#)  
+*(קישור ל־YouTube / Google Drive מומלץ)*
+
+---
+
+## 🚀 התקנה והרצה
+1. `git clone https://github.com/USERNAME/e_commerce_shop.git`  
+2. פתח את הפרויקט ב־**Android Studio**  
+3. הוסף את קובץ ה־`google-services.json` תחת התיקייה `app/`  
+4. הרץ על אמולטור/מכשיר אמיתי (מומלץ API 30+)  
+
+---
+
+## 🧩 מה מייחד את הפרויקט?
+- שילוב **Client + Admin** באפליקציה אחת  
+- אינטגרציה מלאה עם **Firebase Authentication & Realtime Database**  
+- תמיכה ב־**חיפוש חכם וקולי** לצד מנגנון מבצעים עם התראות  
+- דגש על **UX ריאלי** – סל קניות, Checkout, ניהול מלא ע"י אדמין  
+
+---
+
+👨‍💻 פותח ע"י: **Raz Eini (2025)**
