@@ -1,15 +1,33 @@
+# =========================
+# Android / IntelliJ
+# =========================
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+.gradle/
 local.properties
+/.idea/*
+!.idea/codeStyles   # אפשר להשאיר רק הגדרות קוד סטייל
+
+# =========================
+# OS
+# =========================
+.DS_Store
+
+# =========================
+# Build & Outputs
+# =========================
+/build/
+/app/build/
+captures/
+.externalNativeBuild/
+.cxx/
+outputs/
+*.apk
+*.aab
+*.log
+
+# =========================
+# Firebase / Secrets
+# =========================
+google-services.json
+*.keystore
+*.jks
