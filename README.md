@@ -69,7 +69,7 @@
 
 <h2>🚀 התקנה והרצה</h2>
 <ol>
-<li><code>git clone https://github.com/USERNAME/e_commerce_shop.git</code></li>
+<li><code>git clone https://github.com/RazEini/e_commerce_shop.git</code></li>
 <li>פתח את הפרויקט ב־<strong>Android Studio</strong></li>
 <li>הוסף את קובץ ה־<code>google-services.json</code> תחת התיקייה <code>app/</code></li>
 <li>הרץ על אמולטור או מכשיר אמיתי (מומלץ API 30+)</li>
