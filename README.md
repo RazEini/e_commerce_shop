@@ -2,9 +2,12 @@
 
 <h1>🛒 E-Commerce Shop (Android)</h1>
 
-<img src="https://img.shields.io/badge/build-passing-brightgreen">
-<img src="https://img.shields.io/badge/Firebase-RealTimeDB-orange">
-<img src="https://img.shields.io/badge/license-MIT-blue">
+<p align="right">
+  <img src="https://img.shields.io/badge/Android-Studio-green" alt="Android Studio Badge">
+  <img src="https://img.shields.io/badge/Firebase-RealTimeDB-orange" alt="Firebase Badge">
+  <img src="https://img.shields.io/badge/Java-100%25-blue" alt="Java Badge">
+  <img src="https://img.shields.io/badge/License-MIT-blue" alt="License Badge">
+</p>
 
 <p>אפליקציית חנות מקוונת לאנדרואיד עם <strong>ניהול משתמשים, סל קניות חי, חיפוש חכם, חיפוש קולי, פאנל אדמין ופאנל משתמש אישי</strong>.<br>
 הפרויקט נבנה במסגרת <strong>בחינת בגרות במחשבים</strong>, וכולל <strong>תיעוד מלא בחוברת רשמית</strong>.</p>
