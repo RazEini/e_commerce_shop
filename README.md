@@ -24,7 +24,7 @@
 <h2>✨ תכונות עיקריות</h2>
 
 <h3>🔹 משתמש קצה (Client)</h3>
-<ul>
+<ul dir = "rtl">
 <li>🔐 <strong>Authentication Services</strong> – הרשמה/כניסה מאובטחת (Firebase Auth)</li>
 <li>💾 <strong>SharedPreferences</strong> – שמירת נתוני משתמש מקומית</li>
 <li>🔄 <strong>Firebase Realtime Database</strong> – סנכרון בזמן אמת של מוצרים והזמנות</li>
@@ -68,7 +68,7 @@
 <hr>
 
 <h2>🚀 התקנה והרצה</h2>
-<ol>
+<ol dir = "rtl">
 <li><code>git clone https://github.com/RazEini/e_commerce_shop.git</code></li>
 <li>פתח את הפרויקט ב־<strong>Android Studio</strong></li>
 <li>הוסף את קובץ ה־<code>google-services.json</code> תחת התיקייה <code>app/</code></li>
@@ -97,6 +97,18 @@
 <li>פאנל אישי למשתמש עם <strong>ניהול פרטים אישיים + היסטוריית רכישות + מבצעים</strong></li>
 <li>כולל <strong>תיעוד מקיף</strong> כחלק מבחינת בגרות</li>
 </ul>
+
+<hr>
+
+<hr>
+
+<h2>🛠️ טכנולוגיות</h2>
+<p dir = "rtl">Java + XML · Firebase (Auth & Realtime DB) · SharedPreferences · RecyclerView · Notifications · Speech Recognizer</p>
+
+<hr>
+
+<h2>📌 סטטוס</h2>
+<p>גרסת דמו מלאה שפותחה כחלק מבחינת בגרות · קוד פתוח (MIT License)</p>
 
 <hr>
 
