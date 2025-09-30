@@ -17,11 +17,25 @@
 
 <h2>🎥 Demo – מצגת תכונות</h2>
 
-<div style="display:flex; gap:10px; justify-content: flex-start;">
-  <img src="assets/gifs/demo1.gif" alt="Client Demo" width="220px">
-  <img src="assets/gifs/demo2.gif" alt="User Panel Demo" width="220px">
-  <img src="assets/gifs/demo3.gif" alt="Admin Panel Demo" width="220px">
-</div>
+<table align="left">
+  <tr>
+    <td align="center" style="border:1px solid #ccc; border-radius:10px; padding:10px;">
+      <img src="assets/gifs/demo1.gif" width="220" alt="Client Demo" /><br>
+      <b>Client App</b>
+    </td>
+    <td align="center" style="border:1px solid #ccc; border-radius:10px; padding:10px;">
+      <img src="assets/gifs/demo2.gif" width="220" alt="User Panel Demo" /><br>
+      <b>User Panel</b>
+    </td>
+    <td align="center" style="border:1px solid #ccc; border-radius:10px; padding:10px;">
+      <img src="assets/gifs/demo3.gif" width="220" alt="Admin Panel Demo" /><br>
+      <b>Admin Panel</b>
+    </td>
+  </tr>
+</table>
+
+<br clear="all">
+
 
 <hr>
 
