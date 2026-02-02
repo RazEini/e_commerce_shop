@@ -119,7 +119,13 @@
 <hr>
 
 <h2>🛠️ טכנולוגיות</h2>
-<p dir = "rtl">Java + XML · Firebase (Auth & Realtime DB) · SharedPreferences · RecyclerView · Notifications · Speech Recognizer</p>
+<ul dir="rtl">
+  <li><strong>שפות ופלטפורמות:</strong> Java, XML</li>
+  <li><strong>מסדי נתונים ושירותי ענן:</strong> Firebase (Authentication & Realtime Database)</li>
+  <li><strong>ניהול נתונים מקומיים:</strong> SharedPreferences</li>
+  <li><strong>UI ורכיבים:</strong> RecyclerView, Notifications</li>
+  <li><strong>זיהוי קול:</strong> Speech Recognizer</li>
+</ul>
 
 <hr>
 
@@ -135,6 +141,6 @@
 <p>למידע נוסף ראה את קובץ <a href="LICENSE">LICENSE</a></p>
 <hr>
 
-<p>👨‍💻 פותח ע"י: <strong>Raz Eini (2025)</strong></p>
+<p align="center">👨‍💻 פותח ע"י: <strong>Raz Eini (2025)</strong></p>
 
 </div>
