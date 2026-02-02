@@ -72,7 +72,7 @@
 
 <h2>📊 מבנה המערכת</h2>
 
-<table>
+<table align="center">
 <tr><th>רכיב</th><th>תיאור</th></tr>
 <tr><td><strong>Client App</strong></td><td>חיפוש מוצרים, סל קניות, פרופיל אישי</td></tr>
 <tr><td><strong>User Panel</strong></td><td>עדכון פרטים, היסטוריית רכישות, מבצעים</td></tr>
