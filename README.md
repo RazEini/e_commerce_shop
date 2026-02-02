@@ -1,6 +1,6 @@
 <div dir="rtl">
 
-<h1>🛒 E-Commerce Shop (Android)</h1>
+<h1 align="right">🛒 E-Commerce Shop (Android)</h1>
 
 
 <p>אפליקציית חנות מקוונת לאנדרואיד עם <strong>ניהול משתמשים, סל קניות חי, חיפוש חכם, חיפוש קולי, פאנל אדמין ופאנל משתמש אישי</strong>.<br>
@@ -15,9 +15,10 @@
 
 <hr>
 
-<h2>🎥 Demo – מצגת תכונות</h2>
+<h2 align="right">🎥 Demo – מצגת תכונות</h2>
+<br><br>
 
-<table align="left">
+<table align="center">
   <tr>
     <td align="center" style="border:1px solid #ccc; border-radius:10px; padding:10px;">
       <img src="assets/gifs/demo1.gif" width="220" alt="Client Demo" /><br>
