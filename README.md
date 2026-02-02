@@ -2,9 +2,8 @@
 
 <h1 align="center">🛒 E-Commerce Shop (Android)</h1>
 
+<p><strong>אפליקציה זו היא חנות מקוונת מתקדמת לאנדרואיד, המציעה חוויית קנייה מלאה, אינטואיטיבית ודינמית למשתמש הקצה, לצד כלי ניהול מקיפים למנהלי המערכת.</strong> הפרויקט נבנה <strong>במסגרת בחינת בגרות במחשבים</strong>, וכולל <strong>תיעוד מלא ומקיף</strong> הכולל אפיון, תרשימי זרימה, ERD והסברים טכנולוגיים. במהלך הפיתוח, התמקדנו ב<strong>סנכרון בזמן אמת עם Firebase</strong>, <strong>חיפוש חכם וקולי</strong>, <strong>סל קניות דינמי</strong> ופאנלים נפרדים למשתמשים ולאדמינים, תוך שמירה על ממשק משתמש נקי ומתקדם.</p>
 
-<p>אפליקציית חנות מקוונת לאנדרואיד עם <strong>ניהול משתמשים, סל קניות חי, חיפוש חכם, חיפוש קולי, פאנל אדמין ופאנל משתמש אישי</strong>.<br>
-הפרויקט נבנה במסגרת <strong>בחינת בגרות במחשבים</strong>, וכולל <strong>תיעוד מלא בחוברת רשמית</strong>.</p>
 <br>
 <p align="center">
   <img src="https://img.shields.io/badge/Android-Studio-green" alt="Android Studio Badge">
