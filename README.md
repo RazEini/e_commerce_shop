@@ -1,6 +1,6 @@
 <div dir="rtl">
 
-<h1 align="right">🛒 E-Commerce Shop (Android)</h1>
+<h1 align="center">🛒 E-Commerce Shop (Android)</h1>
 
 
 <p>אפליקציית חנות מקוונת לאנדרואיד עם <strong>ניהול משתמשים, סל קניות חי, חיפוש חכם, חיפוש קולי, פאנל אדמין ופאנל משתמש אישי</strong>.<br>
