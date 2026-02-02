@@ -118,8 +118,6 @@
 
 <hr>
 
-<hr>
-
 <h2>🛠️ טכנולוגיות</h2>
 <p dir = "rtl">Java + XML · Firebase (Auth & Realtime DB) · SharedPreferences · RecyclerView · Notifications · Speech Recognizer</p>
 
