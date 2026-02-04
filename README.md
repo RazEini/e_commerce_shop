@@ -14,7 +14,7 @@
 
 <hr>
 
-<h2 align="right">🎥 Demo – מצגת תכונות</h2>
+<h2 align="center">🎥 Demo – מצגת תכונות</h2>
 <br><br>
 
 <table align="center">
